@@ -1,0 +1,1 @@
+e x t r a t e x t ) . J.3.2. User Prompt The user prompt is a formatted string. user_prompt = ( f " ### CODE : \ n { code } \ n \ n " f " ### NAMESPACE : \ n { namespace } \ n \ n " f " ### API DESCRIPTIONS ( Context ) : \ n { a p i _ d e s c r i p t i o n } \ n \ n " f " Does t h i s namespace f i t t h e code ’ s i n t e n t ? " )
