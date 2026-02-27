@@ -20,7 +20,9 @@ class UnverifiedQuestionStore:
                 "question_id": record.question_id,
                 "question_text": record.question_text,
                 "paper_id": record.paper_id,
-                "default_difficulty": record.target_difficulty.value,
+                "default_difficulty": str(
+                    record.audit.get("difficulty_profile", record.target_difficulty.value)
+                ),
             }
         )
         self.output_path.write_text(json.dumps(rows, indent=2), encoding="utf-8")

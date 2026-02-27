@@ -1,5 +1,5 @@
 
-Below is a **design document** for the benchmark-builder app you described. It’s organized around **SOLID**, a clean separation of **/UI** and **/Benchmark**, and a Streamlit workflow that goes **paper-by-paper**, starting with **3 questions per paper**, with **accept -> verify** and persistent JSON files.
+Below is a **design document** for the benchmark-builder app you described. It’s organized around **SOLID**, a clean separation of **/UI** and **/Benchmark**, and a Streamlit workflow that goes **paper-by-paper**, starting with **5 questions per paper**, with **accept -> verify** and persistent JSON files.
 
 ---
 
@@ -15,7 +15,12 @@ Build a semi-automated benchmark construction tool that:
 * Generates **3 candidate questions per paper**, proceeding **paper-by-paper**.
 * Retrieves a **FAISS top-k** set of evidence chunks for each question during verification.
 * Proposes candidate supporting chunks (gold candidates), then requires **human verification** per question.
-* Automatically assigns a difficulty class (single-hop / multi-hop / etc.) with ability to edit.
+* Uses five explicit question profiles with editable selection during verification:
+  * direct reference: single hop
+  * direct reference: multi hop
+  * single reference: single hop
+  * single reference: multi hop
+  * multiple reference: multi hop
 * Produces a benchmark dataset ready for retrieval and RAG evaluation.
 * Leaves room to later add **cross-paper synthesis** (not implemented yet, but designed for).
 
@@ -130,7 +135,7 @@ Record shape (domain model):
   "source_paper_id": "string",
   "ground_truth": "",
   "golden_chunk_ids": ["..."],
-  "difficulty": "single_hop|multi_hop|definition|comparison|negative",
+  "difficulty": "direct reference: single hop|direct reference: multi hop|single reference: single hop|single reference: multi hop|multiple reference: multi hop",
   "date_created": "...",
   "notes": "..."
 }
@@ -173,10 +178,11 @@ For each question:
 * Popup includes dropdowns for each selected chunk to inspect chunk text.
 * Stored `golden_chunk_ids` order matches this final drag order.
 
-### Step 5: Difficulty Classification (auto + editable)
+### Step 5: Difficulty Profile Selection (editable)
 
-* Auto classifier assigns `difficulty_auto`.
-* UI presents difficulty as editable dropdown.
+* Generation assigns one of five profiles in fixed order.
+* Verify page exposes these same five options in the difficulty dropdown.
+* Selected label is persisted directly to `verified_questions.json`.
 
 ### Step 6: Ground Truth Authoring
 
@@ -226,9 +232,8 @@ User must explicitly mark each question:
 
 ### Generation (`Benchmark/generation`)
 
-* `QuestionGenerator` (3 questions per paper)
+* `QuestionGenerator` (5 questions per paper with explicit profile targets)
 * `EvidenceProposer` (LLM chooses chunk IDs from candidate list)
-* `DifficultyClassifier` (LLM or heuristic classifier)
 
 ### Services (`Benchmark/services`)
 
@@ -276,7 +281,7 @@ Orchestrate the pipeline:
 * Loads questions from `data/unverified_questions.json` (one question shown at a time)
 * Runs FAISS top-k retrieval for the current question
 * Candidate checkboxes + chunk text
-* Difficulty dropdown + Notes field
+* Difficulty dropdown (five explicit profiles) + Notes field
 * Ground truth section:
   * editable answer text area
   * `Generate answer` button (enabled when chunks are selected)
@@ -299,7 +304,7 @@ This keeps verification focused and consistent across papers.
 
 ## Models (Cheap OpenAI Choices)
 
-* Question generation / evidence proposing / difficulty classification + ground-truth generation:
+* Question generation / evidence proposing / ground-truth generation:
 
   * `gpt-4o-mini` (cheap, strong for structured labeling)
 * Embeddings:
@@ -345,7 +350,7 @@ But no implementation now.
 * [ ] Accepted questions are persisted to `data/unverified_questions.json`
 * [ ] Verified questions are persisted to `data/verified_questions.json`
 * [ ] Ground truth text is persisted to `verified_questions.json`
-* [ ] Difficulty label is auto-assigned and user-editable
+* [ ] Difficulty uses the five explicit profile labels and is user-editable in Verify
 * [ ] Verify uses FAISS top-k retrieval (default 20, configurable)
 * [ ] Gold chunk order in `verified_questions.json` matches verify popup drag order
 

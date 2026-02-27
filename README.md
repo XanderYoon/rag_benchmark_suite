@@ -27,7 +27,7 @@ Streamlit app for building a paper-grounded RAG benchmark with a human-in-the-lo
 - `UI/pages/2_question_generation.py`: generate + accept flow
 - `UI/pages/3_verify_questions.py`: verify flow
 - `Benchmark/`: services, generation, persistence, verification logic
-- `scripts/build_faiss_rag_index.py`: one-off FAISS index builder
+- `Benchmark/embedding/build_faiss_rag_index.py`: one-off FAISS index builder
 - `data/`: runtime artifacts
 
 ## Requirements
@@ -91,7 +91,7 @@ Chunks are written to:
 ### 3) Build FAISS index (one-off script)
 
 ```bash
-python3 scripts/build_faiss_rag_index.py --overwrite
+python3 Benchmark/embedding/build_faiss_rag_index.py --overwrite
 ```
 
 Outputs:

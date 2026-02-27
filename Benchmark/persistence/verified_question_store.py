@@ -10,7 +10,13 @@ class VerifiedQuestionStore:
     def __init__(self, output_path: Path = Path("data/verified_questions.json")) -> None:
         self.output_path = output_path
 
-    def append_verified(self, record: BenchmarkRecord, notes: str, ground_truth: str) -> None:
+    def append_verified(
+        self,
+        record: BenchmarkRecord,
+        notes: str,
+        ground_truth: str,
+        difficulty_label: str | None = None,
+    ) -> None:
         self.output_path.parent.mkdir(parents=True, exist_ok=True)
         rows = self._read_all()
         rows.append(
@@ -20,7 +26,8 @@ class VerifiedQuestionStore:
                 "source_paper_id": record.paper_id,
                 "ground_truth": ground_truth,
                 "golden_chunk_ids": list(record.gold_chunk_ids),
-                "difficulty": record.difficulty_final.value,
+                "top_k_chunk_ids": list(record.top_k_chunk_ids),
+                "difficulty": difficulty_label or record.difficulty_final.value,
                 "date_created": record.created_at,
                 "notes": notes,
             }

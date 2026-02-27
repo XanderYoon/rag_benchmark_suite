@@ -26,6 +26,7 @@ class RetrievalService:
         self.faiss_error: str | None = None
 
     def retrieve_generous(self, question: str, chunks: list[Chunk]) -> list[EvidenceCandidate]:
+        """Retrieve generous local candidates from in-memory chunk embeddings."""
         index = InMemoryVectorIndex(SimpleTextEmbedder())
         for chunk in chunks:
             index.add(chunk)
@@ -51,76 +52,99 @@ class RetrievalService:
             if len(selected) >= self.config.retrieval_cap:
                 break
 
-        ranked = sorted(selected.items(), key=lambda x: x[1], reverse=True)[: self.config.retrieval_cap]
-        return [EvidenceCandidate(chunk_id=cid, score=float(score), rank=i + 1) for i, (cid, score) in enumerate(ranked)]
+        ranked = sorted(selected.items(), key=lambda item: item[1], reverse=True)[: self.config.retrieval_cap]
+        return [
+            EvidenceCandidate(chunk_id=chunk_id, score=float(score), rank=index_ + 1)
+            for index_, (chunk_id, score) in enumerate(ranked)
+        ]
 
     def retrieve_top_faiss(self, question: str, limit: int = 20) -> list[EvidenceCandidate]:
+        """Retrieve top FAISS candidates for the question if the index is available."""
         if limit <= 0:
             return []
         if not self._ensure_faiss_ready():
             return []
 
+        assert self._openai_client is not None
         assert self._np is not None
         assert self._faiss is not None
         assert self._faiss_index is not None
-        assert self._openai_client is not None
         assert self._faiss_rows_by_id is not None
 
-        response = self._openai_client.embeddings.create(
-            model=self._faiss_embedding_model,
-            input=question,
-        )
-        vector = self._np.array(response.data[0].embedding, dtype=self._np.float32).reshape(1, -1)
-        if self._faiss_metric == "cosine":
-            self._faiss.normalize_L2(vector)
+        try:
+            response = self._openai_client.embeddings.create(
+                model=self._faiss_embedding_model,
+                input=[question],
+            )
+            vector = self._np.array([response.data[0].embedding], dtype=self._np.float32)
+            if self._faiss_metric == "cosine":
+                self._faiss.normalize_L2(vector)
+            distances, indices = self._faiss_index.search(vector, limit)
+        except Exception as exc:
+            self.faiss_error = f"FAISS retrieval failed: {exc}"
+            return []
 
-        scores, ids = self._faiss_index.search(vector, limit)
-        ranked: list[EvidenceCandidate] = []
-        for score, faiss_id in zip(scores[0], ids[0]):
+        candidates: list[EvidenceCandidate] = []
+        self._chunk_text_cache = {}
+        for rank, faiss_id in enumerate(indices[0], start=1):
             if int(faiss_id) < 0:
                 continue
             row = self._faiss_rows_by_id.get(int(faiss_id))
-            if not row:
+            if row is None:
                 continue
-            ranked.append(
-                EvidenceCandidate(
-                    chunk_id=str(row["chunk_id"]),
-                    score=float(score),
-                    rank=len(ranked) + 1,
-                )
-            )
-        return ranked
 
-    def load_chunks_for_candidates(self, candidates: list[EvidenceCandidate]) -> dict[str, Chunk]:
-        if not self._ensure_faiss_ready():
+            distance = float(distances[0][rank - 1])
+            if self._faiss_metric == "cosine":
+                score = distance
+            else:
+                score = 1.0 / (1.0 + max(distance, 0.0))
+
+            chunk_id = str(row["chunk_id"])
+            candidates.append(EvidenceCandidate(chunk_id=chunk_id, score=score, rank=rank))
+
+            file_path = Path(str(row["file_path"]))
+            try:
+                self._chunk_text_cache[chunk_id] = file_path.read_text(encoding="utf-8")
+            except OSError:
+                self._chunk_text_cache[chunk_id] = ""
+
+        return candidates
+
+    def faiss_candidates_to_chunks(self, candidates: list[EvidenceCandidate]) -> dict[str, Chunk]:
+        """Hydrate FAISS candidates into chunk objects when metadata is available."""
+        if not self._faiss_rows_by_chunk_id:
             return {}
-        assert self._faiss_rows_by_chunk_id is not None
 
         chunks_by_id: dict[str, Chunk] = {}
         for cand in candidates:
             row = self._faiss_rows_by_chunk_id.get(cand.chunk_id)
-            if not row:
-                continue
-            chunk_path = Path(str(row["file_path"]))
-            if not chunk_path.exists():
+            if row is None:
                 continue
 
-            if cand.chunk_id not in self._chunk_text_cache:
-                self._chunk_text_cache[cand.chunk_id] = chunk_path.read_text(encoding="utf-8", errors="replace")
+            chunk_id = str(row["chunk_id"])
+            if chunk_id not in self._chunk_text_cache:
+                file_path = Path(str(row["file_path"]))
+                try:
+                    self._chunk_text_cache[chunk_id] = file_path.read_text(encoding="utf-8")
+                except OSError:
+                    self._chunk_text_cache[chunk_id] = ""
 
-            chunk_index = 0
             try:
-                chunk_index = int(cand.chunk_id.rsplit("_", 1)[-1])
-            except (IndexError, ValueError):
-                pass
+                chunk_index = int(chunk_id.split("_")[-1])
+            except ValueError:
+                chunk_index = 0
 
-            chunks_by_id[cand.chunk_id] = Chunk(
-                chunk_id=cand.chunk_id,
-                paper_id=str(row.get("paper_id", "")),
-                text=self._chunk_text_cache[cand.chunk_id],
+            chunks_by_id[chunk_id] = Chunk(
+                chunk_id=chunk_id,
+                paper_id=str(row["paper_id"]),
+                text=self._chunk_text_cache[chunk_id],
                 index=chunk_index,
             )
         return chunks_by_id
+
+    def load_chunks_for_candidates(self, candidates: list[EvidenceCandidate]) -> dict[str, Chunk]:
+        """Return chunk objects for retrieval candidates when backing metadata is available."""
+        return self.faiss_candidates_to_chunks(candidates)
 
     def _ensure_faiss_ready(self) -> bool:
         if self._faiss_index is not None and self._faiss_rows_by_id is not None:
@@ -141,15 +165,13 @@ class RetrievalService:
         metadata_path = output_dir / "chunks_metadata.jsonl"
         manifest_path = output_dir / "index_manifest.json"
         if not index_path.exists() or not metadata_path.exists():
-            self.faiss_error = (
-                f"Missing FAISS artifacts. Expected {index_path} and {metadata_path}."
-            )
+            self.faiss_error = f"Missing FAISS artifacts. Expected {index_path} and {metadata_path}."
             return False
 
         rows_by_id: dict[int, dict[str, Any]] = {}
         rows_by_chunk_id: dict[str, dict[str, Any]] = {}
-        with metadata_path.open("r", encoding="utf-8") as f:
-            for line in f:
+        with metadata_path.open("r", encoding="utf-8") as file_obj:
+            for line in file_obj:
                 line = line.strip()
                 if not line:
                     continue

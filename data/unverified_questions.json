@@ -1,14 +1,302 @@
 [
   {
-    "question_id": "q_000001",
-    "question_text": "What does 1904.05737v1 state about: Investigating Retrieval Method Selection with Axiomatic Features Siddhant Arora1\u22c6 and Andrew Yates2 1 Indian Institute of Technology, Delhi, India cs5150480@iitd.ac.in 2 Max Planck Institute for Informatics, Saarbr\u00a8 ucke?",
-    "paper_id": "1904.05737v1",
-    "default_difficulty": "single_hop"
+    "question_id": "q_000006",
+    "question_text": "What is the primary focus of the document titled \"2309.15217v2\"?",
+    "paper_id": "2309.15217v2",
+    "default_difficulty": "direct reference: single hop"
   },
   {
-    "question_id": "q_000004",
-    "question_text": "What does 1904.05737v1 state about: Investigating Retrieval Method Selection with Axiomatic Features Siddhant Arora1\u22c6 and Andrew Yates2 1 Indian Institute of Technology, Delhi, India cs5150480@iitd.ac.in 2 Max Planck Institute for Informatics, Saarbr\u00a8 ucke?",
-    "paper_id": "1904.05737v1",
-    "default_difficulty": "single_hop"
+    "question_id": "q_000007",
+    "question_text": "How does the evolution of Large Language Models (LLMs) discussed in \"2309.15217v2\" influence the methodology for measuring answer relevance among human annotators?",
+    "paper_id": "2309.15217v2",
+    "default_difficulty": "direct reference: multi hop"
+  },
+  {
+    "question_id": "q_000008",
+    "question_text": "What factors influence the overall performance of tuning in retrieval-augmented systems?",
+    "paper_id": "2309.15217v2",
+    "default_difficulty": "single reference: single hop"
+  },
+  {
+    "question_id": "q_000009",
+    "question_text": "What challenges are associated with predicting factuality in language models that do not provide access to token probabilities, and how do various authors propose addressing these challenges?",
+    "paper_id": "2309.15217v2",
+    "default_difficulty": "single reference: multi hop"
+  },
+  {
+    "question_id": "q_000010",
+    "question_text": "What alternative methods are suggested for evaluating language models that do not allow access to token probabilities, and how do these methods compare in effectiveness?",
+    "paper_id": "2309.15217v2",
+    "default_difficulty": "multiple reference: multi hop"
+  },
+  {
+    "question_id": "q_000011",
+    "question_text": "Who are the authors of the document titled \"2402.12317v2\"?",
+    "paper_id": "2402.12317v2",
+    "default_difficulty": "direct reference: single hop"
+  },
+  {
+    "question_id": "q_000012",
+    "question_text": "What are the key benefits of the retrieval-augmented generation (RAG) paradigm as discussed in the document titled \"2402.12317v2,\" particularly in relation to its efficiency and the adaptation of large language models?",
+    "paper_id": "2402.12317v2",
+    "default_difficulty": "direct reference: multi hop"
+  },
+  {
+    "question_id": "q_000013",
+    "question_text": "What types of content are mentioned as easily obtainable to enrich knowledge bases?",
+    "paper_id": "2402.12317v2",
+    "default_difficulty": "single reference: single hop"
+  },
+  {
+    "question_id": "q_000014",
+    "question_text": "How do the datasets mentioned in the document relate to EVOR's compatibility with existing code generation approaches?",
+    "paper_id": "2402.12317v2",
+    "default_difficulty": "single reference: multi hop"
+  },
+  {
+    "question_id": "q_000015",
+    "question_text": "What improvements can be observed when combining EVOR with agent-based code generation approaches according to the analyses conducted?",
+    "paper_id": "2402.12317v2",
+    "default_difficulty": "multiple reference: multi hop"
+  },
+  {
+    "question_id": "q_000021",
+    "question_text": "What techniques are used for the automated literature review in the document titled \"2411.18583v1\"?",
+    "paper_id": "2411.18583v1",
+    "default_difficulty": "direct reference: single hop"
+  },
+  {
+    "question_id": "q_000022",
+    "question_text": "How does the performance of GPT-3.5-turbo compare to other models in terms of ROUGE scores in the document titled \"2411.18583v1\"?",
+    "paper_id": "2411.18583v1",
+    "default_difficulty": "direct reference: multi hop"
+  },
+  {
+    "question_id": "q_000023",
+    "question_text": "Which approaches are compared to determine the best procedure in the evaluation discussed in the document?",
+    "paper_id": "2411.18583v1",
+    "default_difficulty": "single reference: single hop"
+  },
+  {
+    "question_id": "q_000024",
+    "question_text": "What methods are utilized to gather and analyze data regarding the challenges faced by software engineers, as mentioned in the document?",
+    "paper_id": "2411.18583v1",
+    "default_difficulty": "single reference: multi hop"
+  },
+  {
+    "question_id": "q_000025",
+    "question_text": "What key decision-making procedures do software engineers use to overcome challenges in their work, and how might these intersect with the applications of AI and machine learning in healthcare systems?",
+    "paper_id": "2411.18583v1",
+    "default_difficulty": "multiple reference: multi hop"
+  },
+  {
+    "question_id": "q_000026",
+    "question_text": "What is the title of the document associated with arXiv number 2502.00306v2?",
+    "paper_id": "2502.00306v2",
+    "default_difficulty": "direct reference: single hop"
+  },
+  {
+    "question_id": "q_000027",
+    "question_text": "What are the main findings regarding breach detection and retrieval performance as discussed in the document titled \"2502.00306v2\"?",
+    "paper_id": "2502.00306v2",
+    "default_difficulty": "direct reference: multi hop"
+  },
+  {
+    "question_id": "q_000028",
+    "question_text": "What does RAG involve in the context of retrieving relevant text for a given query?",
+    "paper_id": "2502.00306v2",
+    "default_difficulty": "single reference: single hop"
+  },
+  {
+    "question_id": "q_000029",
+    "question_text": "How does the use of natural-text queries enhance the efficiency of retrieval while considering the implications for privacy and internal context?",
+    "paper_id": "2502.00306v2",
+    "default_difficulty": "single reference: multi hop"
+  },
+  {
+    "question_id": "q_000030",
+    "question_text": "What strategies does the document suggest for optimizing the use of natural-text queries in retrieval-augmented generation systems?",
+    "paper_id": "2502.00306v2",
+    "default_difficulty": "multiple reference: multi hop"
+  },
+  {
+    "question_id": "q_000031",
+    "question_text": "What is the focus of the research conducted by Xiangrong (Daniel) Zhu, Yuan Xu, and Tianjian Liu in the document titled \"2504.13684v1\"?",
+    "paper_id": "2504.13684v1",
+    "default_difficulty": "direct reference: single hop"
+  },
+  {
+    "question_id": "q_000032",
+    "question_text": "How do the authors of \"2504.13684v1\" address the limitations of human cognition in relation to sensory information processing and the organization of key insights from video recordings?",
+    "paper_id": "2504.13684v1",
+    "default_difficulty": "direct reference: multi hop"
+  },
+  {
+    "question_id": "q_000033",
+    "question_text": "What permissions are required for copying, republishing, or redistributing content from the document?",
+    "paper_id": "2504.13684v1",
+    "default_difficulty": "single reference: single hop"
+  },
+  {
+    "question_id": "q_000034",
+    "question_text": "How can user embeddings enhance the tailoring of responses in AI systems to improve human-machine collaboration?",
+    "paper_id": "2504.13684v1",
+    "default_difficulty": "single reference: multi hop"
+  },
+  {
+    "question_id": "q_000035",
+    "question_text": "What methodologies are proposed in the document for integrating user-specific data to enhance cognitive augmentation in AI systems?",
+    "paper_id": "2504.13684v1",
+    "default_difficulty": "multiple reference: multi hop"
+  },
+  {
+    "question_id": "q_000036",
+    "question_text": "What is the focus of the research presented in the document titled \"2504.14689v1\"?",
+    "paper_id": "2504.14689v1",
+    "default_difficulty": "direct reference: single hop"
+  },
+  {
+    "question_id": "q_000037",
+    "question_text": "How do the proposed augmentation artifacts in \"2504.14689v1\" address the balance between improving human performance and preventing overreliance on AI systems?",
+    "paper_id": "2504.14689v1",
+    "default_difficulty": "direct reference: multi hop"
+  },
+  {
+    "question_id": "q_000038",
+    "question_text": "What conditions must be met regarding the distribution of copies from the work?",
+    "paper_id": "2504.14689v1",
+    "default_difficulty": "single reference: single hop"
+  },
+  {
+    "question_id": "q_000039",
+    "question_text": "How do the insights from Engelbart's intellect augmentation framework relate to the evaluation of current AI systems in enhancing critical thinking skills through standardized tests and qualitative assessments?",
+    "paper_id": "2504.14689v1",
+    "default_difficulty": "single reference: multi hop"
+  },
+  {
+    "question_id": "q_000040",
+    "question_text": "How do different assessment tools, such as standardized tests and qualitative methods, interact to influence the evaluation of cognitive development according to current research?",
+    "paper_id": "2504.14689v1",
+    "default_difficulty": "multiple reference: multi hop"
+  },
+  {
+    "question_id": "q_000041",
+    "question_text": "What is the title of the document with the identifier 2504.17204v1?",
+    "paper_id": "2504.17204v1",
+    "default_difficulty": "direct reference: single hop"
+  },
+  {
+    "question_id": "q_000042",
+    "question_text": "How does the document 2504.17204v1 address the challenges of fact-checking in the context of misinformation on social media and its implications for real-time decision-making?",
+    "paper_id": "2504.17204v1",
+    "default_difficulty": "direct reference: multi hop"
+  },
+  {
+    "question_id": "q_000043",
+    "question_text": "What potential benefits does Factually provide in relation to enhancing human cognition?",
+    "paper_id": "2504.17204v1",
+    "default_difficulty": "single reference: single hop"
+  },
+  {
+    "question_id": "q_000044",
+    "question_text": "How does the document illustrate the relationship between cognitive reflection and the effectiveness of nudges in combating misinformation in both media platforms and individual interactions?",
+    "paper_id": "2504.17204v1",
+    "default_difficulty": "single reference: multi hop"
+  },
+  {
+    "question_id": "q_000045",
+    "question_text": "What are the key differences in the approaches of Factiverse and Factually regarding their target audiences and design considerations for combating misinformation?",
+    "paper_id": "2504.17204v1",
+    "default_difficulty": "multiple reference: multi hop"
+  },
+  {
+    "question_id": "q_000046",
+    "question_text": "What is the main focus of the research presented in the document titled \"2506.06962v3\"?",
+    "paper_id": "2506.06962v3",
+    "default_difficulty": "direct reference: single hop"
+  },
+  {
+    "question_id": "q_000047",
+    "question_text": "What are the two parallel frameworks proposed in the document titled \"2506.06962v3,\" and how does the Distribution-Augmentation in Decoding (DAiD) strategy function within this context?",
+    "paper_id": "2506.06962v3",
+    "default_difficulty": "direct reference: multi hop"
+  },
+  {
+    "question_id": "q_000048",
+    "question_text": "How does the input prompt influence the image generation process according to the document?",
+    "paper_id": "2506.06962v3",
+    "default_difficulty": "single reference: single hop"
+  },
+  {
+    "question_id": "q_000049",
+    "question_text": "How does the process of adjusting retrieved patch features to match the local context improve the generation of the next target patch?",
+    "paper_id": "2506.06962v3",
+    "default_difficulty": "single reference: multi hop"
+  },
+  {
+    "question_id": "q_000050",
+    "question_text": "What methodologies are discussed in the document for enhancing the performance of image generation, specifically in relation to the adjustment and blending of patch features?",
+    "paper_id": "2506.06962v3",
+    "default_difficulty": "multiple reference: multi hop"
+  },
+  {
+    "question_id": "q_000051",
+    "question_text": "What is the abbreviation of the system discussed in the document titled \"2507.23334v2\"?",
+    "paper_id": "2507.23334v2",
+    "default_difficulty": "direct reference: single hop"
+  },
+  {
+    "question_id": "q_000052",
+    "question_text": "How does the document titled \"2507.23334v2\" address the challenges of deploying general LLMs in music-related domains, particularly in relation to the ArtistMus dataset?",
+    "paper_id": "2507.23334v2",
+    "default_difficulty": "direct reference: multi hop"
+  },
+  {
+    "question_id": "q_000053",
+    "question_text": "What strategies are discussed for optimizing retrieval performance in the context of the system described?",
+    "paper_id": "2507.23334v2",
+    "default_difficulty": "single reference: single hop"
+  },
+  {
+    "question_id": "q_000054",
+    "question_text": "How does the document propose to enhance the evaluation of music question answering by incorporating rich metadata about artists, tracks, and albums?",
+    "paper_id": "2507.23334v2",
+    "default_difficulty": "single reference: multi hop"
+  },
+  {
+    "question_id": "q_000055",
+    "question_text": "What are the implications of transitioning from the ArtistMus benchmark to TrustMus, and how does this change impact the evaluation of model performance in music-related tasks?",
+    "paper_id": "2507.23334v2",
+    "default_difficulty": "multiple reference: multi hop"
+  },
+  {
+    "question_id": "q_000056",
+    "question_text": "What is the primary focus of the document titled \"2510.22344v1\"?",
+    "paper_id": "2510.22344v1",
+    "default_difficulty": "direct reference: single hop"
+  },
+  {
+    "question_id": "q_000057",
+    "question_text": "How does the two-iteration process of FAIR-RAG enhance its performance on multi-hop QA benchmarks such as HotpotQA and MusiQue?",
+    "paper_id": "2510.22344v1",
+    "default_difficulty": "direct reference: multi hop"
+  },
+  {
+    "question_id": "q_000058",
+    "question_text": "What type of queries are described as being complex and challenging to answer through a single-shot retrieval step?",
+    "paper_id": "2510.22344v1",
+    "default_difficulty": "single reference: single hop"
+  },
+  {
+    "question_id": "q_000059",
+    "question_text": "How does the proposed agentic RAG architecture utilize an iterative refinement loop to enhance trustworthiness and reduce hallucinations in information retrieval?",
+    "paper_id": "2510.22344v1",
+    "default_difficulty": "single reference: multi hop"
+  },
+  {
+    "question_id": "q_000060",
+    "question_text": "What challenges does the FAIR-RAG framework encounter due to the inherent limitations of its orchestration tools, and how do these challenges impact its performance?",
+    "paper_id": "2510.22344v1",
+    "default_difficulty": "multiple reference: multi hop"
   }
 ]

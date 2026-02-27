@@ -13,6 +13,13 @@ class ChunkStore:
         self.chunk_root = chunk_root
         self.chunk_root.mkdir(parents=True, exist_ok=True)
 
+    def has_chunks(self, paper_id: str) -> bool:
+        """Return whether chunk files already exist for a paper."""
+        paper_dir = self.chunk_root / paper_id
+        if not paper_dir.exists():
+            return False
+        return any(paper_dir.glob(f"{paper_id}_chunk_*.txt"))
+
     def write_chunks(self, paper_id: str, chunks: list[Chunk]) -> list[Path]:
         paper_dir = self.chunk_root / paper_id
         paper_dir.mkdir(parents=True, exist_ok=True)

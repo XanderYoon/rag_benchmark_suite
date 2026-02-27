@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from Benchmark.config import AppConfig
+from Benchmark.domain.difficulty_profiles import DIFFICULTY_PROFILES as DEFAULT_DIFFICULTY_PROFILES
 from Benchmark.domain.enums import DifficultyLabel
 from Benchmark.domain.models import BenchmarkRecord, Chunk, Question
 from Benchmark.generation.difficulty_classifier import DifficultyClassifier
@@ -11,31 +12,36 @@ from Benchmark.services.retrieval_service import RetrievalService
 
 
 class QuestionService:
+    DIFFICULTY_PROFILES: list[tuple[str, str, DifficultyLabel]] = DEFAULT_DIFFICULTY_PROFILES
+
     def __init__(self, config: AppConfig) -> None:
         self.config = config
-        self.generator = QuestionGenerator()
+        self.generator = QuestionGenerator(model=config.question_model)
         self.retrieval = RetrievalService(config)
         self.evidence = EvidenceProposer()
         self.difficulty = DifficultyClassifier()
         self.id_allocator = QuestionIdAllocator()
 
     def generate_records(self, paper_id: str, chunks: list[Chunk]) -> list[BenchmarkRecord]:
+        """Generate benchmark records for all configured difficulty profiles."""
         records: list[BenchmarkRecord] = []
-        target_difficulties = self._target_difficulties()
-        for i, target in enumerate(target_difficulties):
-            q = self.generator.generate_one(
+        for i, (profile_label, reference_type, target) in enumerate(self.DIFFICULTY_PROFILES):
+            question_text = self.generator.generate_profile_question(
                 paper_id=paper_id,
                 chunks=chunks,
-                target_difficulty=target,
+                reference_type=reference_type,
+                hop_type=target,
                 slot_index=i,
+                avoid_questions=[record.question_text for record in records],
             )
             question = Question.create(
                 paper_id=paper_id,
-                question_text=q,
+                question_text=question_text,
                 question_id=self.id_allocator.next_id(),
             )
             record = BenchmarkRecord.from_question(question)
             record.target_difficulty = target
+            record.audit["difficulty_profile"] = profile_label
             record.retrieval_candidates = self.retrieval.retrieve_generous(record.question_text, chunks)
             record.candidate_gold_chunk_ids = self.evidence.propose(record.retrieval_candidates)
             record.difficulty_auto = target
@@ -52,32 +58,37 @@ class QuestionService:
         feedback: str,
         avoid_questions: list[str],
     ) -> BenchmarkRecord:
-        q = self.generator.generate_one(
+        """Regenerate a single benchmark record for the selected slot."""
+        profile_label, reference_type, inferred_target = self.profile_for_slot(slot_index)
+        question_text = self.generator.generate_profile_question(
             paper_id=paper_id,
             chunks=chunks,
-            target_difficulty=target_difficulty,
+            reference_type=reference_type,
+            hop_type=inferred_target,
             slot_index=slot_index,
             feedback=feedback,
             avoid_questions=avoid_questions,
         )
         question = Question.create(
             paper_id=paper_id,
-            question_text=q,
+            question_text=question_text,
             question_id=self.id_allocator.next_id(),
         )
         record = BenchmarkRecord.from_question(question)
-        record.target_difficulty = target_difficulty
+        record.target_difficulty = inferred_target
+        record.audit["difficulty_profile"] = profile_label
         record.retrieval_candidates = self.retrieval.retrieve_generous(record.question_text, chunks)
-        max_candidates = 4 if target_difficulty == DifficultyLabel.MULTI_HOP else 3
-        record.candidate_gold_chunk_ids = self.evidence.propose(record.retrieval_candidates, max_candidates=max_candidates)
-        record.difficulty_auto = target_difficulty
-        record.difficulty_final = target_difficulty
+        max_candidates = 4 if inferred_target == DifficultyLabel.MULTI_HOP else 3
+        record.candidate_gold_chunk_ids = self.evidence.propose(
+            record.retrieval_candidates,
+            max_candidates=max_candidates,
+        )
+        record.difficulty_auto = inferred_target
+        record.difficulty_final = inferred_target
         return record
 
-    def _target_difficulties(self) -> list[DifficultyLabel]:
-        # Requirement: exactly 2 single-hop and 1 multi-hop by default.
-        return [
-            DifficultyLabel.SINGLE_HOP,
-            DifficultyLabel.SINGLE_HOP,
-            DifficultyLabel.MULTI_HOP,
-        ]
+    def profile_for_slot(self, slot_index: int) -> tuple[str, str, DifficultyLabel]:
+        """Return the configured profile tuple for a UI slot index."""
+        if slot_index < 0:
+            slot_index = 0
+        return self.DIFFICULTY_PROFILES[slot_index % len(self.DIFFICULTY_PROFILES)]

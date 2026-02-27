@@ -61,6 +61,7 @@ class BenchmarkRecord:
     retrieval_candidates: list[EvidenceCandidate] = field(default_factory=list)
     candidate_gold_chunk_ids: list[str] = field(default_factory=list)
     gold_chunk_ids: list[str] = field(default_factory=list)
+    top_k_chunk_ids: list[str] = field(default_factory=list)
     created_at: str = field(default_factory=UTC_NOW)
     updated_at: str = field(default_factory=UTC_NOW)
     audit: dict[str, Any] = field(default_factory=dict)
