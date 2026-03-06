@@ -1,1 +1,525 @@
-[]
+[
+  {
+    "question_id": "q_000008",
+    "question_text": "What factors influence the overall performance of tuning in retrieval-augmented systems?",
+    "source_paper_ids": [
+      "2309.15217v2"
+    ],
+    "ground_truth": "The overall performance of tuning in retrieval-augmented systems is influenced by several factors, including the retrieval model, the corpus considered, the language model (LM), and the formulation of prompts. Evaluation metrics often focus on the language modeling task, like perplexity, but may not predict downstream performance effectively. The integration of relevant context during fine-tuning and the design choices in retrieval processes, such as embedding models and chunking strategies, also play significant roles in optimizing performance.",
+    "golden_chunk_ids": [
+      "2309.15217v2_chunk_0002",
+      "2507.23334v2_chunk_0002",
+      "2507.23334v2_chunk_0004",
+      "2507.23334v2_chunk_0007"
+    ],
+    "top_k_chunk_ids": [
+      "2507.23334v2_chunk_0007",
+      "2507.23334v2_chunk_0004",
+      "2309.15217v2_chunk_0002",
+      "2507.23334v2_chunk_0002",
+      "2507.23334v2_chunk_0006"
+    ],
+    "difficulty": "Multiple documents",
+    "date_created": "2026-03-06T14:41:32.768795+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000009",
+    "question_text": "What challenges are associated with predicting factuality in language models that do not provide access to token probabilities, and how do various authors propose addressing these challenges?",
+    "source_paper_ids": [
+      "2309.15217v2"
+    ],
+    "ground_truth": "Challenges in predicting factuality in language models that do not provide access to token probabilities include the difficulty in detecting hallucinations with standard prompting strategies and the inability to link generated responses to external knowledge bases. Authors propose various solutions to these challenges:\n\n1. **Few-shot prompting strategies** to enhance factuality prediction (Zhang et al., 2023).\n2. **Sampling multiple answers** through SelfCheckGPT (Manakul et al., 2023), where factual answers are expected to be more stable and semantically similar.\n3. **Using a supervised classifier** on hidden layer weights (Azaria and Mitchell, 2023), though this requires access to hidden states, making it unsuitable for API-based LLMs.\n4. **Evaluating text generation** by scoring aspects like fluency through prompts (GPTScore, Fu et al., 2023) or directly rating responses (Wang et al., 2023a), while recognizing sensitivity to prompt design.\n5. **Selecting the best answer among candidates**, while being cautious of potential biases from answer order (Wang et al., 2023b). \n\nThese methods highlight varied approaches to improving the assessment of factuality in environments lacking access to detailed token probabilities.",
+    "golden_chunk_ids": [
+      "2309.15217v2_chunk_0003",
+      "2309.15217v2_chunk_0004",
+      "2309.15217v2_chunk_0006"
+    ],
+    "top_k_chunk_ids": [
+      "2309.15217v2_chunk_0003",
+      "2504.17204v1_chunk_0008",
+      "2309.15217v2_chunk_0004",
+      "2309.15217v2_chunk_0005",
+      "2309.15217v2_chunk_0006"
+    ],
+    "difficulty": "Single document: multi hop",
+    "date_created": "2026-03-06T14:49:55.952288+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000010",
+    "question_text": "What alternative methods are suggested for evaluating language models that do not allow access to token probabilities, and how do these methods compare in effectiveness?",
+    "source_paper_ids": [
+      "2309.15217v2"
+    ],
+    "ground_truth": "For evaluating language models without access to token probabilities, several alternative methods are suggested:\n\n1. **SelfCheckGPT**: This approach involves sampling multiple answers and assumes that factual answers will show semantic stability across samples, while hallucinated answers will not.\n\n2. **GPTScore**: This method uses prompts to specify aspects like fluency and scores generated text based on average token probabilities from a specified autoregressive language model.\n\n3. **Selecting the Best Answer**: This involves using an LLM to rank several candidate answers, but the order of presentation must be carefully managed to ensure valid results.\n\n4. **Ragas Framework**: A proposed framework that focuses on estimating correctness and usefulness of answers, specifically in contexts where reference answers are not available.\n\nIn terms of effectiveness, Ragas scores are closely aligned with human judgments, especially for faithfulness. However, evaluating answer relevance shows lower agreement due to subtleties between candidates, and context relevance is notably challenging.",
+    "golden_chunk_ids": [
+      "2309.15217v2_chunk_0004",
+      "2309.15217v2_chunk_0002",
+      "2309.15217v2_chunk_0005",
+      "2309.15217v2_chunk_0008",
+      "2309.15217v2_chunk_0012"
+    ],
+    "top_k_chunk_ids": [
+      "2309.15217v2_chunk_0017",
+      "2309.15217v2_chunk_0016",
+      "2309.15217v2_chunk_0002",
+      "2309.15217v2_chunk_0005",
+      "2309.15217v2_chunk_0012"
+    ],
+    "difficulty": "Single document: multi hop",
+    "date_created": "2026-03-06T14:56:21.439881+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000011",
+    "question_text": "Who are the authors of the document titled \"2402.12317v2\"?",
+    "source_paper_ids": [
+      "2402.12317v2"
+    ],
+    "ground_truth": "Hongjin Su, Shuyang Jiang,  Yuhang Lai, Haoyuan Wu, Boao Shi, Che Liu, Qian Liu, Tao Yu\n\nThe University of Hong Kong: Hongjin Su, Haoyuan Wu, Boao Shi, Che Liu, Tao Yu\nFudan University: Shuyang Jiang,  Yuhang Lai\nSea AI Lab: Qian Liu",
+    "golden_chunk_ids": [
+      "2402.12317v2_chunk_0000"
+    ],
+    "top_k_chunk_ids": [
+      "2402.12317v2_chunk_0029",
+      "2402.12317v2_chunk_0000"
+    ],
+    "difficulty": "Single document: single hop",
+    "date_created": "2026-03-06T15:00:41.235850+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000012",
+    "question_text": "What are the key benefits of the retrieval-augmented generation (RAG) paradigm as discussed in the document titled \"2402.12317v2,\" particularly in relation to its efficiency and the adaptation of large language models?",
+    "source_paper_ids": [
+      "2402.12317v2"
+    ],
+    "ground_truth": "The retrieval-augmented generation (RAG) paradigm offers significant benefits in efficiency for adapting large language models (LLMs) without the need for training. Specifically, it has been successfully applied in code generation, enhancing performance by utilizing dynamic, diverse knowledge sources rather than relying on static knowledge bases. The proposed pipeline in the document, EVOR, demonstrates impressive improvements in execution accuracy (achieving two to four times better accuracy compared to previous methods) through the synchronous evolution of queries and knowledge documents. This flexibility allows for further enhancements when combined with existing methods, advancing the design of retrieval-augmented code generation (RACG) pipelines.",
+    "golden_chunk_ids": [
+      "2402.12317v2_chunk_0000",
+      "2402.12317v2_chunk_0001"
+    ],
+    "top_k_chunk_ids": [
+      "2402.12317v2_chunk_0000",
+      "2402.12317v2_chunk_0001",
+      "2402.12317v2_chunk_0016",
+      "2402.12317v2_chunk_0004",
+      "2402.12317v2_chunk_0008"
+    ],
+    "difficulty": "Single document: multi hop",
+    "date_created": "2026-03-06T15:07:18.057952+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000013",
+    "question_text": "What types of content are mentioned as easily obtainable to enrich knowledge bases?",
+    "source_paper_ids": [
+      "2402.12317v2"
+    ],
+    "ground_truth": "The types of content mentioned as easily obtainable to enrich knowledge bases are:\n\n1. Web search content, including blogs, tutorials, and community Q&A discussions.\n2. Documentation of programming languages or updated libraries.\n3. Code snippets generated by large language models (LLMs).",
+    "golden_chunk_ids": [
+      "2402.12317v2_chunk_0005",
+      "2402.12317v2_chunk_0038",
+      "2402.12317v2_chunk_0002"
+    ],
+    "top_k_chunk_ids": [
+      "2402.12317v2_chunk_0005",
+      "2402.12317v2_chunk_0038",
+      "2504.13684v1_chunk_0004",
+      "2309.15217v2_chunk_0009",
+      "2402.12317v2_chunk_0002"
+    ],
+    "difficulty": "Multiple documents",
+    "date_created": "2026-03-06T15:11:51.339992+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000014",
+    "question_text": "How do the datasets mentioned in the document relate to EVOR's compatibility with existing code generation approaches?",
+    "source_paper_ids": [
+      "2402.12317v2"
+    ],
+    "ground_truth": "The datasets mentioned in the document relate to EVOR's compatibility with existing code generation approaches by showcasing its ability to significantly improve performance over methods like DocPrompting, as evidenced in experiments with modifications to popular Python libraries and the introduction of new grammars. EVOR's design allows for integration with various code generation techniques, including agent-based ones, enhancing overall performance further.",
+    "golden_chunk_ids": [
+      "2402.12317v2_chunk_0003"
+    ],
+    "top_k_chunk_ids": [
+      "2402.12317v2_chunk_0003",
+      "2402.12317v2_chunk_0010",
+      "2402.12317v2_chunk_0044",
+      "2402.12317v2_chunk_0018",
+      "2402.12317v2_chunk_0000"
+    ],
+    "difficulty": "Single document: single hop",
+    "date_created": "2026-03-06T15:13:21.152862+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000015",
+    "question_text": "What improvements can be observed when combining EVOR with agent-based code generation approaches according to the analyses conducted?",
+    "source_paper_ids": [
+      "2402.12317v2"
+    ],
+    "ground_truth": "The analyses indicate that combining EVOR with agent-based code generation approaches, specifically SWE-agent, results in notable performance improvements. When integrated, EVOR enhances the search space of SWE-agent by incorporating execution feedback and error-free code snippets, leading to dynamically updated queries and knowledge bases. This synergy shows increased performance beyond what EVOR and SWE-agent achieve independently, highlighting EVOR\u2019s flexibility and effectiveness in repository-level code generation tasks.",
+    "golden_chunk_ids": [
+      "2402.12317v2_chunk_0018"
+    ],
+    "top_k_chunk_ids": [
+      "2402.12317v2_chunk_0018",
+      "2402.12317v2_chunk_0003",
+      "2402.12317v2_chunk_0004",
+      "2402.12317v2_chunk_0000",
+      "2402.12317v2_chunk_0022"
+    ],
+    "difficulty": "Single document: single hop",
+    "date_created": "2026-03-06T15:16:05.274677+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000021",
+    "question_text": "What techniques are used for the automated literature review in the document titled \"2411.18583v1\"?",
+    "source_paper_ids": [
+      "2411.18583v1"
+    ],
+    "ground_truth": "The document \"2411.18583v1\" discusses techniques for automating literature reviews using Natural Language Processing (NLP) and retrieval-augmented generation (RAG) with Large Language Models (LLMs). Key techniques include:\n\n1. **Frequency-based methods** (spaCy)\n2. **Transformer models** (Simple T5)\n3. **Retrieval-Augmented Generation** (RAG) with LLMs (GPT-3.5-turbo)\n\nThe effectiveness of these techniques was evaluated using ROUGE scores, where GPT-3.5-turbo achieved the highest score. The research also outlines a system for automatically generating literature reviews from PDF files.",
+    "golden_chunk_ids": [
+      "2411.18583v1_chunk_0003",
+      "2411.18583v1_chunk_0000",
+      "2411.18583v1_chunk_0014",
+      "2411.18583v1_chunk_0008"
+    ],
+    "top_k_chunk_ids": [
+      "2411.18583v1_chunk_0003",
+      "2411.18583v1_chunk_0015",
+      "2411.18583v1_chunk_0000",
+      "2411.18583v1_chunk_0014",
+      "2411.18583v1_chunk_0008"
+    ],
+    "difficulty": "Single document: multi hop",
+    "date_created": "2026-03-06T15:20:16.117798+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000022",
+    "question_text": "How does the performance of GPT-3.5-turbo compare to other models in terms of ROUGE scores in the document titled \"2411.18583v1\"?",
+    "source_paper_ids": [
+      "2411.18583v1"
+    ],
+    "ground_truth": "In the document titled \"2411.18583v1\", the performance of GPT-3.5-turbo is superior to other models in terms of ROUGE scores. Specifically, GPT-3.5-turbo achieved the highest ROUGE-1 score of 0.364, outperforming T5 which scored 0.268, and spaCy which scored 0.257. The comparison indicates that the LLM-generated summaries had better unigram and bigram overlap with human summaries than the other models.",
+    "golden_chunk_ids": [
+      "2411.18583v1_chunk_0001",
+      "2411.18583v1_chunk_0014",
+      "2411.18583v1_chunk_0013"
+    ],
+    "top_k_chunk_ids": [
+      "2411.18583v1_chunk_0001",
+      "2411.18583v1_chunk_0014",
+      "2411.18583v1_chunk_0008",
+      "2411.18583v1_chunk_0013",
+      "2411.18583v1_chunk_0002"
+    ],
+    "difficulty": "Single document: multi hop",
+    "date_created": "2026-03-06T15:22:04.752426+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000024",
+    "question_text": "What methods are utilized to gather and analyze data regarding the challenges faced by software engineers?",
+    "source_paper_ids": [
+      "2411.18583v1"
+    ],
+    "ground_truth": "The methods utilized to gather and analyze data regarding the challenges faced by software engineers include Rapid Review and Semi-Structured Interviews. Rapid Review emphasizes decision-making procedures related to issues and challenges in daily work, while Semi-Structured Interviews explore researchers\u2019 experiences, challenges, strategies, strengths, and weaknesses of Systematic Literature Review tools.",
+    "golden_chunk_ids": [
+      "2411.18583v1_chunk_0004",
+      "2411.18583v1_chunk_0003"
+    ],
+    "top_k_chunk_ids": [
+      "2411.18583v1_chunk_0003",
+      "2411.18583v1_chunk_0004",
+      "2411.18583v1_chunk_0005",
+      "2411.18583v1_chunk_0002",
+      "2411.18583v1_chunk_0001"
+    ],
+    "difficulty": "Single document: multi hop",
+    "date_created": "2026-03-06T15:25:00.433030+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000025",
+    "question_text": "What key decision-making procedures do software engineers use to overcome challenges in their work, and how might these intersect with the applications of AI and machine learning in healthcare systems?",
+    "source_paper_ids": [
+      "2411.18583v1"
+    ],
+    "ground_truth": "Software engineers utilize decision-making procedures such as semi-structured interviews and systematic literature reviews to address challenges in their work. These processes help in exploring experiences, identifying strategies, and understanding the strengths and weaknesses of tools used in software engineering.\n\nIn the context of AI and machine learning in healthcare systems, these decision-making techniques intersect with the ongoing integration of AI and IoT. For instance, AI-enhanced systems can improve patient care through automated monitoring and diagnosis, while the challenges faced\u2014such as biased data and privacy concerns\u2014parallel the issues encountered in software engineering. Addressing these challenges is essential for enhancing personalized healthcare systems and ensuring the effective application of AI technologies.",
+    "golden_chunk_ids": [
+      "2411.18583v1_chunk_0012",
+      "2504.14689v1_chunk_0000",
+      "2504.14689v1_chunk_0001",
+      "2411.18583v1_chunk_0004",
+      "2411.18583v1_chunk_0003",
+      "2411.18583v1_chunk_0013"
+    ],
+    "top_k_chunk_ids": [
+      "2411.18583v1_chunk_0012",
+      "2411.18583v1_chunk_0003",
+      "2411.18583v1_chunk_0013",
+      "2504.14689v1_chunk_0000",
+      "2504.14689v1_chunk_0001"
+    ],
+    "difficulty": "Multiple documents",
+    "date_created": "2026-03-06T15:29:45.965065+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000026",
+    "question_text": "What is the title of the document associated with arXiv number 2502.00306v2?",
+    "source_paper_ids": [
+      "2502.00306v2"
+    ],
+    "ground_truth": "\"Riddle Me This! Stealthy Membership Inference for Retrieval-Augmented Generation.\"",
+    "golden_chunk_ids": [
+      "2502.00306v2_chunk_0000"
+    ],
+    "top_k_chunk_ids": [
+      "2502.00306v2_chunk_0000",
+      "2502.00306v2_chunk_0001"
+    ],
+    "difficulty": "Single document: single hop",
+    "date_created": "2026-03-06T15:31:04.836090+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000027",
+    "question_text": "What are the main findings regarding breach detection and retrieval performance as discussed in the document titled \"2502.00306v2\"?",
+    "source_paper_ids": [
+      "2502.00306v2"
+    ],
+    "ground_truth": "The main findings regarding breach detection and retrieval performance indicate that the Interrogation Attack (IA) demonstrates strong performance in bypassing detection filters while maintaining a high true positive rate (TPR) with low false positive rates (FPR). The performance of IA is significantly better than prior methods, achieving a 2\u00d7 improvement in TPR at 1% FPR. However, the Mask-Based Attack (MBA) manages to evade detection but shows inconsistent performance across different Large Language Model (LLM) generators in the Retrieval-Augmented Generation (RAG) system. The TREC-COVID dataset presents more challenges for these attacks compared to NFCorpus and SCIDOCS, resulting in lower performance metrics. Although some baselines achieve perfect recall in retrieval, they prioritize performance over stealth, which may render them less practical than IA, which uses diverse queries per document to enhance effectiveness while remaining undetectable.",
+    "golden_chunk_ids": [
+      "2502.00306v2_chunk_0027",
+      "2502.00306v2_chunk_0013",
+      "2502.00306v2_chunk_0042",
+      "2502.00306v2_chunk_0000",
+      "2502.00306v2_chunk_0005",
+      "2502.00306v2_chunk_0008"
+    ],
+    "top_k_chunk_ids": [
+      "2502.00306v2_chunk_0000",
+      "2502.00306v2_chunk_0042",
+      "2502.00306v2_chunk_0013",
+      "2502.00306v2_chunk_0005",
+      "2502.00306v2_chunk_0008"
+    ],
+    "difficulty": "Single document: multi hop",
+    "date_created": "2026-03-06T15:38:12.197711+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000028",
+    "question_text": "What does RAG involve in the context of retrieving relevant text for a given query?",
+    "source_paper_ids": [
+      "2502.00306v2"
+    ],
+    "ground_truth": "Retrieval-Augmented Generation (RAG) involves retrieving relevant text from a knowledge base for a given query using a retrieval model. This process allows the retrieved documents to be incorporated into the model\u2019s prompt as context, enhancing its knowledge and grounding the model's outputs in factual information. RAG facilitates flexible, domain-specific customization without the need for retraining the model. It combines the generative capabilities of language models with external knowledge retrieval to improve factual accuracy and adaptability during inference.",
+    "golden_chunk_ids": [
+      "2507.23334v2_chunk_0002",
+      "2502.00306v2_chunk_0002",
+      "2507.23334v2_chunk_0004",
+      "2507.23334v2_chunk_0005",
+      "2502.00306v2_chunk_0001"
+    ],
+    "top_k_chunk_ids": [
+      "2507.23334v2_chunk_0002",
+      "2502.00306v2_chunk_0002",
+      "2507.23334v2_chunk_0004",
+      "2502.00306v2_chunk_0001",
+      "2507.23334v2_chunk_0005"
+    ],
+    "difficulty": "Multiple documents",
+    "date_created": "2026-03-06T15:42:48.403784+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000030",
+    "question_text": "What strategies are suggested for optimizing the use of natural-text queries in retrieval-augmented generation systems?",
+    "source_paper_ids": [
+      "2502.00306v2"
+    ],
+    "ground_truth": "To optimize the use of natural-text queries in retrieval-augmented generation systems, three strategies are suggested:\n\n1. **Instruction Only**: Provide detailed instructions to the model for generating queries.\n2. **Few-Shot Prompting**: Along with detailed instructions, include example texts and multiple example queries based on those texts.\n3. **Iterative Generation**: Use the same instructions and examples, generating queries in three stages. In each stage, add previously generated queries to the prompt and instruct the model to create new, non-redundant queries to ensure diversity.\n\nThe effectiveness of these strategies is measured using metrics like Attack Success Rate (ASR), Retrieval Recall, and Semantic Diversity.",
+    "golden_chunk_ids": [
+      "2502.00306v2_chunk_0051",
+      "2506.06962v3_chunk_0020",
+      "2510.22344v1_chunk_0006",
+      "2309.15217v2_chunk_0002"
+    ],
+    "top_k_chunk_ids": [
+      "2502.00306v2_chunk_0051",
+      "2506.06962v3_chunk_0021",
+      "2506.06962v3_chunk_0020",
+      "2510.22344v1_chunk_0006",
+      "2309.15217v2_chunk_0002"
+    ],
+    "difficulty": "Multiple documents",
+    "date_created": "2026-03-06T15:47:25.441984+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000031",
+    "question_text": "What is the focus of the research conducted by Xiangrong (Daniel) Zhu, Yuan Xu, and Tianjian Liu in the document titled \"2504.13684v1\"?",
+    "source_paper_ids": [
+      "2504.13684v1"
+    ],
+    "ground_truth": "The research conducted by Xiangrong (Daniel) Zhu, Yuan Xu, and Tianjian Liu focuses on context-aware cognitive augmentation using Large Language Models (LLMs). It explores how LLMs can adapt dynamically to users' cognitive states and task environments to provide effective support, addressing cognitive overload and decision-making challenges. The study emphasizes the development of AI-driven systems that offer personalized, real-time assistance and highlights the importance of integrating contextual awareness in human-centered AI design.",
+    "golden_chunk_ids": [
+      "2504.13684v1_chunk_0000",
+      "2504.13684v1_chunk_0001"
+    ],
+    "top_k_chunk_ids": [
+      "2504.13684v1_chunk_0000",
+      "2504.13684v1_chunk_0001",
+      "2504.13684v1_chunk_0009",
+      "2504.13684v1_chunk_0002",
+      "2504.13684v1_chunk_0003"
+    ],
+    "difficulty": "Single document: single hop",
+    "date_created": "2026-03-06T15:49:54.353750+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000032",
+    "question_text": "How do the authors of \"2504.13684v1\" address the limitations of human cognition in relation to sensory information processing and the organization of key insights from video recordings?",
+    "source_paper_ids": [
+      "2504.13684v1"
+    ],
+    "ground_truth": "The authors of \"2504.13684v1\" address the limitations of human cognition by highlighting the disparity between sensory information processing and cognitive capabilities. They note that while sensory systems can acquire data at about 10^9 bits per second, cognitive processing is limited to approximately 10 bits per second, leading to cognitive overload and difficulties in knowledge application. They propose utilizing context-aware cognitive augmentation through AI, suggesting that large language models (LLMs) should adapt dynamically to users' cognitive states and task environments. This would enhance information processing and structured reasoning by filtering and contextualizing relevant knowledge in real-time, thus supporting users in navigating complex information-rich settings.",
+    "golden_chunk_ids": [
+      "2504.13684v1_chunk_0001",
+      "2504.13684v1_chunk_0008",
+      "2504.13684v1_chunk_0002"
+    ],
+    "top_k_chunk_ids": [
+      "2504.13684v1_chunk_0001",
+      "2504.13684v1_chunk_0008",
+      "2504.13684v1_chunk_0002",
+      "2504.13684v1_chunk_0003",
+      "2504.13684v1_chunk_0000"
+    ],
+    "difficulty": "Single document: multi hop",
+    "date_created": "2026-03-06T15:51:08.663523+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000034",
+    "question_text": "How can user embeddings enhance the tailoring of responses in AI systems to improve human-machine collaboration?",
+    "source_paper_ids": [
+      "2504.13684v1"
+    ],
+    "ground_truth": "User embeddings enhance the tailoring of responses in AI systems by creating numerical representations of a user's interaction history and cognitive style. This allows AI systems, particularly LLMs, to adjust their response styles dynamically, thereby improving personalization and fostering better human-machine collaboration. However, these embeddings face limitations as they do not incorporate structured knowledge dependencies, such as the evolution of a user\u2019s beliefs or the influence of new perspectives on reasoning. This aspect highlights the need for additional frameworks, like knowledge graphs, to enrich user information representation.",
+    "golden_chunk_ids": [
+      "2504.13684v1_chunk_0004",
+      "2504.13684v1_chunk_0003"
+    ],
+    "top_k_chunk_ids": [
+      "2504.13684v1_chunk_0003",
+      "2504.13684v1_chunk_0004",
+      "2504.13684v1_chunk_0010",
+      "2504.13684v1_chunk_0009",
+      "2504.13684v1_chunk_0001"
+    ],
+    "difficulty": "Single document: multi hop",
+    "date_created": "2026-03-06T15:54:54.173700+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000035",
+    "question_text": "What methodologies are proposed in the document for integrating user-specific data to enhance cognitive augmentation in AI systems?",
+    "source_paper_ids": [
+      "2504.13684v1"
+    ],
+    "ground_truth": "The document proposes several methodologies for integrating user-specific data to enhance cognitive augmentation in AI systems:\n\n1. **Multi-modal Awareness**: Incorporate diverse data types (text, images, movement patterns) to augment contextual knowledge.\n2. **Cognitive Workflow Adaptation**: Tailor interventions based on whether a user engages in exploratory or structured information processing.\n3. **Socially Adaptive Interaction**: Offer discrete and unobtrusive user engagement methods while respecting social contexts.\n4. **Seamless Support Transition**: Function as both a real-time assistant and a post-experience knowledge synthesizer.\n5. **User-Specific Embeddings**: Create numerical representations of users\u2019 interaction histories and cognitive styles to adjust response styles.\n6. **Knowledge Graphs**: Utilize structured representations of user information to enhance personalization and contextual understanding.\n\nThese approaches aim for AI systems to proactively assist users by adapting to their cognitive constraints and integrating into daily workflows.",
+    "golden_chunk_ids": [
+      "2504.13684v1_chunk_0010",
+      "2504.13684v1_chunk_0009",
+      "2504.13684v1_chunk_0004"
+    ],
+    "top_k_chunk_ids": [
+      "2504.13684v1_chunk_0010",
+      "2504.13684v1_chunk_0009",
+      "2504.13684v1_chunk_0004",
+      "2504.14689v1_chunk_0005",
+      "2504.13684v1_chunk_0007"
+    ],
+    "difficulty": "Single document: single hop",
+    "date_created": "2026-03-06T15:57:11.232403+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000036",
+    "question_text": "What is the focus of the research presented in the document titled \"2504.14689v1\"?",
+    "source_paper_ids": [
+      "2504.14689v1"
+    ],
+    "ground_truth": "The research presented in the document titled \"2504.14689v1\" focuses on the impact of generative AI (GenAI) on critical thinking skills. It distinguishes between \"performed critical thinking,\" which occurs independently of AI assistance, and \"demonstrated critical thinking,\" which is facilitated by AI. The paper argues that while current AI systems may enhance demonstrated critical thinking, they do not necessarily improve performed critical thinking, highlighting important implications for research and AI design.",
+    "golden_chunk_ids": [
+      "2504.14689v1_chunk_0001",
+      "2504.14689v1_chunk_0002",
+      "2504.14689v1_chunk_0003"
+    ],
+    "top_k_chunk_ids": [
+      "2504.14689v1_chunk_0012",
+      "2504.14689v1_chunk_0001",
+      "2504.14689v1_chunk_0002",
+      "2504.14689v1_chunk_0003",
+      "2504.14689v1_chunk_0000"
+    ],
+    "difficulty": "Single document: single hop",
+    "date_created": "2026-03-06T15:58:59.601478+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000037",
+    "question_text": "How do the proposed augmentation artifacts in \"2504.14689v1\" address the balance between improving human performance and preventing overreliance on AI systems?",
+    "source_paper_ids": [
+      "2504.14689v1"
+    ],
+    "ground_truth": "The proposed augmentation artifacts in \"2504.14689v1\" address the balance between improving human performance and preventing overreliance on AI systems by distinguishing between augmenting demonstrated and performed critical thinking. Demonstrated critical thinking focuses on enhancing the quality of outputs in collaborative processes, which can be useful in time-sensitive or complex problem-solving contexts. In contrast, performed critical thinking aims to improve individuals' independent cognitive skills after interacting with AI, ensuring long-term development and maintaining autonomy. By emphasizing both forms of augmentation, the framework encourages effective collaboration with AI while fostering essential independent cognitive abilities.",
+    "golden_chunk_ids": [
+      "2504.14689v1_chunk_0007"
+    ],
+    "top_k_chunk_ids": [
+      "2504.14689v1_chunk_0007",
+      "2504.14689v1_chunk_0001",
+      "2504.14689v1_chunk_0000",
+      "2504.14689v1_chunk_0006",
+      "2504.14689v1_chunk_0008"
+    ],
+    "difficulty": "Single document: single hop",
+    "date_created": "2026-03-06T15:59:31.916497+00:00",
+    "notes": ""
+  },
+  {
+    "question_id": "q_000039",
+    "question_text": "How do the insights from Engelbart's intellect augmentation framework relate to the evaluation of current AI systems in enhancing critical thinking skills through standardized tests and qualitative assessments?",
+    "source_paper_ids": [
+      "2504.14689v1"
+    ],
+    "ground_truth": "Insights from Engelbart's intellect augmentation framework emphasize the distinction between performed and demonstrated critical thinking in evaluating current AI systems. While AI can enhance demonstrated critical thinking\u2014evident in outputs from collaborative processes\u2014it doesn't necessarily improve performed critical thinking, which involves independent cognitive efforts without external assistance. To foster performed critical thinking, AI should focus on training users through structured frameworks and guiding questions rather than merely delivering conclusions. Current evaluations often conflate these two types of critical thinking, predominantly assessing demonstrated abilities, thus overlooking how AI may impact long-term skill development and human autonomy in reasoning.",
+    "golden_chunk_ids": [
+      "2504.14689v1_chunk_0008",
+      "2504.14689v1_chunk_0003",
+      "2504.14689v1_chunk_0004",
+      "2504.14689v1_chunk_0007"
+    ],
+    "top_k_chunk_ids": [
+      "2504.14689v1_chunk_0003",
+      "2504.14689v1_chunk_0004",
+      "2504.14689v1_chunk_0008",
+      "2504.14689v1_chunk_0005",
+      "2504.14689v1_chunk_0007"
+    ],
+    "difficulty": "Single document: multi hop",
+    "date_created": "2026-03-06T16:01:24.661396+00:00",
+    "notes": ""
+  }
+]

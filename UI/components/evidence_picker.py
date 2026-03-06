@@ -4,14 +4,21 @@ import streamlit as st
 
 from Benchmark.domain.models import Chunk
 from Benchmark.domain.models import BenchmarkRecord
+from Benchmark.domain.models import EvidenceCandidate
 
 
-def render_evidence_picker(record: BenchmarkRecord, chunks_by_id: dict[str, Chunk], key_prefix: str) -> list[str]:
+def render_evidence_picker(
+    record: BenchmarkRecord,
+    chunks_by_id: dict[str, Chunk],
+    key_prefix: str,
+    candidates: list[EvidenceCandidate] | None = None,
+) -> list[str]:
     defaults = set(record.gold_chunk_ids or record.candidate_gold_chunk_ids)
     selected: list[str] = []
+    display_candidates = candidates if candidates is not None else record.retrieval_candidates
 
     st.write("Recommended chunks (check to include in gold chunks):")
-    for cand in record.retrieval_candidates:
+    for cand in display_candidates:
         check_key = f"{key_prefix}_chk_{record.question_id}_{cand.chunk_id}"
         checked = st.checkbox(
             f"{cand.rank}. {cand.chunk_id} (score={cand.score:.3f})",

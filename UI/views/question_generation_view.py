@@ -20,6 +20,9 @@ from UI.state.session_state import (
 )
 
 
+USER_CREATED_RESET_KEY = "user_created_question_reset_pending"
+
+
 def _show_title(show_title: bool) -> None:
     if show_title:
         st.title("Question Generation")
@@ -36,6 +39,11 @@ def _text_area_height(text: str) -> int:
 
 def _render_user_created_questions_section() -> None:
     """Render manual question entry inputs above the paper selector."""
+    if st.session_state.pop(USER_CREATED_RESET_KEY, False):
+        st.session_state["user_created_question_text"] = ""
+        st.session_state["user_created_question_paper_ids"] = []
+    if "user_created_question_paper_ids" not in st.session_state:
+        st.session_state["user_created_question_paper_ids"] = []
     st.subheader("User Created Questions")
     custom_question = str(st.session_state.get("user_created_question_text", ""))
     st.text_area(
@@ -60,7 +68,7 @@ def _render_user_created_questions_section() -> None:
 
 def _add_user_created_question(
     *,
-    paper_id: str,
+    paper_ids: list[str],
     unverified_store: UnverifiedQuestionStore,
     id_allocator: QuestionIdAllocator,
 ) -> bool:
@@ -77,8 +85,9 @@ def _add_user_created_question(
 
     record = BenchmarkRecord(
         question_id=id_allocator.next_id(),
-        paper_id=paper_id,
+        paper_id=paper_ids[0] if paper_ids else "",
         question_text=question_text,
+        source_paper_ids=list(paper_ids),
         target_difficulty=difficulty,
         difficulty_auto=difficulty,
         difficulty_final=difficulty,
@@ -86,7 +95,7 @@ def _add_user_created_question(
     record.audit["difficulty_profile"] = difficulty_value
     record.audit["accepted_for_verification"] = True
     unverified_store.append_accepted(record)
-    st.session_state["user_created_question_text"] = ""
+    st.session_state[USER_CREATED_RESET_KEY] = True
     st.success("Added manual question to data/unverified_questions.json")
     return True
 
@@ -99,19 +108,15 @@ def _render_user_created_question_actions(
     id_allocator: QuestionIdAllocator,
 ) -> None:
     """Render the action row for the manual question section."""
-    selected_paper_id = st.selectbox(
-        "Add to paper",
-        options=[None, *paper_ids],
-        index=(paper_ids.index(current_paper_id) + 1) if current_paper_id in paper_ids else 0,
-        format_func=lambda value: "No paper selected" if value is None else value,
-        key="user_created_question_paper_id",
+    selected_paper_ids = st.multiselect(
+        "Add to papers",
+        options=paper_ids,
+        placeholder="No selected papers",
+        key="user_created_question_paper_ids",
     )
     if st.button("Add", key="add_user_created_question"):
-        if selected_paper_id is None:
-            st.error("Select a paper before adding the question.")
-            return
         if _add_user_created_question(
-            paper_id=selected_paper_id,
+            paper_ids=selected_paper_ids,
             unverified_store=unverified_store,
             id_allocator=id_allocator,
         ):

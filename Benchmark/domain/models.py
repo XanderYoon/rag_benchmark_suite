@@ -53,6 +53,7 @@ class BenchmarkRecord:
     question_id: str
     paper_id: str
     question_text: str
+    source_paper_ids: list[str] = field(default_factory=list)
     status: QuestionStatus = QuestionStatus.DRAFT
     target_difficulty: DifficultyLabel = DifficultyLabel.SINGLE_HOP
     difficulty_auto: DifficultyLabel = DifficultyLabel.SINGLE_HOP
