@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import os
 import re
-from typing import Any
 
 from Benchmark.domain.enums import DifficultyLabel
 from Benchmark.domain.models import Chunk
+from Benchmark.llm import generate_llm_text, normalize_llm_provider
 
 
 class QuestionGenerator:
@@ -16,9 +16,15 @@ class QuestionGenerator:
         "or references sections."
     )
 
-    def __init__(self, model: str = "gpt-4o-mini") -> None:
+    def __init__(
+        self,
+        model: str = "gpt-4o-mini",
+        provider: str = "openai",
+        ollama_base_url: str = "http://localhost:11434",
+    ) -> None:
         self.model = model
-        self._openai_client: Any | None = None
+        self.provider = normalize_llm_provider(provider)
+        self.ollama_base_url = ollama_base_url
 
     def generate_one(
         self,
@@ -241,43 +247,21 @@ class QuestionGenerator:
         return prompt
 
     def _generate_with_llm(self, prompt: str) -> str | None:
-        client = self._get_openai_client()
-        if client is None:
+        text = generate_llm_text(
+            provider=self.provider,
+            model=self.model,
+            system_prompt=(
+                "You generate benchmark questions for retrieval evaluation. "
+                "Return one question only."
+            ),
+            user_prompt=prompt,
+            openai_api_key=os.getenv("OPENAI_API_KEY", ""),
+            ollama_base_url=self.ollama_base_url,
+        )
+        if not text:
             return None
-        try:
-            resp = client.responses.create(
-                model=self.model,
-                input=[
-                    {
-                        "role": "system",
-                        "content": (
-                            "You generate benchmark questions for retrieval evaluation. "
-                            "Return one question only."
-                        ),
-                    },
-                    {"role": "user", "content": prompt},
-                ],
-            )
-            text = (resp.output_text or "").strip()
-            if not text:
-                return None
-            line = text.splitlines()[0].strip().strip('"').strip("'")
-            return line if line else None
-        except Exception:
-            return None
-
-    def _get_openai_client(self) -> Any | None:
-        if self._openai_client is not None:
-            return self._openai_client
-        try:
-            from openai import OpenAI
-        except ImportError:
-            return None
-        api_key = os.getenv("OPENAI_API_KEY")
-        if not api_key:
-            return None
-        self._openai_client = OpenAI(api_key=api_key)
-        return self._openai_client
+        line = text.splitlines()[0].strip().strip('"').strip("'")
+        return line if line else None
 
     def _fallback_profile_question(
         self,

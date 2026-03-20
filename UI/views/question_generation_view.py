@@ -21,6 +21,7 @@ from UI.state.session_state import (
 
 
 USER_CREATED_RESET_KEY = "user_created_question_reset_pending"
+OPENAI_QUESTION_MODELS = ["gpt-4o-mini", "gpt-4.1-mini", "gpt-4.1"]
 
 
 def _show_title(show_title: bool) -> None:
@@ -124,6 +125,46 @@ def _render_user_created_question_actions(
     st.divider()
 
 
+def _question_model_options() -> list[tuple[str, str, str]]:
+    """Return selectable `(key, provider, model)` options for question generation."""
+    enabled_providers = list(st.session_state.get("llm_providers", ["openai"]))
+    options: list[tuple[str, str, str]] = []
+    if "openai" in enabled_providers:
+        for model in OPENAI_QUESTION_MODELS:
+            options.append((f"openai::{model}", "openai", model))
+    if "ollama" in enabled_providers:
+        ollama_model = str(st.session_state.get("ollama_model", "")).strip()
+        if ollama_model:
+            options.append((f"ollama::{ollama_model}", "ollama", ollama_model))
+    if not options:
+        options.append(("openai::gpt-4o-mini", "openai", "gpt-4o-mini"))
+    return options
+
+
+def _render_question_model_picker() -> None:
+    """Render AI question model dropdown and persist provider/model selection."""
+    options = _question_model_options()
+    option_keys = [key for key, _, _ in options]
+    option_lookup = {key: (provider, model) for key, provider, model in options}
+
+    selected_provider = str(st.session_state.get("question_generation_provider", "")).strip().lower()
+    selected_model = str(st.session_state.get("question_generation_model", "")).strip()
+    default_key = f"{selected_provider}::{selected_model}" if selected_provider and selected_model else option_keys[0]
+    if default_key not in option_lookup:
+        default_key = option_keys[0]
+
+    selected_key = st.selectbox(
+        "Question generation model",
+        options=option_keys,
+        index=option_keys.index(default_key),
+        format_func=lambda key: f"{option_lookup[key][1]} ({option_lookup[key][0]})",
+        key="question_generation_model_select",
+    )
+    provider, model = option_lookup[selected_key]
+    st.session_state["question_generation_provider"] = provider
+    st.session_state["question_generation_model"] = model
+
+
 def render(show_title: bool = True) -> None:
     _show_title(show_title)
 
@@ -161,6 +202,7 @@ def render(show_title: bool = True) -> None:
     )
 
     st.subheader("AI Generated Questions")
+    _render_question_model_picker()
     current_index = render_paper_selector(paper_ids, current_index)
     set_current_paper_index(current_index)
     paper_id = paper_ids[current_index]

@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+import os
+import time
+import traceback
 from inspect import signature
 from typing import Any
 
 from Benchmark.benchmark_tools.models import RetrievalCaseResult
+from Benchmark.benchmark_tools.observability import append_debug_event
 
 
 def run_ragas_benchmark(
@@ -13,6 +17,11 @@ def run_ragas_benchmark(
     evaluation_model: str | None = None,
 ) -> dict[str, Any]:
     """Run RAGAS over retrieval case results when the SDK is installed."""
+    debug_context = _build_ragas_debug_context(
+        results=results,
+        retrieval_model=retrieval_model,
+        evaluation_model=evaluation_model,
+    )
     try:
         from datasets import Dataset
         from ragas import evaluate
@@ -22,6 +31,16 @@ def run_ragas_benchmark(
             tool_name="ragas",
             message="RAGAS dependencies are missing. Install with: pip install ragas datasets",
             error=str(exc),
+        )
+
+    if _is_embedding_model_name(model_name=evaluation_model):
+        return skipped_tool_result(
+            tool_name="ragas",
+            message=(
+                "RAGAS requires an LLM-style evaluation model. "
+                f"Received embedding model '{evaluation_model}'."
+            ),
+            error="Set evaluation_model to a chat/completion model (for example, gpt-4o-mini).",
         )
 
     rows = []
@@ -63,6 +82,7 @@ def run_ragas_benchmark(
         )
 
     try:
+        debug_context["metric_names"] = list(metric_names)
         dataset = Dataset.from_list(rows)
         evaluate_kwargs: dict[str, Any] = {
             "dataset": dataset,
@@ -70,10 +90,30 @@ def run_ragas_benchmark(
         }
         embeddings = _build_langchain_embeddings(model=retrieval_model)
         llm = _build_langchain_chat_model(model=evaluation_model) if evaluation_model else None
-        if embeddings is not None:
-            evaluate_kwargs["embeddings"] = embeddings
-        if llm is not None:
-            evaluate_kwargs["llm"] = llm
+        if embeddings is None:
+            backend_error = _embeddings_backend_error(model=retrieval_model)
+            return skipped_tool_result(
+                tool_name="ragas",
+                message=f"RAGAS embeddings backend is not available. {backend_error}",
+                error=backend_error,
+            )
+        if llm is None:
+            backend_error = _chat_backend_error(model=evaluation_model)
+            return skipped_tool_result(
+                tool_name="ragas",
+                message=(
+                    "RAGAS evaluation LLM could not be initialized from advanced settings. "
+                    f"Configured evaluation_model='{evaluation_model}'. {backend_error}"
+                ),
+                error=backend_error,
+            )
+
+        evaluate_kwargs["embeddings"] = embeddings
+        evaluate_kwargs["llm"] = llm
+        debug_context["chat_model_kwargs"] = _safe_json_value(
+            _build_chat_model_debug_context(model=evaluation_model or "")
+        )
+        debug_context["started_at_unix"] = time.time()
 
         evaluate_signature = signature(evaluate)
         if "raise_exceptions" in evaluate_signature.parameters:
@@ -83,216 +123,192 @@ def run_ragas_benchmark(
 
         score_result = evaluate(**evaluate_kwargs)
         parsed_scores = _extract_ragas_scores(score_result)
+        case_scores = _extract_ragas_case_scores(score_result=score_result, results=results)
+        debug_file = append_debug_event(
+            event_type="ragas_completed",
+            payload={
+                **debug_context,
+                "summary": _safe_json_value(parsed_scores),
+                "case_scores_count": len(case_scores),
+            },
+        )
         return completed_tool_result(
             tool_name="ragas",
             summary=parsed_scores,
-            details={"num_cases": len(rows)},
-        )
-    except Exception as exc:
-        return failed_tool_result("ragas", exc)
-
-
-def run_deepeval_benchmark(
-    *,
-    results: list[RetrievalCaseResult],
-    evaluation_model: str | None = None,
-) -> dict[str, Any]:
-    """Run DeepEval metrics over retrieval case results when installed."""
-    try:
-        from deepeval.metrics import (
-            AnswerRelevancyMetric,
-            ContextualPrecisionMetric,
-            ContextualRecallMetric,
-            ContextualRelevancyMetric,
-            FaithfulnessMetric,
-        )
-        from deepeval.test_case import LLMTestCase
-    except ImportError as exc:
-        return skipped_tool_result(
-            tool_name="deepeval",
-            message="DeepEval dependencies are missing. Install with: pip install deepeval",
-            error=str(exc),
-        )
-
-    metric_defs = [
-        ("answer_relevancy", AnswerRelevancyMetric),
-        ("faithfulness", FaithfulnessMetric),
-        ("contextual_precision", ContextualPrecisionMetric),
-        ("contextual_recall", ContextualRecallMetric),
-        ("contextual_relevancy", ContextualRelevancyMetric),
-    ]
-
-    aggregate_scores: dict[str, list[float]] = {name: [] for name, _ in metric_defs}
-    metric_reasons: dict[str, list[str]] = {name: [] for name, _ in metric_defs}
-
-    try:
-        for result in results:
-            test_case = _build_deepeval_test_case(LLMTestCase=LLMTestCase, result=result)
-            for name, metric_cls in metric_defs:
-                metric = _instantiate_metric(metric_cls, evaluation_model=evaluation_model)
-                metric.measure(test_case)
-                aggregate_scores[name].append(float(getattr(metric, "score", 0.0)))
-                reason = getattr(metric, "reason", None)
-                if reason:
-                    metric_reasons[name].append(str(reason))
-
-        summary = {
-            name: (sum(values) / len(values) if values else 0.0)
-            for name, values in aggregate_scores.items()
-        }
-        details = {
-            "num_cases": len(results),
-            "reasons": {
-                name: reasons[:3]
-                for name, reasons in metric_reasons.items()
-                if reasons
-            },
-        }
-        return completed_tool_result(tool_name="deepeval", summary=summary, details=details)
-    except Exception as exc:
-        return failed_tool_result("deepeval", exc)
-
-
-def run_langsmith_benchmark(
-    *,
-    results: list[RetrievalCaseResult],
-    experiment_name: str | None = None,
-) -> dict[str, Any]:
-    """Run a simple LangSmith evaluation flow when the SDK is installed."""
-    try:
-        from langsmith import Client
-        from langsmith import evaluate as langsmith_evaluate
-    except ImportError as exc:
-        return skipped_tool_result(
-            tool_name="langsmith",
-            message="LangSmith dependencies are missing. Install with: pip install langsmith",
-            error=str(exc),
-        )
-
-    payload = [
-        {
-            "inputs": {"question": result.query},
-            "outputs": {
-                "answer": result.actual_answer,
-                "top_hit_chunk_id": result.top_hit_chunk_id,
-                "retrieved_chunk_ids": [chunk.chunk_id for chunk in result.retrieved_chunks],
-            },
-            "reference_outputs": {
-                "expected_chunk_id": result.expected_chunk_id,
-                "expected_answer": result.expected_answer,
-            },
-        }
-        for result in results
-    ]
-
-    summary = {
-        "num_cases": len(results),
-        "hit_at_1": sum(1 for result in results if result.hit_at_1) / len(results) if results else 0.0,
-        "hit_at_3": sum(1 for result in results if result.hit_at_3) / len(results) if results else 0.0,
-    }
-
-    try:
-        client = Client()
-        evaluate_method = langsmith_evaluate if callable(langsmith_evaluate) else getattr(client, "evaluate", None)
-        if callable(evaluate_method):
-            def target(example: dict[str, Any]) -> dict[str, Any]:
-                return dict(example.get("outputs", {}))
-
-            def retrieval_hit_evaluator(run: Any, example: Any) -> dict[str, Any]:
-                predicted = None
-                expected = None
-
-                if hasattr(run, "outputs") and isinstance(run.outputs, dict):
-                    predicted = run.outputs.get("top_hit_chunk_id")
-                elif isinstance(run, dict):
-                    predicted = run.get("outputs", {}).get("top_hit_chunk_id")
-
-                if hasattr(example, "reference_outputs") and isinstance(example.reference_outputs, dict):
-                    expected = example.reference_outputs.get("expected_chunk_id")
-                elif isinstance(example, dict):
-                    expected = example.get("reference_outputs", {}).get("expected_chunk_id")
-
-                return {
-                    "key": "retrieval_hit",
-                    "score": 1.0 if predicted == expected and expected is not None else 0.0,
-                }
-
-            evaluate_kwargs: dict[str, Any] = {
-                "data": payload,
-                "evaluators": [retrieval_hit_evaluator],
-            }
-            if experiment_name:
-                if "experiment_prefix" in signature(evaluate_method).parameters:
-                    evaluate_kwargs["experiment_prefix"] = experiment_name
-                elif "experiment_name" in signature(evaluate_method).parameters:
-                    evaluate_kwargs["experiment_name"] = experiment_name
-
-            experiment_result = evaluate_method(target, **evaluate_kwargs)
-            details = {
-                "num_cases": len(results),
-                "experiment_name": experiment_name,
-                "langsmith_result_type": type(experiment_result).__name__,
-            }
-            return completed_tool_result("langsmith", summary=summary, details=details)
-
-        return completed_tool_result(
-            tool_name="langsmith",
-            summary=summary,
             details={
-                "num_cases": len(results),
-                "message": "LangSmith client is installed, but no evaluate method was available. "
-                "Returned local compatibility summary only.",
+                "num_cases": len(rows),
+                "case_scores": case_scores,
+                "debug_log_file": str(debug_file),
+                "debug_context": debug_context,
             },
         )
     except Exception as exc:
-        return failed_tool_result("langsmith", exc, summary=summary, details={"num_cases": len(results)})
+        debug_file = append_debug_event(
+            event_type="ragas_failed",
+            payload={
+                **debug_context,
+                "exception": {
+                    "type": type(exc).__name__,
+                    "message": str(exc),
+                    "traceback": traceback.format_exc(),
+                },
+            },
+        )
+        return failed_tool_result(
+            "ragas",
+            exc,
+            details={
+                "debug_log_file": str(debug_file),
+                "debug_context": debug_context,
+            },
+        )
 
 
 def _build_langchain_embeddings(model: str) -> Any | None:
-    """Build a LangChain OpenAI embeddings wrapper when available."""
+    """Build a LangChain embeddings wrapper for OpenAI or Ollama."""
+    if _is_openai_embedding_model(model_name=model):
+        try:
+            from langchain_openai import OpenAIEmbeddings
+        except ImportError:
+            return None
+        return OpenAIEmbeddings(model=model)
+
     try:
-        from langchain_openai import OpenAIEmbeddings
+        from langchain_ollama import OllamaEmbeddings
     except ImportError:
         return None
-    return OpenAIEmbeddings(model=model)
+    return OllamaEmbeddings(model=model, base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"))
 
 
 def _build_langchain_chat_model(model: str) -> Any | None:
-    """Build a LangChain OpenAI chat wrapper when available."""
+    """Build a LangChain chat wrapper for OpenAI or Ollama."""
+    if _is_embedding_model_name(model_name=model):
+        return None
+    if _is_openai_chat_model(model_name=model):
+        try:
+            from langchain_openai import ChatOpenAI
+        except ImportError:
+            return None
+        return ChatOpenAI(model=model)
+
     try:
-        from langchain_openai import ChatOpenAI
+        from langchain_ollama import ChatOllama
     except ImportError:
         return None
-    return ChatOpenAI(model=model)
+    return ChatOllama(**_build_ollama_chat_kwargs(model=model))
 
 
-def _instantiate_metric(metric_cls: type, evaluation_model: str | None) -> Any:
-    """Instantiate a DeepEval metric with optional model support."""
-    kwargs: dict[str, Any] = {"threshold": 0.0}
-    if evaluation_model:
-        params = signature(metric_cls).parameters
-        if "model" in params:
-            kwargs["model"] = evaluation_model
-        elif "evaluation_model" in params:
-            kwargs["evaluation_model"] = evaluation_model
-    return metric_cls(**kwargs)
+def _build_ollama_chat_kwargs(*, model: str) -> dict[str, Any]:
+    """Build Ollama chat kwargs with stable defaults for evaluator use."""
+    kwargs: dict[str, Any] = {
+        "model": model,
+        "base_url": os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
+        "temperature": 0,
+    }
+    normalized_model = str(model).strip().lower()
+    if normalized_model.startswith("qwen"):
+        # Disable reasoning output so RAGAS gets concise judge responses.
+        kwargs["reasoning"] = False
+    return kwargs
 
 
-def _build_deepeval_test_case(LLMTestCase: type, result: RetrievalCaseResult) -> Any:
-    """Instantiate an LLMTestCase with only supported keyword arguments."""
-    available_fields = signature(LLMTestCase).parameters
-    kwargs: dict[str, Any] = {}
-    if "input" in available_fields:
-        kwargs["input"] = result.query
-    if "actual_output" in available_fields:
-        kwargs["actual_output"] = result.actual_answer
-    if "expected_output" in available_fields:
-        kwargs["expected_output"] = result.expected_answer
-    if "context" in available_fields:
-        kwargs["context"] = list(result.reference_contexts)
-    if "retrieval_context" in available_fields:
-        kwargs["retrieval_context"] = [chunk.text for chunk in result.retrieved_chunks]
-    return LLMTestCase(**kwargs)
+def _build_chat_model_debug_context(*, model: str) -> dict[str, Any]:
+    """Return non-sensitive chat-model config used for benchmark evaluation."""
+    if _is_openai_chat_model(model_name=model):
+        return {
+            "provider": "openai",
+            "model": model,
+        }
+    if not model:
+        return {"provider": "unknown", "model": ""}
+    return {
+        "provider": "ollama",
+        "model": model,
+        "base_url": os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
+        "temperature": 0,
+        "reasoning": False if str(model).strip().lower().startswith("qwen") else None,
+    }
+
+
+def _build_ragas_debug_context(
+    *,
+    results: list[RetrievalCaseResult],
+    retrieval_model: str,
+    evaluation_model: str | None,
+) -> dict[str, Any]:
+    """Build a structured debug context for one RAGAS adapter invocation."""
+    sample_case_ids = [result.case_id for result in results[:3]]
+    sample_queries = [result.query for result in results[:2]]
+    return {
+        "tool": "ragas",
+        "retrieval_model": retrieval_model,
+        "evaluation_model": str(evaluation_model or ""),
+        "retrieval_case_count": len(results),
+        "sample_case_ids": sample_case_ids,
+        "sample_queries": sample_queries,
+    }
+
+
+def _safe_json_value(value: Any) -> Any:
+    """Convert nested values into JSON-serializable debug payloads."""
+    if isinstance(value, (str, int, float, bool)) or value is None:
+        return value
+    if isinstance(value, dict):
+        return {str(key): _safe_json_value(inner) for key, inner in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_safe_json_value(item) for item in value]
+    return str(value)
+
+
+def _embeddings_backend_error(*, model: str) -> str:
+    """Return actionable setup guidance for retrieval embeddings backend."""
+    if _is_openai_embedding_model(model_name=model):
+        return (
+            "Configured retrieval_model uses OpenAI embeddings. "
+            "Install langchain-openai and set OPENAI_API_KEY."
+        )
+    return (
+        "Configured retrieval_model appears to be Ollama/local embeddings. "
+        "Install langchain-ollama and ensure OLLAMA_BASE_URL is reachable."
+    )
+
+
+def _chat_backend_error(*, model: str | None) -> str:
+    """Return actionable setup guidance for evaluation chat backend."""
+    if not model:
+        return "Set evaluation_model under Advanced Evaluation Settings."
+    normalized = str(model).strip().lower()
+    if _is_openai_chat_model(model_name=normalized):
+        return (
+            f"Configured evaluation_model='{model}' requires OpenAI chat backend. "
+            "Install langchain-openai and set OPENAI_API_KEY."
+        )
+    return (
+        f"Configured evaluation_model='{model}' requires Ollama chat backend. "
+        "Install langchain-ollama and ensure OLLAMA_BASE_URL is reachable."
+    )
+
+
+def _is_embedding_model_name(*, model_name: str | None) -> bool:
+    """Return True when model name appears to be an embeddings-only model id."""
+    if not model_name:
+        return False
+    lowered = str(model_name).strip().lower()
+    return lowered.startswith("text-embedding-") or "embed" in lowered
+
+
+def _is_openai_embedding_model(*, model_name: str | None) -> bool:
+    """Return True when the embedding model id belongs to OpenAI."""
+    if not model_name:
+        return False
+    return str(model_name).strip().lower().startswith("text-embedding-")
+
+
+def _is_openai_chat_model(*, model_name: str | None) -> bool:
+    """Return True when the chat model id belongs to OpenAI."""
+    if not model_name:
+        return False
+    return str(model_name).strip().lower().startswith("gpt-")
 
 
 def _extract_ragas_scores(score_result: Any) -> dict[str, float]:
@@ -327,6 +343,55 @@ def _extract_ragas_scores(score_result: Any) -> dict[str, float]:
         }
 
     return {}
+
+
+def _extract_ragas_case_scores(
+    *,
+    score_result: Any,
+    results: list[RetrievalCaseResult],
+) -> list[dict[str, Any]]:
+    """Extract per-case RAGAS metric rows aligned to benchmark case ids."""
+    to_pandas = getattr(score_result, "to_pandas", None)
+    if not callable(to_pandas):
+        return []
+
+    try:
+        frame = to_pandas()
+    except Exception:
+        return []
+
+    frame_columns = getattr(frame, "columns", None)
+    if frame_columns is None:
+        return []
+
+    metric_names = (
+        "context_precision",
+        "context_recall",
+        "faithfulness",
+        "answer_relevancy",
+        "response_relevancy",
+    )
+    available_metrics = [name for name in metric_names if name in frame_columns]
+    if not available_metrics:
+        return []
+
+    case_scores: list[dict[str, Any]] = []
+    for index, case_result in enumerate(results):
+        if index >= len(frame.index):
+            break
+        row_payload: dict[str, Any] = {"case_id": case_result.case_id}
+        has_metric = False
+        for metric_name in available_metrics:
+            try:
+                metric_value = frame.iloc[index][metric_name]
+            except Exception:
+                continue
+            if isinstance(metric_value, (int, float)):
+                row_payload[metric_name] = float(metric_value)
+                has_metric = True
+        if has_metric:
+            case_scores.append(row_payload)
+    return case_scores
 
 
 def _configure_ragas_metric(metric: Any) -> Any:
@@ -387,4 +452,7 @@ def failed_tool_result(
         "details": details or {},
     }
     payload["details"]["error"] = f"{type(exc).__name__}: {exc}"
+    payload["details"]["error_type"] = type(exc).__name__
+    payload["details"]["error_message"] = str(exc)
+    payload["details"]["traceback"] = traceback.format_exc()
     return payload

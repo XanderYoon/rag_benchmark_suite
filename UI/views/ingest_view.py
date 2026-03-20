@@ -60,7 +60,7 @@ def _render_pdf_viewer(pdf_path: Path) -> None:
         data=pdf_bytes,
         file_name=pdf_path.name,
         mime="application/pdf",
-        use_container_width=True,
+        width="stretch",
         key=f"download_pdf_{pdf_path.stem}",
     )
 
@@ -107,7 +107,7 @@ def render(show_title: bool = True) -> None:
     pipeline = get_pipeline()
 
     c_use, c_chunk = st.columns(2)
-    if c_use.button("Use selected folder", key=f"use_corpus_dir_{_display_path(browser_dir)}", use_container_width=True):
+    if c_use.button("Use selected folder", key=f"use_corpus_dir_{_display_path(browser_dir)}", width="stretch"):
         if selected == "..":
             next_dir = browser_dir.parent
         else:
@@ -115,7 +115,7 @@ def render(show_title: bool = True) -> None:
         st.session_state["corpus_dir"] = _display_path(next_dir)
         st.rerun()
 
-    if c_chunk.button("Chunk all", key="chunk_all_pdfs", use_container_width=True):
+    if c_chunk.button("Chunk all", key="chunk_all_pdfs", width="stretch"):
         total_pdfs = len(pipeline.paper_service.list_pdfs())
         progress_bar, status_placeholder = _render_ingest_progress(total_pdfs)
 

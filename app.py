@@ -1,10 +1,14 @@
 from __future__ import annotations
 
 import os
+import subprocess
+import time
+from urllib.parse import urlparse
 
 import requests
 import streamlit as st
 
+from Benchmark.llm.provider_client import DEFAULT_OLLAMA_BASE_URL, DEFAULT_OLLAMA_MODEL, normalize_llm_provider
 from UI.views.benchmarking_view import render as render_benchmarking
 from UI.views.corpus_creation_view import render as render_corpus_creation
 from UI.views.ingest_view import render as render_ingest
@@ -44,8 +48,10 @@ st.markdown(
 SECTIONS: dict[str, list[str]] = {
     "RAG Creation": ["Corpus Creation", "Ingest", "RAG Model Creator"],
     "Query Creation": ["Question Generation", "Verify Questions"],
-    "Benchmarking": ["Overview"],
+    "Benchmarking": ["Run Benchmarks", "Compare Benchmarks"],
 }
+BENCHMARK_RUN_IN_PROGRESS_KEY = "benchmark_run_in_progress"
+SUPPORTED_LLM_PROVIDERS = ("openai", "ollama")
 
 
 def _default_subpage(section: str) -> str:
@@ -72,6 +78,172 @@ def _is_valid_openai_api_key(api_key: str) -> bool:
     return response.status_code == 200
 
 
+def _is_reachable_ollama_server(base_url: str, model: str) -> tuple[bool, str]:
+    server_url = base_url.strip().rstrip("/")
+    if not server_url:
+        return False, "Enter an Ollama base URL."
+    if not model.strip():
+        return False, "Enter an Ollama model name."
+    try:
+        response = requests.get(f"{server_url}/api/tags", timeout=5)
+        response.raise_for_status()
+        body = response.json()
+    except Exception:
+        return False, f"Could not connect to Ollama at {server_url}."
+
+    listed_models = {
+        str(item.get("name", "")).strip()
+        for item in body.get("models", [])
+        if isinstance(item, dict)
+    }
+    if model.strip() not in listed_models:
+        return (
+            False,
+            f"Connected to Ollama, but model '{model.strip()}' is not installed. "
+            f"Run: ollama pull {model.strip()}",
+        )
+    return True, f"Ollama reachable and model '{model.strip()}' is available."
+
+
+def _candidate_ollama_cli_paths() -> list[str]:
+    """Return likely executable paths for the Ollama CLI."""
+    home_dir = os.path.expanduser("~")
+    return [
+        str(os.getenv("OLLAMA_CLI_PATH", "")).strip(),
+        os.path.join(home_dir, ".local", "bin", "ollama"),
+        "/usr/local/bin/ollama",
+        "/usr/bin/ollama",
+        "/opt/homebrew/bin/ollama",
+    ]
+
+
+def _resolve_ollama_cli_path(configured_path: str | None = None) -> str | None:
+    """Resolve an executable Ollama CLI path from config and common locations."""
+    candidates = [str(configured_path or "").strip(), *_candidate_ollama_cli_paths()]
+    seen: set[str] = set()
+    for candidate in candidates:
+        if not candidate or candidate in seen:
+            continue
+        seen.add(candidate)
+        if os.path.isfile(candidate) and os.access(candidate, os.X_OK):
+            return candidate
+    return None
+
+
+def _is_ollama_server_up(base_url: str) -> bool:
+    """Return True when an Ollama server responds at the given URL."""
+    server_url = base_url.strip().rstrip("/")
+    if not server_url:
+        return False
+    try:
+        response = requests.get(f"{server_url}/api/tags", timeout=2)
+        return response.status_code == 200
+    except Exception:
+        return False
+
+
+def _normalize_provider_list(raw_providers: list[str] | tuple[str, ...] | str | None) -> list[str]:
+    """Return unique supported providers preserving user order."""
+    providers: list[str] = []
+    if isinstance(raw_providers, str):
+        candidates = [item.strip() for item in raw_providers.split(",")]
+    elif isinstance(raw_providers, (list, tuple)):
+        candidates = [str(item).strip() for item in raw_providers]
+    else:
+        candidates = []
+    for candidate in candidates:
+        provider = normalize_llm_provider(candidate)
+        if provider in SUPPORTED_LLM_PROVIDERS and provider not in providers:
+            providers.append(provider)
+    return providers
+
+
+def _resolve_active_provider(*, providers: list[str], preferred: str | None) -> str:
+    """Pick the active provider from selected providers and preferred value."""
+    if not providers:
+        return "openai"
+    preferred_provider = normalize_llm_provider(preferred or "")
+    if preferred_provider in providers:
+        return preferred_provider
+    return providers[0]
+
+
+def _is_local_ollama_url(base_url: str) -> bool:
+    """Return True when the base URL points to localhost."""
+    parsed = urlparse(base_url)
+    host = (parsed.hostname or "").strip().lower()
+    return host in {"localhost", "127.0.0.1", "::1", "0.0.0.0"}
+
+
+def _selected_provider_ids_from_settings() -> list[str]:
+    """Return enabled provider ids from sidebar widget state."""
+    selected_providers: list[str] = []
+    if bool(st.session_state.get("settings_provider_openai", False)):
+        selected_providers.append("openai")
+    if bool(st.session_state.get("settings_provider_ollama", False)):
+        selected_providers.append("ollama")
+    return selected_providers
+
+
+def _sync_provider_settings_state() -> None:
+    """Keep provider widget state and backend session state in sync."""
+    selected_providers = _selected_provider_ids_from_settings()
+    if not selected_providers:
+        fallback_provider = normalize_llm_provider(str(st.session_state.get("llm_provider", "openai")))
+        if fallback_provider not in SUPPORTED_LLM_PROVIDERS:
+            fallback_provider = "openai"
+        selected_providers = [fallback_provider]
+        st.session_state["settings_provider_openai"] = fallback_provider == "openai"
+        st.session_state["settings_provider_ollama"] = fallback_provider == "ollama"
+        st.session_state["provider_selection_warning"] = "At least one provider is required."
+    else:
+        st.session_state["provider_selection_warning"] = ""
+
+    st.session_state["llm_providers"] = selected_providers
+    st.session_state["llm_provider"] = _resolve_active_provider(
+        providers=selected_providers,
+        preferred=str(st.session_state.get("llm_provider", "openai")),
+    )
+
+
+def _start_local_ollama_server(base_url: str) -> tuple[bool, str]:
+    """Start Ollama server for local URLs and verify readiness."""
+    target_url = base_url.strip() or DEFAULT_OLLAMA_BASE_URL
+    if not _is_local_ollama_url(target_url):
+        return False, "Can only start Ollama automatically for localhost URLs."
+    if _is_ollama_server_up(target_url):
+        return True, f"Ollama server is already running at {target_url}."
+    ollama_cli_path = _resolve_ollama_cli_path(str(st.session_state.get("ollama_cli_path", "")).strip())
+    if not ollama_cli_path:
+        searched_paths = [p for p in _candidate_ollama_cli_paths() if p]
+        return (
+            False,
+            "Could not find the Ollama CLI binary. Set 'Ollama CLI Path' in Settings "
+            f"or install Ollama. Checked: {searched_paths}",
+        )
+    try:
+        subprocess.Popen(
+            [ollama_cli_path, "serve"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            start_new_session=True,
+        )
+    except FileNotFoundError:
+        return False, "Could not find the 'ollama' CLI on PATH."
+    except Exception as exc:
+        return False, f"Failed to start Ollama server: {exc}"
+
+    for _ in range(8):
+        try:
+            response = requests.get(f"{target_url.rstrip('/')}/api/tags", timeout=1.5)
+            if response.status_code == 200:
+                return True, f"Started Ollama server at {target_url}."
+        except Exception:
+            pass
+        time.sleep(0.5)
+    return False, f"Started process but could not verify Ollama at {target_url} yet."
+
+
 if "openai_api_key_initialized" not in st.session_state:
     st.session_state["openai_api_key_initialized"] = True
     env_api_key = os.getenv("OPENAI_API_KEY", "").strip()
@@ -80,37 +252,90 @@ if "openai_api_key_initialized" not in st.session_state:
     else:
         st.session_state["openai_api_key"] = ""
 
+if "llm_settings_initialized" not in st.session_state:
+    st.session_state["llm_settings_initialized"] = True
+    env_provider_list = _normalize_provider_list(os.getenv("LLM_PROVIDERS", ""))
+    if not env_provider_list:
+        env_provider_list = _normalize_provider_list(os.getenv("LLM_PROVIDER", "openai"))
+    if not env_provider_list:
+        env_provider_list = ["openai"]
+    st.session_state["llm_providers"] = env_provider_list
+    st.session_state["llm_provider"] = env_provider_list[0]
+    st.session_state["ollama_base_url"] = os.getenv("OLLAMA_BASE_URL", DEFAULT_OLLAMA_BASE_URL).strip()
+    st.session_state["ollama_model"] = os.getenv("OLLAMA_MODEL", DEFAULT_OLLAMA_MODEL).strip()
+    st.session_state["ollama_cli_path"] = _resolve_ollama_cli_path(
+        os.getenv("OLLAMA_CLI_PATH", "")
+    ) or str(os.getenv("OLLAMA_CLI_PATH", "")).strip()
+    st.session_state["settings_provider_openai"] = "openai" in env_provider_list
+    st.session_state["settings_provider_ollama"] = "ollama" in env_provider_list
+    st.session_state["provider_selection_warning"] = ""
+
 session_api_key = str(st.session_state.get("openai_api_key", "")).strip()
 if session_api_key:
     os.environ["OPENAI_API_KEY"] = session_api_key
 else:
     os.environ.pop("OPENAI_API_KEY", None)
+session_llm_providers = _normalize_provider_list(st.session_state.get("llm_providers", ["openai"]))
+if not session_llm_providers:
+    session_llm_providers = _normalize_provider_list(st.session_state.get("llm_provider", "openai"))
+if not session_llm_providers:
+    session_llm_providers = ["openai"]
+st.session_state["llm_providers"] = session_llm_providers
+session_llm_provider = _resolve_active_provider(
+    providers=session_llm_providers,
+    preferred=str(st.session_state.get("llm_provider", "openai")),
+)
+st.session_state["llm_provider"] = session_llm_provider
+os.environ["LLM_PROVIDER"] = session_llm_provider
+os.environ["LLM_PROVIDERS"] = ",".join(session_llm_providers)
+session_ollama_base_url = str(st.session_state.get("ollama_base_url", DEFAULT_OLLAMA_BASE_URL)).strip()
+session_ollama_model = str(st.session_state.get("ollama_model", DEFAULT_OLLAMA_MODEL)).strip()
+st.session_state["ollama_base_url"] = session_ollama_base_url
+st.session_state["ollama_model"] = session_ollama_model
+os.environ["OLLAMA_BASE_URL"] = session_ollama_base_url
+os.environ["OLLAMA_MODEL"] = session_ollama_model
+session_ollama_cli_path = str(st.session_state.get("ollama_cli_path", "")).strip()
+if session_ollama_cli_path:
+    os.environ["OLLAMA_CLI_PATH"] = session_ollama_cli_path
+else:
+    os.environ.pop("OLLAMA_CLI_PATH", None)
 
 
 with st.sidebar:
     st.title("Navigation")
+    navigation_locked = bool(st.session_state.get(BENCHMARK_RUN_IN_PROGRESS_KEY, False))
     if "nav_section" not in st.session_state:
         st.session_state["nav_section"] = "RAG Creation"
     if "nav_subpage" not in st.session_state:
         st.session_state["nav_subpage"] = _default_subpage(st.session_state["nav_section"])
+    if navigation_locked:
+        st.session_state["nav_section"] = "Benchmarking"
+        st.session_state["nav_subpage"] = "Run Benchmarks"
+        st.warning("Benchmark in progress: navigation is temporarily locked.")
 
     for section_name, pages in SECTIONS.items():
         is_active_section = st.session_state.get("nav_section") == section_name
         if section_name == "Benchmarking":
             st.markdown(f"**{section_name}**" if is_active_section else section_name)
-            is_active_page = (
-                st.session_state.get("nav_section") == "Benchmarking"
-                and st.session_state.get("nav_subpage") == "Overview"
-            )
-            if is_active_page:
-                st.markdown(
-                    "<div class='nav-active-card'><span>Overview</span></div>",
-                    unsafe_allow_html=True,
+            for page_name in pages:
+                is_active_page = (
+                    st.session_state.get("nav_section") == "Benchmarking"
+                    and st.session_state.get("nav_subpage") == page_name
                 )
-            else:
-                if st.button("Overview", key="nav_benchmarking", use_container_width=True):
-                    _set_navigation("Benchmarking", "Overview")
-                    st.rerun()
+                if is_active_page:
+                    st.markdown(
+                        f"<div class='nav-active-card'><span>{page_name}</span></div>",
+                        unsafe_allow_html=True,
+                    )
+                else:
+                    if st.button(
+                        page_name,
+                        key=f"nav_benchmarking_{page_name}",
+                        width="stretch",
+                        disabled=navigation_locked,
+                    ):
+                        _set_navigation("Benchmarking", page_name)
+                        st.rerun()
             st.write("")
             continue
 
@@ -129,7 +354,8 @@ with st.sidebar:
                 if st.button(
                     page_name,
                     key=f"nav_{section_name}_{page_name}",
-                    use_container_width=True,
+                    width="stretch",
+                    disabled=navigation_locked,
                 ):
                     _set_navigation(section_name, page_name)
                     st.rerun()
@@ -140,14 +366,39 @@ with st.sidebar:
 
     st.divider()
     with st.expander("Settings", expanded=False):
+        selected_providers = list(st.session_state.get("llm_providers", ["openai"]))
+        st.session_state["settings_provider_openai"] = "openai" in selected_providers
+        st.session_state["settings_provider_ollama"] = "ollama" in selected_providers
+        st.markdown("**LLM Provider**")
+        provider_col_openai, provider_col_ollama = st.columns(2)
+        provider_col_openai.checkbox(
+            "OpenAI",
+            key="settings_provider_openai",
+            on_change=_sync_provider_settings_state,
+        )
+        provider_col_ollama.checkbox(
+            "Ollama",
+            key="settings_provider_ollama",
+            on_change=_sync_provider_settings_state,
+        )
+        _sync_provider_settings_state()
+        selected_providers = list(st.session_state.get("llm_providers", ["openai"]))
+        provider_warning = str(st.session_state.get("provider_selection_warning", "")).strip()
+        if provider_warning:
+            st.warning(provider_warning)
+
+        st.markdown("**OpenAI Settings**")
+        openai_settings_enabled = "openai" in st.session_state.get("llm_providers", [])
         api_key_input = st.text_input(
             "OpenAI API Key",
             value=st.session_state.get("openai_api_key", ""),
             type="password",
             key="settings_openai_api_key_input",
             placeholder="sk-...",
+            disabled=not openai_settings_enabled,
         )
-        if st.button("Set OpenAI API Key", key="set_openai_key"):
+        openai_action_col1, openai_action_col2 = st.columns(2)
+        if openai_action_col1.button("Set OpenAI Key", key="set_openai_key", disabled=not openai_settings_enabled):
             candidate_key = api_key_input.strip()
             if not candidate_key:
                 st.error("Enter an API key first.")
@@ -159,18 +410,98 @@ with st.sidebar:
             else:
                 st.error("That key could not be verified with OpenAI. It was not saved.")
 
-        if st.button("Clear key", key="clear_openai_key"):
+        if openai_action_col2.button(
+            "Clear OpenAI Key",
+            key="clear_openai_key",
+            disabled=not openai_settings_enabled,
+        ):
             st.session_state["openai_api_key"] = ""
             st.session_state["settings_openai_api_key_input"] = ""
             os.environ.pop("OPENAI_API_KEY", None)
             st.success("Cleared session and environment key.")
             st.rerun()
 
+        st.markdown("**Ollama Settings**")
+        ollama_settings_enabled = "ollama" in st.session_state.get("llm_providers", [])
+        ollama_base_url = st.text_input(
+            "Ollama Base URL",
+            value=st.session_state.get("ollama_base_url", DEFAULT_OLLAMA_BASE_URL),
+            key="settings_ollama_base_url_input",
+            placeholder=DEFAULT_OLLAMA_BASE_URL,
+            disabled=not ollama_settings_enabled,
+        )
+        ollama_model = st.text_input(
+            "Ollama Model",
+            value=st.session_state.get("ollama_model", DEFAULT_OLLAMA_MODEL),
+            key="settings_ollama_model_input",
+            placeholder=DEFAULT_OLLAMA_MODEL,
+            disabled=not ollama_settings_enabled,
+        )
+        ollama_cli_path = st.text_input(
+            "Ollama CLI Path",
+            value=st.session_state.get("ollama_cli_path", ""),
+            key="settings_ollama_cli_path_input",
+            placeholder="/usr/local/bin/ollama",
+            disabled=not ollama_settings_enabled,
+            help="Absolute path to the ollama executable used to auto-start the server.",
+        )
+        ollama_action_col1, ollama_action_col2 = st.columns(2)
+        if ollama_action_col1.button(
+            "Save Ollama",
+            key="set_ollama_settings",
+            disabled=not ollama_settings_enabled,
+        ):
+            st.session_state["ollama_base_url"] = ollama_base_url.strip() or DEFAULT_OLLAMA_BASE_URL
+            st.session_state["ollama_model"] = ollama_model.strip() or DEFAULT_OLLAMA_MODEL
+            st.session_state["ollama_cli_path"] = ollama_cli_path.strip()
+            st.success("Saved Ollama settings for this session.")
+            st.rerun()
+        if ollama_action_col2.button(
+            "Test Ollama",
+            key="test_ollama_connection",
+            disabled=not ollama_settings_enabled,
+        ):
+            ok, message = _is_reachable_ollama_server(
+                base_url=str(st.session_state.get("ollama_base_url", DEFAULT_OLLAMA_BASE_URL)),
+                model=str(st.session_state.get("ollama_model", DEFAULT_OLLAMA_MODEL)),
+            )
+            if ok:
+                st.success(message)
+            else:
+                st.warning(message)
+        if st.button(
+            "Start Ollama Server (Local)",
+            key="start_ollama_server",
+            disabled=not ollama_settings_enabled,
+        ):
+            ok, message = _start_local_ollama_server(
+                str(st.session_state.get("ollama_base_url", DEFAULT_OLLAMA_BASE_URL))
+            )
+            if ok:
+                st.success(message)
+            else:
+                st.warning(message)
+
         active_key = str(st.session_state.get("openai_api_key", "")).strip()
-        if active_key:
-            st.caption("OpenAI key is set for this session.")
-        else:
-            st.caption("No OpenAI key is set in this session.")
+        enabled_providers = st.session_state.get("llm_providers", ["openai"])
+        st.caption(f"Enabled providers: {', '.join(enabled_providers)}")
+        st.caption(f"Active provider: {st.session_state.get('llm_provider', 'openai')}")
+        if "openai" in enabled_providers:
+            if active_key:
+                st.caption("OpenAI key is set for this session.")
+            else:
+                st.caption("No OpenAI key is set in this session.")
+        if "ollama" in enabled_providers:
+            st.caption(
+                "Ollama target: "
+                f"{st.session_state.get('ollama_base_url', DEFAULT_OLLAMA_BASE_URL)} / "
+                f"{st.session_state.get('ollama_model', DEFAULT_OLLAMA_MODEL)}"
+            )
+            resolved_cli = _resolve_ollama_cli_path(str(st.session_state.get("ollama_cli_path", "")).strip())
+            if resolved_cli:
+                st.caption(f"Ollama CLI: {resolved_cli}")
+            else:
+                st.caption("Ollama CLI not found. Set 'Ollama CLI Path' to enable auto-start.")
 
 st.caption(f"{section} / {subpage}")
 

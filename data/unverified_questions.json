@@ -1,10 +1,4 @@
-[  
-  {
-    "question_id": "q_000061",
-    "question_text": "Who is the best Marvel superhero?",
-    "paper_ids": [],
-    "default_difficulty": "Negative / Null"
-  },
+[
   {
     "question_id": "q_000040",
     "question_text": "How do different assessment tools, such as standardized tests and qualitative methods, interact to influence the evaluation of cognitive development according to current research?",

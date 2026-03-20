@@ -16,7 +16,11 @@ class QuestionService:
 
     def __init__(self, config: AppConfig) -> None:
         self.config = config
-        self.generator = QuestionGenerator(model=config.question_model)
+        self.generator = QuestionGenerator(
+            model=config.question_model,
+            provider=config.llm_provider,
+            ollama_base_url=config.ollama_base_url,
+        )
         self.retrieval = RetrievalService(config)
         self.evidence = EvidenceProposer()
         self.difficulty = DifficultyClassifier()

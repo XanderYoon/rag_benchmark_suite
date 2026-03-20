@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 import streamlit as st
 
+from Benchmark.config import AppConfig
 from Benchmark.domain.difficulty_profiles import difficulty_from_profile_label
 from Benchmark.domain.enums import DifficultyLabel, QuestionStatus
 from Benchmark.domain.models import BenchmarkRecord, Chunk, EvidenceCandidate
+from Benchmark.llm import generate_llm_text
 from Benchmark.persistence.unverified_question_store import UnverifiedQuestionStore
 from Benchmark.persistence.verified_question_store import VerifiedQuestionStore
 from UI.components.difficulty_editor import render_difficulty_editor
@@ -18,6 +21,9 @@ from UI.state.session_state import (
     set_current_paper_index,
 )
 
+OPENAI_EMBEDDING_MODELS = ["text-embedding-3-small", "text-embedding-3-large", "text-embedding-ada-002"]
+OLLAMA_EMBEDDING_MODELS = ["nomic-embed-text"]
+
 
 def _show_title(show_title: bool) -> None:
     if show_title:
@@ -26,7 +32,12 @@ def _show_title(show_title: bool) -> None:
         st.subheader("Verify Questions")
 
 
-def _generate_ground_truth(question: str, selected_chunk_ids: list[str], chunks_by_id: dict[str, Chunk]) -> str:
+def _generate_ground_truth(
+    question: str,
+    selected_chunk_ids: list[str],
+    chunks_by_id: dict[str, Chunk],
+    config: AppConfig,
+) -> str:
     context_parts = [
         chunks_by_id[cid].text.strip()
         for cid in selected_chunk_ids
@@ -36,36 +47,19 @@ def _generate_ground_truth(question: str, selected_chunk_ids: list[str], chunks_
         return ""
 
     context = "\n\n".join(context_parts)[:12000]
-    try:
-        from openai import OpenAI
-    except ImportError:
-        OpenAI = None  # type: ignore[assignment]
-
-    api_key = os.getenv("OPENAI_API_KEY")
-    if OpenAI is not None and api_key:
-        try:
-            client = OpenAI(api_key=api_key)
-            resp = client.responses.create(
-                model="gpt-4o-mini",
-                input=[
-                    {
-                        "role": "system",
-                        "content": (
-                            "Write a concise ground-truth answer strictly from provided chunks. "
-                            "Do not add facts not in context."
-                        ),
-                    },
-                    {
-                        "role": "user",
-                        "content": f"Question:\n{question}\n\nContext chunks:\n{context}",
-                    },
-                ],
-            )
-            text = (resp.output_text or "").strip()
-            if text:
-                return text
-        except Exception:
-            pass
+    answer = generate_llm_text(
+        provider=config.llm_provider,
+        model=config.question_model,
+        system_prompt=(
+            "Write a concise ground-truth answer strictly from provided chunks. "
+            "Do not add facts not in context."
+        ),
+        user_prompt=f"Question:\n{question}\n\nContext chunks:\n{context}",
+        openai_api_key=os.getenv("OPENAI_API_KEY", ""),
+        ollama_base_url=config.ollama_base_url,
+    )
+    if answer:
+        return answer
 
     fallback = " ".join(context_parts)[:900].strip()
     if len(fallback) == 900:
@@ -165,6 +159,64 @@ def _candidate_matches_filters(
     return True
 
 
+def _resolve_faiss_retrieval_model() -> tuple[str, str]:
+    """Return selected FAISS retrieval `(provider, model)` from enabled providers."""
+    enabled_providers = list(st.session_state.get("llm_providers", ["openai"]))
+    options: list[tuple[str, str, str]] = []
+    if "openai" in enabled_providers:
+        for model in OPENAI_EMBEDDING_MODELS:
+            options.append((f"openai::{model}", "openai", model))
+    if "ollama" in enabled_providers:
+        for model in OLLAMA_EMBEDDING_MODELS:
+            options.append((f"ollama::{model}", "ollama", model))
+    if not options:
+        options.append(("openai::text-embedding-3-small", "openai", "text-embedding-3-small"))
+
+    option_lookup = {key: (provider, model) for key, provider, model in options}
+    default_provider = str(st.session_state.get("verify_faiss_retrieval_provider", "")).strip().lower()
+    default_model = str(st.session_state.get("verify_faiss_retrieval_model", "")).strip()
+    default_key = f"{default_provider}::{default_model}" if default_provider and default_model else options[0][0]
+    if default_key not in option_lookup:
+        default_key = options[0][0]
+
+    selected_key = st.selectbox(
+        "FAISS retrieval model",
+        options=[key for key, _, _ in options],
+        index=[key for key, _, _ in options].index(default_key),
+        format_func=lambda key: f"{option_lookup[key][1]} ({option_lookup[key][0]})",
+        key="verify_faiss_retrieval_model_select",
+    )
+    provider, model = option_lookup[selected_key]
+    st.session_state["verify_faiss_retrieval_provider"] = provider
+    st.session_state["verify_faiss_retrieval_model"] = model
+    return provider, model
+
+
+def _discover_faiss_directories() -> list[Path]:
+    """Return FAISS artifact directories available under the data root."""
+    project_root = Path(__file__).resolve().parents[2]
+    data_root = project_root / "data"
+    candidates: set[Path] = set()
+    if data_root.exists():
+        for manifest_path in data_root.rglob("index_manifest.json"):
+            parent = manifest_path.parent
+            if (parent / "chunks.faiss").exists() and (parent / "chunks_metadata.jsonl").exists():
+                candidates.add(parent.resolve())
+    default_dir = (data_root / "faiss_rag_index").resolve()
+    if (default_dir / "chunks.faiss").exists() and (default_dir / "chunks_metadata.jsonl").exists():
+        candidates.add(default_dir)
+    return sorted(candidates)
+
+
+def _fallback_candidates_without_faiss(chunks_by_id: dict[str, Chunk]) -> list[EvidenceCandidate]:
+    """Create deterministic non-FAISS candidates from loaded chunks."""
+    ordered_chunk_ids = sorted(chunks_by_id.keys())
+    return [
+        EvidenceCandidate(chunk_id=chunk_id, score=0.0, rank=index + 1)
+        for index, chunk_id in enumerate(ordered_chunk_ids)
+    ]
+
+
 def render(show_title: bool = True) -> None:
     _show_title(show_title)
     st.markdown(
@@ -227,21 +279,55 @@ def render(show_title: bool = True) -> None:
         for chunk in pipeline.load_chunks(selected_paper_id):
             chunks_by_id[chunk.chunk_id] = chunk
 
-    faiss_top_k = int(
-        st.number_input(
-            "Top-k",
-            min_value=1,
-            max_value=200,
-            value=20,
-            step=1,
-            key="verify_faiss_top_k",
-        )
-    )
-    limit_to_top_k = st.toggle(
-        "Restrict displayed chunks to top-k",
+    enable_faiss = st.toggle(
+        "Enable FAISS retrieval",
         value=True,
-        key=f"verify_limit_top_k_{scope_key or 'none'}",
+        key="verify_enable_faiss_retrieval",
     )
+    faiss_top_k = 20
+    limit_to_top_k = False
+    retrieval_provider = ""
+    retrieval_model = ""
+    selected_faiss_directory = ""
+    if enable_faiss:
+        with st.expander("FAISS settings", expanded=False):
+            faiss_directories = _discover_faiss_directories()
+            if faiss_directories:
+                faiss_directory_options = [str(path) for path in faiss_directories]
+                saved_faiss_directory = str(st.session_state.get("verify_faiss_directory", faiss_directory_options[0]))
+                if saved_faiss_directory not in faiss_directory_options:
+                    saved_faiss_directory = faiss_directory_options[0]
+                selected_faiss_directory = st.selectbox(
+                    "FAISS directory",
+                    options=faiss_directory_options,
+                    index=faiss_directory_options.index(saved_faiss_directory),
+                    key="verify_faiss_directory_select",
+                )
+                st.session_state["verify_faiss_directory"] = selected_faiss_directory
+            else:
+                st.warning("No FAISS directories found. Using chunk-only fallback.")
+                enable_faiss = False
+
+            if enable_faiss:
+                retrieval_provider, retrieval_model = _resolve_faiss_retrieval_model()
+                limit_to_top_k = st.toggle(
+                    "Restrict displayed chunks to top-k",
+                    value=True,
+                    key=f"verify_limit_top_k_{scope_key or 'none'}",
+                )
+                if limit_to_top_k:
+                    faiss_top_k = int(
+                        st.number_input(
+                            "Top-k",
+                            min_value=1,
+                            max_value=200,
+                            value=int(st.session_state.get("verify_faiss_top_k", 20)),
+                            step=1,
+                            key="verify_faiss_top_k",
+                        )
+                    )
+                else:
+                    faiss_top_k = 200
 
     verify_idx_key = f"verify_question_index_{scope_key or 'none'}"
     if verify_idx_key not in st.session_state:
@@ -268,13 +354,25 @@ def render(show_title: bool = True) -> None:
     st.markdown(f"### Question {verify_idx + 1} of {len(paper_rows)}")
     record.question_text = st.text_area("Question", value=record.question_text, key=f"verify_q_{record.question_id}")
 
-    faiss_candidates = pipeline.question_service.retrieval.retrieve_top_faiss(record.question_text, limit=faiss_top_k)
-    if faiss_candidates:
-        record.retrieval_candidates = faiss_candidates
+    faiss_results_applied = False
+    if enable_faiss:
+        faiss_candidates = pipeline.question_service.retrieval.retrieve_top_faiss(
+            record.question_text,
+            limit=faiss_top_k,
+            retrieval_model=retrieval_model,
+            retrieval_provider=retrieval_provider,
+            faiss_output_dir=selected_faiss_directory,
+        )
+        if faiss_candidates:
+            record.retrieval_candidates = faiss_candidates
+            faiss_results_applied = True
+        else:
+            faiss_error = pipeline.question_service.retrieval.faiss_error
+            if faiss_error:
+                st.warning(f"FAISS retrieval unavailable: {faiss_error}. Showing chunks without FAISS.")
+            record.retrieval_candidates = _fallback_candidates_without_faiss(chunks_by_id)
     else:
-        faiss_error = pipeline.question_service.retrieval.faiss_error
-        if faiss_error:
-            st.warning(f"FAISS retrieval unavailable: {faiss_error}")
+        record.retrieval_candidates = _fallback_candidates_without_faiss(chunks_by_id)
 
     faiss_chunks_by_id = pipeline.question_service.retrieval.load_chunks_for_candidates(record.retrieval_candidates)
     chunks_by_id.update(faiss_chunks_by_id)
@@ -319,7 +417,9 @@ def render(show_title: bool = True) -> None:
         chunks_by_id=chunks_by_id,
         key_prefix=f"verify_{scope_key or 'none'}_{verify_idx}",
         candidates=filtered_candidates,
+        show_scores=faiss_results_applied,
     )
+    st.divider()
     record.top_k_chunk_ids = _render_top_k_picker(record, filtered_candidates)
     selected_difficulty_profile = render_difficulty_editor(
         record,
@@ -344,7 +444,12 @@ def render(show_title: bool = True) -> None:
         placeholder="Write or generate the reference answer here.",
     )
     if st.button("Generate answer", key=f"gen_answer_{record.question_id}", disabled=not bool(record.gold_chunk_ids)):
-        generated = _generate_ground_truth(record.question_text, record.gold_chunk_ids, chunks_by_id)
+        generated = _generate_ground_truth(
+            record.question_text,
+            record.gold_chunk_ids,
+            chunks_by_id,
+            pipeline.config,
+        )
         if generated:
             st.session_state[ground_truth_pending_key] = generated
             st.rerun()
@@ -359,35 +464,30 @@ def render(show_title: bool = True) -> None:
 
     c1, c2, c3 = st.columns(3)
     if c1.button("Verify", key=f"verify_btn_{record.question_id}"):
-        if not record.gold_chunk_ids:
-            st.error("Select at least one chunk before verifying.")
-        elif not record.top_k_chunk_ids:
-            st.error("Select at least one top-k retrieval chunk before verifying.")
-        else:
-            final = BenchmarkRecord(
-                question_id=record.question_id,
-                paper_id=record.paper_id,
-                question_text=record.question_text,
-                source_paper_ids=list(record.source_paper_ids),
-                status=QuestionStatus.DRAFT,
-                target_difficulty=record.target_difficulty,
-                difficulty_auto=record.target_difficulty,
-                difficulty_final=record.difficulty_final,
-            )
-            final.gold_chunk_ids = list(record.gold_chunk_ids)
-            final.top_k_chunk_ids = list(record.top_k_chunk_ids)
-            final.audit["difficulty_profile"] = selected_difficulty_profile
-            verifier.verify(final, verified_by="streamlit_user", notes=notes)
-            pipeline.audit_log.append("question_verified", final.to_dict())
-            verified_store.append_verified(
-                final,
-                notes=notes,
-                ground_truth=record_ground_truth,
-                difficulty_label=selected_difficulty_profile,
-            )
-            unverified_store.remove_question(final.question_id)
-            st.success("Question saved to data/verified_questions.json")
-            st.rerun()
+        final = BenchmarkRecord(
+            question_id=record.question_id,
+            paper_id=record.paper_id,
+            question_text=record.question_text,
+            source_paper_ids=list(record.source_paper_ids),
+            status=QuestionStatus.DRAFT,
+            target_difficulty=record.target_difficulty,
+            difficulty_auto=record.target_difficulty,
+            difficulty_final=record.difficulty_final,
+        )
+        final.gold_chunk_ids = list(record.gold_chunk_ids)
+        final.top_k_chunk_ids = list(record.top_k_chunk_ids)
+        final.audit["difficulty_profile"] = selected_difficulty_profile
+        verifier.verify(final, verified_by="streamlit_user", notes=notes)
+        pipeline.audit_log.append("question_verified", final.to_dict())
+        verified_store.append_verified(
+            final,
+            notes=notes,
+            ground_truth=record_ground_truth,
+            difficulty_label=selected_difficulty_profile,
+        )
+        unverified_store.remove_question(final.question_id)
+        st.success("Question saved to data/verified_questions.json")
+        st.rerun()
 
     if c2.button("Needs revision", key=f"revise_btn_{record.question_id}"):
         verifier.needs_revision(record, verified_by="streamlit_user", notes=notes)

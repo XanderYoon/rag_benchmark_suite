@@ -6,8 +6,11 @@ from pathlib import Path
 import streamlit as st
 
 from Benchmark.config import AppConfig, DEFAULT_CONFIG
+from Benchmark.llm import normalize_llm_provider
 from Benchmark.services.pipeline import PipelineService
 from Benchmark.verification.verifier import Verifier
+
+BENCHMARK_SNAPSHOT_KEY = "benchmark_snapshot"
 
 
 def _config_key(config: AppConfig) -> str:
@@ -17,6 +20,17 @@ def _config_key(config: AppConfig) -> str:
 
 def get_config() -> AppConfig:
     corpus_dir = st.session_state.get("corpus_dir", str(DEFAULT_CONFIG.corpus_dir))
+    llm_provider = normalize_llm_provider(st.session_state.get("llm_provider", DEFAULT_CONFIG.llm_provider))
+    ollama_base_url = str(st.session_state.get("ollama_base_url", DEFAULT_CONFIG.ollama_base_url)).strip()
+    ollama_model = str(st.session_state.get("ollama_model", DEFAULT_CONFIG.ollama_model)).strip()
+    selected_question_provider = normalize_llm_provider(
+        st.session_state.get("question_generation_provider", llm_provider)
+    )
+    selected_question_model = str(st.session_state.get("question_generation_model", "")).strip()
+    if not selected_question_model:
+        selected_question_model = DEFAULT_CONFIG.question_model
+        if selected_question_provider == "ollama":
+            selected_question_model = ollama_model or DEFAULT_CONFIG.ollama_model
     return AppConfig(
         chunk_size_tokens=DEFAULT_CONFIG.chunk_size_tokens,
         chunk_overlap_tokens=DEFAULT_CONFIG.chunk_overlap_tokens,
@@ -24,10 +38,13 @@ def get_config() -> AppConfig:
         retrieval_top_k=DEFAULT_CONFIG.retrieval_top_k,
         retrieval_threshold=DEFAULT_CONFIG.retrieval_threshold,
         retrieval_cap=DEFAULT_CONFIG.retrieval_cap,
-        question_model=DEFAULT_CONFIG.question_model,
+        question_model=selected_question_model,
         evidence_model=DEFAULT_CONFIG.evidence_model,
         difficulty_model=DEFAULT_CONFIG.difficulty_model,
         embedding_model=DEFAULT_CONFIG.embedding_model,
+        llm_provider=selected_question_provider,
+        ollama_base_url=ollama_base_url or DEFAULT_CONFIG.ollama_base_url,
+        ollama_model=ollama_model or DEFAULT_CONFIG.ollama_model,
         corpus_dir=Path(corpus_dir),
         text_cache_dir=DEFAULT_CONFIG.text_cache_dir,
         chunk_dir=DEFAULT_CONFIG.chunk_dir,
@@ -62,3 +79,29 @@ def get_current_paper_index() -> int:
 
 def set_current_paper_index(index: int) -> None:
     st.session_state["current_paper_index"] = max(index, 0)
+
+
+def set_benchmark_snapshot(*, snapshot: dict) -> None:
+    """Persist the latest benchmark snapshot for cross-page rendering."""
+    if not isinstance(snapshot, dict):
+        raise ValueError(
+            "Invalid benchmark snapshot payload. Expected a dictionary suitable for session storage."
+        )
+    st.session_state[BENCHMARK_SNAPSHOT_KEY] = dict(snapshot)
+
+
+def get_benchmark_snapshot() -> dict | None:
+    """Return the persisted benchmark snapshot if present."""
+    raw_snapshot = st.session_state.get(BENCHMARK_SNAPSHOT_KEY)
+    if raw_snapshot is None:
+        return None
+    if not isinstance(raw_snapshot, dict):
+        raise ValueError(
+            f"Invalid benchmark snapshot found in session key '{BENCHMARK_SNAPSHOT_KEY}'. Expected a dictionary."
+        )
+    return dict(raw_snapshot)
+
+
+def clear_benchmark_snapshot() -> None:
+    """Remove the persisted benchmark snapshot from Streamlit session state."""
+    st.session_state.pop(BENCHMARK_SNAPSHOT_KEY, None)

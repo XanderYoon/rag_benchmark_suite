@@ -21,6 +21,9 @@ class AppConfig:
     evidence_model: str = "gpt-4o-mini"
     difficulty_model: str = "gpt-4o-mini"
     embedding_model: str = "text-embedding-3-small"
+    llm_provider: str = "openai"
+    ollama_base_url: str = "http://localhost:11434"
+    ollama_model: str = "qwen3:8b"
 
     corpus_dir: Path = DEFAULT_CORPUS_DIR
     text_cache_dir: Path = Path("data/rag_corpus_text")

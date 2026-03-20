@@ -9,6 +9,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Sequence
 
+import requests
+
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CHUNKS_ROOT = PROJECT_ROOT / "data" / "rag_corpus_chunked"
@@ -16,7 +18,7 @@ DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "data" / "faiss_rag_index"
 ProgressCallback = Callable[[float, str], None]
 
 
-def _import_dependencies() -> tuple[object, object, object]:
+def _import_dependencies() -> tuple[object, object]:
     """Load optional runtime dependencies for FAISS index building."""
     try:
         import numpy as np
@@ -28,12 +30,7 @@ def _import_dependencies() -> tuple[object, object, object]:
     except ImportError as exc:  # pragma: no cover
         raise RuntimeError("faiss is required. Install with: pip install faiss-cpu") from exc
 
-    try:
-        from openai import OpenAI
-    except ImportError as exc:  # pragma: no cover
-        raise RuntimeError("openai is required. Install with: pip install openai") from exc
-
-    return np, faiss, OpenAI
+    return np, faiss
 
 
 @dataclass(frozen=True)
@@ -72,7 +69,18 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--embedding-model",
         default="text-embedding-3-small",
-        help="OpenAI embedding model name.",
+        help="Embedding model name.",
+    )
+    parser.add_argument(
+        "--embedding-provider",
+        choices=["openai", "ollama"],
+        default="openai",
+        help="Provider used to generate embeddings.",
+    )
+    parser.add_argument(
+        "--ollama-base-url",
+        default=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
+        help="Ollama server base URL used when --embedding-provider=ollama.",
     )
     parser.add_argument(
         "--batch-size",
@@ -138,17 +146,21 @@ def embed_texts_openai(
     model: str,
     batch_size: int,
     np: object,
-    openai_client_cls: object,
     progress_callback: ProgressCallback | None = None,
 ) -> object:
     """Embed chunk text with OpenAI and return a dense matrix."""
+    try:
+        from openai import OpenAI
+    except ImportError as exc:
+        raise RuntimeError("openai is required. Install with: pip install openai") from exc
+
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         raise RuntimeError("OPENAI_API_KEY is required in the environment.")
     if not texts:
         raise RuntimeError("No chunk texts were provided for embedding.")
 
-    client = openai_client_cls(api_key=api_key)
+    client = OpenAI(api_key=api_key)
     vectors = []
     batches = batched(texts, batch_size)
 
@@ -158,6 +170,60 @@ def embed_texts_openai(
     for idx, batch in enumerate(batches, start=1):
         response = client.embeddings.create(model=model, input=batch)
         vectors.extend(item.embedding for item in response.data)
+        if idx % 10 == 0 or idx == len(batches):
+            print(f"  completed {idx}/{len(batches)} batches")
+        if progress_callback is not None:
+            progress_callback(
+                0.1 + (0.65 * idx / len(batches)),
+                f"Embedded batch {idx}/{len(batches)}",
+            )
+
+    matrix = np.array(vectors, dtype=np.float32)
+    if matrix.ndim != 2:
+        raise RuntimeError(f"Unexpected embedding matrix shape: {matrix.shape}")
+    return matrix
+
+
+def embed_texts_ollama(
+    *,
+    texts: list[str],
+    model: str,
+    batch_size: int,
+    np: object,
+    ollama_base_url: str,
+    progress_callback: ProgressCallback | None = None,
+) -> object:
+    """Embed chunk text with Ollama and return a dense matrix."""
+    if not texts:
+        raise RuntimeError("No chunk texts were provided for embedding.")
+    base_url = ollama_base_url.strip().rstrip("/")
+    if not base_url:
+        raise RuntimeError("Ollama base URL is required when using ollama embeddings.")
+
+    vectors: list[list[float]] = []
+    batches = batched(texts, batch_size)
+    print(f"Embedding {len(texts)} chunks in {len(batches)} batches...")
+    if progress_callback is not None:
+        progress_callback(0.1, f"Embedding {len(texts)} chunks in {len(batches)} batches...")
+
+    for idx, batch in enumerate(batches, start=1):
+        try:
+            response = requests.post(
+                f"{base_url}/api/embed",
+                json={"model": model, "input": batch},
+                timeout=90,
+            )
+            response.raise_for_status()
+            body = response.json()
+            batch_vectors = body.get("embeddings")
+            if not isinstance(batch_vectors, list) or len(batch_vectors) != len(batch):
+                raise RuntimeError("Ollama /api/embed returned unexpected embeddings payload.")
+            vectors.extend(batch_vectors)
+        except Exception as exc:
+            raise RuntimeError(
+                f"Failed Ollama embedding request to {base_url}/api/embed for model '{model}'."
+            ) from exc
+
         if idx % 10 == 0 or idx == len(batches):
             print(f"  completed {idx}/{len(batches)} batches")
         if progress_callback is not None:
@@ -190,6 +256,7 @@ def write_outputs(
     output_dir: Path,
     index: object,
     rows: list[ChunkRow],
+    provider: str,
     model: str,
     metric: str,
     dimension: int,
@@ -220,6 +287,7 @@ def write_outputs(
 
     manifest = {
         "created_at": datetime.now(timezone.utc).isoformat(),
+        "embedding_provider": provider,
         "embedding_model": model,
         "metric": metric,
         "dimension": dimension,
@@ -239,30 +307,46 @@ def build_faiss_index(
     *,
     chunks_root: Path,
     output_dir: Path,
+    embedding_provider: str,
     embedding_model: str,
     batch_size: int,
     metric: str,
     overwrite: bool,
+    ollama_base_url: str = "http://localhost:11434",
     progress_callback: ProgressCallback | None = None,
 ) -> dict[str, str | int]:
     """Build a FAISS index over stored chunks and return output metadata."""
     if progress_callback is not None:
         progress_callback(0.02, "Loading FAISS build dependencies...")
-    np, faiss, openai_client_cls = _import_dependencies()
+    np, faiss = _import_dependencies()
 
     if progress_callback is not None:
         progress_callback(0.05, "Discovering chunk files...")
     files = discover_chunks(chunks_root)
     rows, texts = chunk_rows_from_files(files)
 
-    embeddings = embed_texts_openai(
-        texts=texts,
-        model=embedding_model,
-        batch_size=batch_size,
-        np=np,
-        openai_client_cls=openai_client_cls,
-        progress_callback=progress_callback,
-    )
+    normalized_provider = str(embedding_provider).strip().lower()
+    if normalized_provider == "openai":
+        embeddings = embed_texts_openai(
+            texts=texts,
+            model=embedding_model,
+            batch_size=batch_size,
+            np=np,
+            progress_callback=progress_callback,
+        )
+    elif normalized_provider == "ollama":
+        embeddings = embed_texts_ollama(
+            texts=texts,
+            model=embedding_model,
+            batch_size=batch_size,
+            np=np,
+            ollama_base_url=ollama_base_url,
+            progress_callback=progress_callback,
+        )
+    else:
+        raise RuntimeError(
+            f"Unsupported embedding provider '{embedding_provider}'. Supported: ['openai', 'ollama']"
+        )
 
     if progress_callback is not None:
         progress_callback(0.82, "Building FAISS index...")
@@ -274,6 +358,7 @@ def build_faiss_index(
         output_dir=output_dir,
         index=index,
         rows=rows,
+        provider=normalized_provider,
         model=embedding_model,
         metric=metric,
         dimension=int(embeddings.shape[1]),
@@ -288,6 +373,8 @@ def build_faiss_index(
     return {
         "num_chunks": int(embeddings.shape[0]),
         "dimension": int(embeddings.shape[1]),
+        "embedding_provider": normalized_provider,
+        "embedding_model": embedding_model,
         "output_dir": str(resolved_output_dir),
         "index_path": str(resolved_output_dir / "chunks.faiss"),
         "metadata_path": str(resolved_output_dir / "chunks_metadata.jsonl"),
@@ -301,10 +388,12 @@ def main(argv: Sequence[str] | None = None) -> None:
     build_faiss_index(
         chunks_root=args.chunks_root,
         output_dir=args.output_dir,
+        embedding_provider=args.embedding_provider,
         embedding_model=args.embedding_model,
         batch_size=args.batch_size,
         metric=args.metric,
         overwrite=args.overwrite,
+        ollama_base_url=args.ollama_base_url,
     )
 
 

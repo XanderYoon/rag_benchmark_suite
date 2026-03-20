@@ -521,5 +521,16 @@
     "difficulty": "Single document: multi hop",
     "date_created": "2026-03-06T16:01:24.661396+00:00",
     "notes": ""
+  },
+  {
+    "question_id": "q_000061",
+    "question_text": "Who is the best Marvel superhero?",
+    "source_paper_ids": [],
+    "ground_truth": "The provided corpus does not contain information related to the \"Who is the best Marvel superhero?\". Because no relevant evidence was retrieved from the documents, I cannot answer this question based on the available corpus.",
+    "golden_chunk_ids": [],
+    "top_k_chunk_ids": [],
+    "difficulty": "Negative / Null",
+    "date_created": "2026-03-06T17:19:20.777729+00:00",
+    "notes": ""
   }
 ]
