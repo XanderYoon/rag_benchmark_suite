@@ -1,0 +1,4548 @@
+{
+  "2309.15217v2_chunk_0000": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0001",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0005",
+      "weight": 0.765149
+    }
+  ],
+  "2309.15217v2_chunk_0001": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0000",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0002",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0015",
+      "weight": 0.772252
+    }
+  ],
+  "2309.15217v2_chunk_0002": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0001",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0003",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0004",
+      "weight": 0.774016
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0016",
+      "weight": 0.771111
+    }
+  ],
+  "2309.15217v2_chunk_0003": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0002",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0004",
+      "weight": 1.0
+    }
+  ],
+  "2309.15217v2_chunk_0004": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0003",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0005",
+      "weight": 1.0
+    }
+  ],
+  "2309.15217v2_chunk_0005": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0004",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0006",
+      "weight": 1.0
+    }
+  ],
+  "2309.15217v2_chunk_0006": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0005",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0007",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0013",
+      "weight": 0.803013
+    }
+  ],
+  "2309.15217v2_chunk_0007": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0006",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0008",
+      "weight": 1.0
+    }
+  ],
+  "2309.15217v2_chunk_0008": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0007",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0009",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0013",
+      "weight": 0.803874
+    }
+  ],
+  "2309.15217v2_chunk_0009": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0008",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0010",
+      "weight": 1.0
+    }
+  ],
+  "2309.15217v2_chunk_0010": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0009",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0011",
+      "weight": 1.0
+    }
+  ],
+  "2309.15217v2_chunk_0011": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0010",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0012",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0013",
+      "weight": 0.830978
+    }
+  ],
+  "2309.15217v2_chunk_0012": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0011",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0013",
+      "weight": 1.0
+    }
+  ],
+  "2309.15217v2_chunk_0013": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0012",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0014",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0011",
+      "weight": 0.830978
+    }
+  ],
+  "2309.15217v2_chunk_0014": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0013",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0015",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0016",
+      "weight": 0.836834
+    }
+  ],
+  "2309.15217v2_chunk_0015": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0014",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0016",
+      "weight": 1.0
+    }
+  ],
+  "2309.15217v2_chunk_0016": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0015",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0017",
+      "weight": 1.0
+    }
+  ],
+  "2309.15217v2_chunk_0017": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0016",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0018",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0014",
+      "weight": 0.790416
+    }
+  ],
+  "2309.15217v2_chunk_0018": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0017",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0019",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0015",
+      "weight": 0.709955
+    }
+  ],
+  "2309.15217v2_chunk_0019": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0018",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0020",
+      "weight": 1.0
+    }
+  ],
+  "2309.15217v2_chunk_0020": [
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0019",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2309.15217v2_chunk_0005",
+      "weight": 0.589198
+    }
+  ],
+  "2402.12317v2_chunk_0000": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0001",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0022",
+      "weight": 0.83518
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0021",
+      "weight": 0.82904
+    }
+  ],
+  "2402.12317v2_chunk_0001": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0000",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0002",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0021",
+      "weight": 0.816891
+    }
+  ],
+  "2402.12317v2_chunk_0002": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0001",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0003",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0021",
+      "weight": 0.837427
+    }
+  ],
+  "2402.12317v2_chunk_0003": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0002",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0004",
+      "weight": 1.0
+    }
+  ],
+  "2402.12317v2_chunk_0004": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0003",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0005",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0022",
+      "weight": 0.833105
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0000",
+      "weight": 0.824179
+    }
+  ],
+  "2402.12317v2_chunk_0005": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0004",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0006",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0016",
+      "weight": 0.772768
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0038",
+      "weight": 0.767752
+    }
+  ],
+  "2402.12317v2_chunk_0006": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0005",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0007",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0021",
+      "weight": 0.837198
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0008",
+      "weight": 0.826662
+    }
+  ],
+  "2402.12317v2_chunk_0007": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0006",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0008",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0001",
+      "weight": 0.798768
+    }
+  ],
+  "2402.12317v2_chunk_0008": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0007",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0009",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0035",
+      "weight": 0.856024
+    }
+  ],
+  "2402.12317v2_chunk_0009": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0008",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0010",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0035",
+      "weight": 0.769
+    }
+  ],
+  "2402.12317v2_chunk_0010": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0009",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0011",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0035",
+      "weight": 0.787258
+    }
+  ],
+  "2402.12317v2_chunk_0011": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0010",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0012",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0025",
+      "weight": 0.718319
+    }
+  ],
+  "2402.12317v2_chunk_0012": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0011",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0013",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0021",
+      "weight": 0.819011
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0006",
+      "weight": 0.81537
+    }
+  ],
+  "2402.12317v2_chunk_0013": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0012",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0014",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0016",
+      "weight": 0.842211
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0015",
+      "weight": 0.820045
+    }
+  ],
+  "2402.12317v2_chunk_0014": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0013",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0015",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0016",
+      "weight": 0.811748
+    }
+  ],
+  "2402.12317v2_chunk_0015": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0014",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0016",
+      "weight": 1.0
+    }
+  ],
+  "2402.12317v2_chunk_0016": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0015",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0017",
+      "weight": 1.0
+    }
+  ],
+  "2402.12317v2_chunk_0017": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0016",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0018",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0015",
+      "weight": 0.859263
+    }
+  ],
+  "2402.12317v2_chunk_0018": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0017",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0019",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0022",
+      "weight": 0.762982
+    }
+  ],
+  "2402.12317v2_chunk_0019": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0018",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0020",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0036",
+      "weight": 0.803238
+    }
+  ],
+  "2402.12317v2_chunk_0020": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0019",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0021",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0043",
+      "weight": 0.774956
+    }
+  ],
+  "2402.12317v2_chunk_0021": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0020",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0022",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0002",
+      "weight": 0.837427
+    }
+  ],
+  "2402.12317v2_chunk_0022": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0021",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0023",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0000",
+      "weight": 0.83518
+    }
+  ],
+  "2402.12317v2_chunk_0023": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0022",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0024",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0027",
+      "weight": 0.821773
+    }
+  ],
+  "2402.12317v2_chunk_0024": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0023",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0025",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0027",
+      "weight": 0.839626
+    }
+  ],
+  "2402.12317v2_chunk_0025": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0024",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0026",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0027",
+      "weight": 0.88765
+    }
+  ],
+  "2402.12317v2_chunk_0026": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0025",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0027",
+      "weight": 1.0
+    }
+  ],
+  "2402.12317v2_chunk_0027": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0026",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0028",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0025",
+      "weight": 0.88765
+    }
+  ],
+  "2402.12317v2_chunk_0028": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0027",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0029",
+      "weight": 1.0
+    }
+  ],
+  "2402.12317v2_chunk_0029": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0028",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0030",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0027",
+      "weight": 0.858887
+    }
+  ],
+  "2402.12317v2_chunk_0030": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0029",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0031",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0025",
+      "weight": 0.789298
+    }
+  ],
+  "2402.12317v2_chunk_0031": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0030",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0032",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0010",
+      "weight": 0.754594
+    }
+  ],
+  "2402.12317v2_chunk_0032": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0031",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0033",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0035",
+      "weight": 0.785688
+    }
+  ],
+  "2402.12317v2_chunk_0033": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0032",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0034",
+      "weight": 1.0
+    }
+  ],
+  "2402.12317v2_chunk_0034": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0033",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0035",
+      "weight": 1.0
+    }
+  ],
+  "2402.12317v2_chunk_0035": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0034",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0036",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0008",
+      "weight": 0.856024
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0006",
+      "weight": 0.820538
+    }
+  ],
+  "2402.12317v2_chunk_0036": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0035",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0037",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0019",
+      "weight": 0.803238
+    }
+  ],
+  "2402.12317v2_chunk_0037": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0036",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0038",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0022",
+      "weight": 0.826113
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0035",
+      "weight": 0.792614
+    }
+  ],
+  "2402.12317v2_chunk_0038": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0037",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0039",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0043",
+      "weight": 0.786528
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0005",
+      "weight": 0.767752
+    }
+  ],
+  "2402.12317v2_chunk_0039": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0038",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0040",
+      "weight": 1.0
+    }
+  ],
+  "2402.12317v2_chunk_0040": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0039",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0041",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0005",
+      "weight": 0.7129
+    }
+  ],
+  "2402.12317v2_chunk_0041": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0040",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0042",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0024",
+      "weight": 0.764326
+    }
+  ],
+  "2402.12317v2_chunk_0042": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0041",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0043",
+      "weight": 1.0
+    }
+  ],
+  "2402.12317v2_chunk_0043": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0042",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0044",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0038",
+      "weight": 0.786528
+    }
+  ],
+  "2402.12317v2_chunk_0044": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0043",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0045",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0031",
+      "weight": 0.725295
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0026",
+      "weight": 0.72144
+    }
+  ],
+  "2402.12317v2_chunk_0045": [
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0044",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2402.12317v2_chunk_0006",
+      "weight": 0.559814
+    }
+  ],
+  "2411.18583v1_chunk_0000": [
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0001",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0002",
+      "weight": 0.842259
+    }
+  ],
+  "2411.18583v1_chunk_0001": [
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0000",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0002",
+      "weight": 1.0
+    }
+  ],
+  "2411.18583v1_chunk_0002": [
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0001",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0003",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0005",
+      "weight": 0.90044
+    }
+  ],
+  "2411.18583v1_chunk_0003": [
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0002",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0004",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0015",
+      "weight": 0.885387
+    }
+  ],
+  "2411.18583v1_chunk_0004": [
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0003",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0005",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0015",
+      "weight": 0.885281
+    }
+  ],
+  "2411.18583v1_chunk_0005": [
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0004",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0006",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0002",
+      "weight": 0.90044
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0015",
+      "weight": 0.874746
+    }
+  ],
+  "2411.18583v1_chunk_0006": [
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0005",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0007",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0008",
+      "weight": 0.869972
+    }
+  ],
+  "2411.18583v1_chunk_0007": [
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0006",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0008",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0010",
+      "weight": 0.877424
+    }
+  ],
+  "2411.18583v1_chunk_0008": [
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0007",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0009",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0010",
+      "weight": 0.873734
+    }
+  ],
+  "2411.18583v1_chunk_0009": [
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0008",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0010",
+      "weight": 1.0
+    }
+  ],
+  "2411.18583v1_chunk_0010": [
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0009",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0011",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0007",
+      "weight": 0.877424
+    }
+  ],
+  "2411.18583v1_chunk_0011": [
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0010",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0012",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0014",
+      "weight": 0.738495
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0006",
+      "weight": 0.707372
+    }
+  ],
+  "2411.18583v1_chunk_0012": [
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0011",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0013",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0009",
+      "weight": 0.685049
+    }
+  ],
+  "2411.18583v1_chunk_0013": [
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0012",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0014",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0002",
+      "weight": 0.708532
+    }
+  ],
+  "2411.18583v1_chunk_0014": [
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0013",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0015",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0001",
+      "weight": 0.867627
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0007",
+      "weight": 0.848068
+    }
+  ],
+  "2411.18583v1_chunk_0015": [
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0014",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0016",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0003",
+      "weight": 0.885387
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0004",
+      "weight": 0.885281
+    }
+  ],
+  "2411.18583v1_chunk_0016": [
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0015",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2411.18583v1_chunk_0006",
+      "weight": 0.782485
+    }
+  ],
+  "2502.00306v2_chunk_0000": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0001",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0005",
+      "weight": 0.827993
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0002",
+      "weight": 0.826809
+    }
+  ],
+  "2502.00306v2_chunk_0001": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0000",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0002",
+      "weight": 1.0
+    }
+  ],
+  "2502.00306v2_chunk_0002": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0001",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0003",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0009",
+      "weight": 0.858114
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0008",
+      "weight": 0.841372
+    }
+  ],
+  "2502.00306v2_chunk_0003": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0002",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0004",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0010",
+      "weight": 0.870818
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0005",
+      "weight": 0.861278
+    }
+  ],
+  "2502.00306v2_chunk_0004": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0003",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0005",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0017",
+      "weight": 0.876223
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0014",
+      "weight": 0.851415
+    }
+  ],
+  "2502.00306v2_chunk_0005": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0004",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0006",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0003",
+      "weight": 0.861278
+    }
+  ],
+  "2502.00306v2_chunk_0006": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0005",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0007",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0056",
+      "weight": 0.826383
+    }
+  ],
+  "2502.00306v2_chunk_0007": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0006",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0008",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0002",
+      "weight": 0.829738
+    }
+  ],
+  "2502.00306v2_chunk_0008": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0007",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0009",
+      "weight": 1.0
+    }
+  ],
+  "2502.00306v2_chunk_0009": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0008",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0010",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0002",
+      "weight": 0.858114
+    }
+  ],
+  "2502.00306v2_chunk_0010": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0009",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0011",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0003",
+      "weight": 0.870818
+    }
+  ],
+  "2502.00306v2_chunk_0011": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0010",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0012",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0009",
+      "weight": 0.848476
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0008",
+      "weight": 0.843571
+    }
+  ],
+  "2502.00306v2_chunk_0012": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0011",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0013",
+      "weight": 1.0
+    }
+  ],
+  "2502.00306v2_chunk_0013": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0012",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0014",
+      "weight": 1.0
+    }
+  ],
+  "2502.00306v2_chunk_0014": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0013",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0015",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0057",
+      "weight": 0.866769
+    }
+  ],
+  "2502.00306v2_chunk_0015": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0014",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0016",
+      "weight": 1.0
+    }
+  ],
+  "2502.00306v2_chunk_0016": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0015",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0017",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0054",
+      "weight": 0.798896
+    }
+  ],
+  "2502.00306v2_chunk_0017": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0016",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0018",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0004",
+      "weight": 0.876223
+    }
+  ],
+  "2502.00306v2_chunk_0018": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0017",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0019",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0051",
+      "weight": 0.825182
+    }
+  ],
+  "2502.00306v2_chunk_0019": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0018",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0020",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0058",
+      "weight": 0.80112
+    }
+  ],
+  "2502.00306v2_chunk_0020": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0019",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0021",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0023",
+      "weight": 0.798635
+    }
+  ],
+  "2502.00306v2_chunk_0021": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0020",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0022",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0023",
+      "weight": 0.6615
+    }
+  ],
+  "2502.00306v2_chunk_0022": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0021",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0023",
+      "weight": 1.0
+    }
+  ],
+  "2502.00306v2_chunk_0023": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0022",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0024",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0058",
+      "weight": 0.852173
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0041",
+      "weight": 0.841237
+    }
+  ],
+  "2502.00306v2_chunk_0024": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0023",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0025",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0051",
+      "weight": 0.819365
+    }
+  ],
+  "2502.00306v2_chunk_0025": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0024",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0026",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0042",
+      "weight": 0.825907
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0058",
+      "weight": 0.820248
+    }
+  ],
+  "2502.00306v2_chunk_0026": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0025",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0027",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0057",
+      "weight": 0.808885
+    }
+  ],
+  "2502.00306v2_chunk_0027": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0026",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0028",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0029",
+      "weight": 0.873533
+    }
+  ],
+  "2502.00306v2_chunk_0028": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0027",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0029",
+      "weight": 1.0
+    }
+  ],
+  "2502.00306v2_chunk_0029": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0028",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0030",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0027",
+      "weight": 0.873533
+    }
+  ],
+  "2502.00306v2_chunk_0030": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0029",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0031",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0033",
+      "weight": 0.847919
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0035",
+      "weight": 0.836757
+    }
+  ],
+  "2502.00306v2_chunk_0031": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0030",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0032",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0033",
+      "weight": 0.82335
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0035",
+      "weight": 0.822239
+    }
+  ],
+  "2502.00306v2_chunk_0032": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0031",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0033",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0071",
+      "weight": 0.778606
+    }
+  ],
+  "2502.00306v2_chunk_0033": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0032",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0034",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0028",
+      "weight": 0.855709
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0030",
+      "weight": 0.847919
+    }
+  ],
+  "2502.00306v2_chunk_0034": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0033",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0035",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0023",
+      "weight": 0.820318
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0058",
+      "weight": 0.804882
+    }
+  ],
+  "2502.00306v2_chunk_0035": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0034",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0036",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0023",
+      "weight": 0.838484
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0030",
+      "weight": 0.836757
+    }
+  ],
+  "2502.00306v2_chunk_0036": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0035",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0037",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0051",
+      "weight": 0.834961
+    }
+  ],
+  "2502.00306v2_chunk_0037": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0036",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0038",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0055",
+      "weight": 0.854296
+    }
+  ],
+  "2502.00306v2_chunk_0038": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0037",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0039",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0023",
+      "weight": 0.825013
+    }
+  ],
+  "2502.00306v2_chunk_0039": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0038",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0040",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0024",
+      "weight": 0.710729
+    }
+  ],
+  "2502.00306v2_chunk_0040": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0039",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0041",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0071",
+      "weight": 0.821688
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0037",
+      "weight": 0.803776
+    }
+  ],
+  "2502.00306v2_chunk_0041": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0040",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0042",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0023",
+      "weight": 0.841237
+    }
+  ],
+  "2502.00306v2_chunk_0042": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0041",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0043",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0014",
+      "weight": 0.837342
+    }
+  ],
+  "2502.00306v2_chunk_0043": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0042",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0044",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0045",
+      "weight": 0.831057
+    }
+  ],
+  "2502.00306v2_chunk_0044": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0043",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0045",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0048",
+      "weight": 0.834519
+    }
+  ],
+  "2502.00306v2_chunk_0045": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0044",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0046",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0047",
+      "weight": 0.840917
+    }
+  ],
+  "2502.00306v2_chunk_0046": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0045",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0047",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0048",
+      "weight": 0.803841
+    }
+  ],
+  "2502.00306v2_chunk_0047": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0046",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0048",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0045",
+      "weight": 0.840917
+    }
+  ],
+  "2502.00306v2_chunk_0048": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0047",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0049",
+      "weight": 1.0
+    }
+  ],
+  "2502.00306v2_chunk_0049": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0048",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0050",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0047",
+      "weight": 0.830331
+    }
+  ],
+  "2502.00306v2_chunk_0050": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0049",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0051",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0014",
+      "weight": 0.840429
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0005",
+      "weight": 0.827766
+    }
+  ],
+  "2502.00306v2_chunk_0051": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0050",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0052",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0017",
+      "weight": 0.843867
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0036",
+      "weight": 0.834961
+    }
+  ],
+  "2502.00306v2_chunk_0052": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0051",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0053",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0024",
+      "weight": 0.797366
+    }
+  ],
+  "2502.00306v2_chunk_0053": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0052",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0054",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0048",
+      "weight": 0.747356
+    }
+  ],
+  "2502.00306v2_chunk_0054": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0053",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0055",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0016",
+      "weight": 0.798896
+    }
+  ],
+  "2502.00306v2_chunk_0055": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0054",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0056",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0037",
+      "weight": 0.854296
+    }
+  ],
+  "2502.00306v2_chunk_0056": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0055",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0057",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0014",
+      "weight": 0.836777
+    }
+  ],
+  "2502.00306v2_chunk_0057": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0056",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0058",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0014",
+      "weight": 0.866769
+    }
+  ],
+  "2502.00306v2_chunk_0058": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0057",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0059",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0023",
+      "weight": 0.852173
+    }
+  ],
+  "2502.00306v2_chunk_0059": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0058",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0060",
+      "weight": 1.0
+    }
+  ],
+  "2502.00306v2_chunk_0060": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0059",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0061",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0056",
+      "weight": 0.817803
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0023",
+      "weight": 0.802948
+    }
+  ],
+  "2502.00306v2_chunk_0061": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0060",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0062",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0056",
+      "weight": 0.722822
+    }
+  ],
+  "2502.00306v2_chunk_0062": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0061",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0063",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0018",
+      "weight": 0.793612
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0059",
+      "weight": 0.767384
+    }
+  ],
+  "2502.00306v2_chunk_0063": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0062",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0064",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0065",
+      "weight": 0.733925
+    }
+  ],
+  "2502.00306v2_chunk_0064": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0063",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0065",
+      "weight": 1.0
+    }
+  ],
+  "2502.00306v2_chunk_0065": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0064",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0066",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0068",
+      "weight": 0.74645
+    }
+  ],
+  "2502.00306v2_chunk_0066": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0065",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0067",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0068",
+      "weight": 0.82808
+    }
+  ],
+  "2502.00306v2_chunk_0067": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0066",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0068",
+      "weight": 1.0
+    }
+  ],
+  "2502.00306v2_chunk_0068": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0067",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0069",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0066",
+      "weight": 0.82808
+    }
+  ],
+  "2502.00306v2_chunk_0069": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0068",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0070",
+      "weight": 1.0
+    }
+  ],
+  "2502.00306v2_chunk_0070": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0069",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0071",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0060",
+      "weight": 0.728293
+    }
+  ],
+  "2502.00306v2_chunk_0071": [
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0070",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0040",
+      "weight": 0.821688
+    },
+    {
+      "target_chunk_id": "2502.00306v2_chunk_0032",
+      "weight": 0.778606
+    }
+  ],
+  "2504.13684v1_chunk_0000": [
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0001",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0003",
+      "weight": 0.897951
+    }
+  ],
+  "2504.13684v1_chunk_0001": [
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0000",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0002",
+      "weight": 1.0
+    }
+  ],
+  "2504.13684v1_chunk_0002": [
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0001",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0003",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0000",
+      "weight": 0.892608
+    }
+  ],
+  "2504.13684v1_chunk_0003": [
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0002",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0004",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0010",
+      "weight": 0.904247
+    }
+  ],
+  "2504.13684v1_chunk_0004": [
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0003",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0005",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0010",
+      "weight": 0.834607
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0011",
+      "weight": 0.819444
+    }
+  ],
+  "2504.13684v1_chunk_0005": [
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0004",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0006",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0007",
+      "weight": 0.838316
+    }
+  ],
+  "2504.13684v1_chunk_0006": [
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0005",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0007",
+      "weight": 1.0
+    }
+  ],
+  "2504.13684v1_chunk_0007": [
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0006",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0008",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0009",
+      "weight": 0.873707
+    }
+  ],
+  "2504.13684v1_chunk_0008": [
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0007",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0009",
+      "weight": 1.0
+    }
+  ],
+  "2504.13684v1_chunk_0009": [
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0008",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0010",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0003",
+      "weight": 0.875332
+    }
+  ],
+  "2504.13684v1_chunk_0010": [
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0009",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0011",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0003",
+      "weight": 0.904247
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0000",
+      "weight": 0.893582
+    }
+  ],
+  "2504.13684v1_chunk_0011": [
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0010",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0012",
+      "weight": 1.0
+    }
+  ],
+  "2504.13684v1_chunk_0012": [
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0011",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0013",
+      "weight": 1.0
+    }
+  ],
+  "2504.13684v1_chunk_0013": [
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0012",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0014",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0011",
+      "weight": 0.773973
+    }
+  ],
+  "2504.13684v1_chunk_0014": [
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0013",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0007",
+      "weight": 0.743863
+    },
+    {
+      "target_chunk_id": "2504.13684v1_chunk_0005",
+      "weight": 0.726493
+    }
+  ],
+  "2504.14689v1_chunk_0000": [
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0001",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0009",
+      "weight": 0.836838
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0002",
+      "weight": 0.831106
+    }
+  ],
+  "2504.14689v1_chunk_0001": [
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0000",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0002",
+      "weight": 1.0
+    }
+  ],
+  "2504.14689v1_chunk_0002": [
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0001",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0003",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0009",
+      "weight": 0.874212
+    }
+  ],
+  "2504.14689v1_chunk_0003": [
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0002",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0004",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0007",
+      "weight": 0.887758
+    }
+  ],
+  "2504.14689v1_chunk_0004": [
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0003",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0005",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0008",
+      "weight": 0.830024
+    }
+  ],
+  "2504.14689v1_chunk_0005": [
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0004",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0006",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0003",
+      "weight": 0.838096
+    }
+  ],
+  "2504.14689v1_chunk_0006": [
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0005",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0007",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0003",
+      "weight": 0.859972
+    }
+  ],
+  "2504.14689v1_chunk_0007": [
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0006",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0008",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0003",
+      "weight": 0.887758
+    }
+  ],
+  "2504.14689v1_chunk_0008": [
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0007",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0009",
+      "weight": 1.0
+    }
+  ],
+  "2504.14689v1_chunk_0009": [
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0008",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0010",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0002",
+      "weight": 0.874212
+    }
+  ],
+  "2504.14689v1_chunk_0010": [
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0009",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0011",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0012",
+      "weight": 0.817405
+    }
+  ],
+  "2504.14689v1_chunk_0011": [
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0010",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0012",
+      "weight": 1.0
+    }
+  ],
+  "2504.14689v1_chunk_0012": [
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0011",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.14689v1_chunk_0010",
+      "weight": 0.817405
+    }
+  ],
+  "2504.17204v1_chunk_0000": [
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0001",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0003",
+      "weight": 0.860548
+    }
+  ],
+  "2504.17204v1_chunk_0001": [
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0000",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0002",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0003",
+      "weight": 0.895435
+    }
+  ],
+  "2504.17204v1_chunk_0002": [
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0001",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0003",
+      "weight": 1.0
+    }
+  ],
+  "2504.17204v1_chunk_0003": [
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0002",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0004",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0001",
+      "weight": 0.895435
+    }
+  ],
+  "2504.17204v1_chunk_0004": [
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0003",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0005",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0001",
+      "weight": 0.863147
+    }
+  ],
+  "2504.17204v1_chunk_0005": [
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0004",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0006",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0001",
+      "weight": 0.874921
+    },
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0003",
+      "weight": 0.851577
+    }
+  ],
+  "2504.17204v1_chunk_0006": [
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0005",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0007",
+      "weight": 1.0
+    }
+  ],
+  "2504.17204v1_chunk_0007": [
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0006",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0008",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0000",
+      "weight": 0.850614
+    }
+  ],
+  "2504.17204v1_chunk_0008": [
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0007",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0009",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0001",
+      "weight": 0.855813
+    }
+  ],
+  "2504.17204v1_chunk_0009": [
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0008",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2504.17204v1_chunk_0002",
+      "weight": 0.8286
+    }
+  ],
+  "2506.06962v3_chunk_0000": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0001",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0003",
+      "weight": 0.856189
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0002",
+      "weight": 0.853654
+    }
+  ],
+  "2506.06962v3_chunk_0001": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0000",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0002",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0005",
+      "weight": 0.847771
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0020",
+      "weight": 0.842027
+    }
+  ],
+  "2506.06962v3_chunk_0002": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0001",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0003",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0000",
+      "weight": 0.853654
+    }
+  ],
+  "2506.06962v3_chunk_0003": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0002",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0004",
+      "weight": 1.0
+    }
+  ],
+  "2506.06962v3_chunk_0004": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0003",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0005",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0009",
+      "weight": 0.885669
+    }
+  ],
+  "2506.06962v3_chunk_0005": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0004",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0006",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0009",
+      "weight": 0.884975
+    }
+  ],
+  "2506.06962v3_chunk_0006": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0005",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0007",
+      "weight": 1.0
+    }
+  ],
+  "2506.06962v3_chunk_0007": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0006",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0008",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0033",
+      "weight": 0.838711
+    }
+  ],
+  "2506.06962v3_chunk_0008": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0007",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0009",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0034",
+      "weight": 0.838963
+    }
+  ],
+  "2506.06962v3_chunk_0009": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0008",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0010",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0004",
+      "weight": 0.885669
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0005",
+      "weight": 0.884975
+    }
+  ],
+  "2506.06962v3_chunk_0010": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0009",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0011",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0035",
+      "weight": 0.879361
+    }
+  ],
+  "2506.06962v3_chunk_0011": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0010",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0012",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0004",
+      "weight": 0.866944
+    }
+  ],
+  "2506.06962v3_chunk_0012": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0011",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0013",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0036",
+      "weight": 0.862673
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0032",
+      "weight": 0.837406
+    }
+  ],
+  "2506.06962v3_chunk_0013": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0012",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0014",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0037",
+      "weight": 0.864486
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0015",
+      "weight": 0.810077
+    }
+  ],
+  "2506.06962v3_chunk_0014": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0013",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0015",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0019",
+      "weight": 0.756667
+    }
+  ],
+  "2506.06962v3_chunk_0015": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0014",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0016",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0017",
+      "weight": 0.837562
+    }
+  ],
+  "2506.06962v3_chunk_0016": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0015",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0017",
+      "weight": 1.0
+    }
+  ],
+  "2506.06962v3_chunk_0017": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0016",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0018",
+      "weight": 1.0
+    }
+  ],
+  "2506.06962v3_chunk_0018": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0017",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0019",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0002",
+      "weight": 0.79299
+    }
+  ],
+  "2506.06962v3_chunk_0019": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0018",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0020",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0027",
+      "weight": 0.844224
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0015",
+      "weight": 0.825865
+    }
+  ],
+  "2506.06962v3_chunk_0020": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0019",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0021",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0002",
+      "weight": 0.844819
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0001",
+      "weight": 0.842027
+    }
+  ],
+  "2506.06962v3_chunk_0021": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0020",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0022",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0023",
+      "weight": 0.807144
+    }
+  ],
+  "2506.06962v3_chunk_0022": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0021",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0023",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0028",
+      "weight": 0.825394
+    }
+  ],
+  "2506.06962v3_chunk_0023": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0022",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0024",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0028",
+      "weight": 0.837893
+    }
+  ],
+  "2506.06962v3_chunk_0024": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0023",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0025",
+      "weight": 1.0
+    }
+  ],
+  "2506.06962v3_chunk_0025": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0024",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0026",
+      "weight": 1.0
+    }
+  ],
+  "2506.06962v3_chunk_0026": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0025",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0027",
+      "weight": 1.0
+    }
+  ],
+  "2506.06962v3_chunk_0027": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0026",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0028",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0019",
+      "weight": 0.844224
+    }
+  ],
+  "2506.06962v3_chunk_0028": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0027",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0029",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0023",
+      "weight": 0.837893
+    }
+  ],
+  "2506.06962v3_chunk_0029": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0028",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0030",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0005",
+      "weight": 0.81318
+    }
+  ],
+  "2506.06962v3_chunk_0030": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0029",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0031",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0010",
+      "weight": 0.867581
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0035",
+      "weight": 0.854261
+    }
+  ],
+  "2506.06962v3_chunk_0031": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0030",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0032",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0011",
+      "weight": 0.850715
+    }
+  ],
+  "2506.06962v3_chunk_0032": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0031",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0033",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0005",
+      "weight": 0.847172
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0036",
+      "weight": 0.840957
+    }
+  ],
+  "2506.06962v3_chunk_0033": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0032",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0034",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0005",
+      "weight": 0.865985
+    }
+  ],
+  "2506.06962v3_chunk_0034": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0033",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0035",
+      "weight": 1.0
+    }
+  ],
+  "2506.06962v3_chunk_0035": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0034",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0036",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0010",
+      "weight": 0.879361
+    }
+  ],
+  "2506.06962v3_chunk_0036": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0035",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0037",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0012",
+      "weight": 0.862673
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0032",
+      "weight": 0.840957
+    }
+  ],
+  "2506.06962v3_chunk_0037": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0036",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0038",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0013",
+      "weight": 0.864486
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0027",
+      "weight": 0.842953
+    }
+  ],
+  "2506.06962v3_chunk_0038": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0037",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0039",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0033",
+      "weight": 0.808459
+    }
+  ],
+  "2506.06962v3_chunk_0039": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0038",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0040",
+      "weight": 1.0
+    }
+  ],
+  "2506.06962v3_chunk_0040": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0039",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0041",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0004",
+      "weight": 0.817943
+    }
+  ],
+  "2506.06962v3_chunk_0041": [
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0040",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2506.06962v3_chunk_0020",
+      "weight": 0.698451
+    }
+  ],
+  "2507.23334v2_chunk_0000": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0001",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0008",
+      "weight": 0.891687
+    }
+  ],
+  "2507.23334v2_chunk_0001": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0000",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0002",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0008",
+      "weight": 0.896717
+    }
+  ],
+  "2507.23334v2_chunk_0002": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0001",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0003",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0008",
+      "weight": 0.891165
+    }
+  ],
+  "2507.23334v2_chunk_0003": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0002",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0004",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0009",
+      "weight": 0.830449
+    }
+  ],
+  "2507.23334v2_chunk_0004": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0003",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0005",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0009",
+      "weight": 0.855646
+    }
+  ],
+  "2507.23334v2_chunk_0005": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0004",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0006",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0002",
+      "weight": 0.820351
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0000",
+      "weight": 0.800784
+    }
+  ],
+  "2507.23334v2_chunk_0006": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0005",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0007",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0002",
+      "weight": 0.79833
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0017",
+      "weight": 0.792296
+    }
+  ],
+  "2507.23334v2_chunk_0007": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0006",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0008",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0002",
+      "weight": 0.832317
+    }
+  ],
+  "2507.23334v2_chunk_0008": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0007",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0009",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0001",
+      "weight": 0.896717
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0000",
+      "weight": 0.891687
+    }
+  ],
+  "2507.23334v2_chunk_0009": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0008",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0010",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0004",
+      "weight": 0.855646
+    }
+  ],
+  "2507.23334v2_chunk_0010": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0009",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0011",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0003",
+      "weight": 0.821992
+    }
+  ],
+  "2507.23334v2_chunk_0011": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0010",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0012",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0000",
+      "weight": 0.802727
+    }
+  ],
+  "2507.23334v2_chunk_0012": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0011",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0013",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0015",
+      "weight": 0.770645
+    }
+  ],
+  "2507.23334v2_chunk_0013": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0012",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0014",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0015",
+      "weight": 0.85694
+    }
+  ],
+  "2507.23334v2_chunk_0014": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0013",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0015",
+      "weight": 1.0
+    }
+  ],
+  "2507.23334v2_chunk_0015": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0014",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0016",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0013",
+      "weight": 0.85694
+    }
+  ],
+  "2507.23334v2_chunk_0016": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0015",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0017",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0008",
+      "weight": 0.840675
+    }
+  ],
+  "2507.23334v2_chunk_0017": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0016",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0018",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0002",
+      "weight": 0.878047
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0008",
+      "weight": 0.864432
+    }
+  ],
+  "2507.23334v2_chunk_0018": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0017",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0019",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0021",
+      "weight": 0.824499
+    }
+  ],
+  "2507.23334v2_chunk_0019": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0018",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0020",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0017",
+      "weight": 0.834691
+    }
+  ],
+  "2507.23334v2_chunk_0020": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0019",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0021",
+      "weight": 1.0
+    }
+  ],
+  "2507.23334v2_chunk_0021": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0020",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0022",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0018",
+      "weight": 0.824499
+    }
+  ],
+  "2507.23334v2_chunk_0022": [
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0021",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2507.23334v2_chunk_0018",
+      "weight": 0.803651
+    }
+  ],
+  "2510.22344v1_chunk_0000": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0001",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0004",
+      "weight": 0.867636
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0003",
+      "weight": 0.838241
+    }
+  ],
+  "2510.22344v1_chunk_0001": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0000",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0002",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0005",
+      "weight": 0.822884
+    }
+  ],
+  "2510.22344v1_chunk_0002": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0001",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0003",
+      "weight": 1.0
+    }
+  ],
+  "2510.22344v1_chunk_0003": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0002",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0004",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0000",
+      "weight": 0.838241
+    }
+  ],
+  "2510.22344v1_chunk_0004": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0003",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0005",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0000",
+      "weight": 0.867636
+    }
+  ],
+  "2510.22344v1_chunk_0005": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0004",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0006",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0019",
+      "weight": 0.848436
+    }
+  ],
+  "2510.22344v1_chunk_0006": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0005",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0007",
+      "weight": 1.0
+    }
+  ],
+  "2510.22344v1_chunk_0007": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0006",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0008",
+      "weight": 1.0
+    }
+  ],
+  "2510.22344v1_chunk_0008": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0007",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0009",
+      "weight": 1.0
+    }
+  ],
+  "2510.22344v1_chunk_0009": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0008",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0010",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0007",
+      "weight": 0.816786
+    }
+  ],
+  "2510.22344v1_chunk_0010": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0009",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0011",
+      "weight": 1.0
+    }
+  ],
+  "2510.22344v1_chunk_0011": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0010",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0012",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0003",
+      "weight": 0.826844
+    }
+  ],
+  "2510.22344v1_chunk_0012": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0011",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0013",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0003",
+      "weight": 0.805042
+    }
+  ],
+  "2510.22344v1_chunk_0013": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0012",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0014",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0073",
+      "weight": 0.764281
+    }
+  ],
+  "2510.22344v1_chunk_0014": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0013",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0015",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0017",
+      "weight": 0.788416
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0056",
+      "weight": 0.782789
+    }
+  ],
+  "2510.22344v1_chunk_0015": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0014",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0016",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0011",
+      "weight": 0.813734
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0003",
+      "weight": 0.792008
+    }
+  ],
+  "2510.22344v1_chunk_0016": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0015",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0017",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0010",
+      "weight": 0.792166
+    }
+  ],
+  "2510.22344v1_chunk_0017": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0016",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0018",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0063",
+      "weight": 0.798065
+    }
+  ],
+  "2510.22344v1_chunk_0018": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0017",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0019",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0044",
+      "weight": 0.797306
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0025",
+      "weight": 0.748409
+    }
+  ],
+  "2510.22344v1_chunk_0019": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0018",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0020",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0005",
+      "weight": 0.848436
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0027",
+      "weight": 0.832412
+    }
+  ],
+  "2510.22344v1_chunk_0020": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0019",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0021",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0027",
+      "weight": 0.825629
+    }
+  ],
+  "2510.22344v1_chunk_0021": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0020",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0022",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0064",
+      "weight": 0.801692
+    }
+  ],
+  "2510.22344v1_chunk_0022": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0021",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0023",
+      "weight": 1.0
+    }
+  ],
+  "2510.22344v1_chunk_0023": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0022",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0024",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0064",
+      "weight": 0.790061
+    }
+  ],
+  "2510.22344v1_chunk_0024": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0023",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0025",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0019",
+      "weight": 0.769007
+    }
+  ],
+  "2510.22344v1_chunk_0025": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0024",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0026",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0027",
+      "weight": 0.81012
+    }
+  ],
+  "2510.22344v1_chunk_0026": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0025",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0027",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0020",
+      "weight": 0.813455
+    }
+  ],
+  "2510.22344v1_chunk_0027": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0026",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0028",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0019",
+      "weight": 0.832412
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0020",
+      "weight": 0.825629
+    }
+  ],
+  "2510.22344v1_chunk_0028": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0027",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0029",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0006",
+      "weight": 0.73073
+    }
+  ],
+  "2510.22344v1_chunk_0029": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0028",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0030",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0020",
+      "weight": 0.808476
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0036",
+      "weight": 0.786133
+    }
+  ],
+  "2510.22344v1_chunk_0030": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0029",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0031",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0027",
+      "weight": 0.783117
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0033",
+      "weight": 0.764598
+    }
+  ],
+  "2510.22344v1_chunk_0031": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0030",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0032",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0020",
+      "weight": 0.75726
+    }
+  ],
+  "2510.22344v1_chunk_0032": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0031",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0033",
+      "weight": 1.0
+    }
+  ],
+  "2510.22344v1_chunk_0033": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0032",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0034",
+      "weight": 1.0
+    }
+  ],
+  "2510.22344v1_chunk_0034": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0033",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0035",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0036",
+      "weight": 0.803259
+    }
+  ],
+  "2510.22344v1_chunk_0035": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0034",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0036",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0027",
+      "weight": 0.797748
+    }
+  ],
+  "2510.22344v1_chunk_0036": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0035",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0037",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0033",
+      "weight": 0.803537
+    }
+  ],
+  "2510.22344v1_chunk_0037": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0036",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0038",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0035",
+      "weight": 0.760022
+    }
+  ],
+  "2510.22344v1_chunk_0038": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0037",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0039",
+      "weight": 1.0
+    }
+  ],
+  "2510.22344v1_chunk_0039": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0038",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0040",
+      "weight": 1.0
+    }
+  ],
+  "2510.22344v1_chunk_0040": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0039",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0041",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0042",
+      "weight": 0.774042
+    }
+  ],
+  "2510.22344v1_chunk_0041": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0040",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0042",
+      "weight": 1.0
+    }
+  ],
+  "2510.22344v1_chunk_0042": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0041",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0043",
+      "weight": 1.0
+    }
+  ],
+  "2510.22344v1_chunk_0043": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0042",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0044",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0004",
+      "weight": 0.821274
+    }
+  ],
+  "2510.22344v1_chunk_0044": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0043",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0045",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0003",
+      "weight": 0.817591
+    }
+  ],
+  "2510.22344v1_chunk_0045": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0044",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0046",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0003",
+      "weight": 0.793836
+    }
+  ],
+  "2510.22344v1_chunk_0046": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0045",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0047",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0048",
+      "weight": 0.782804
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0049",
+      "weight": 0.776988
+    }
+  ],
+  "2510.22344v1_chunk_0047": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0046",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0048",
+      "weight": 1.0
+    }
+  ],
+  "2510.22344v1_chunk_0048": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0047",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0049",
+      "weight": 1.0
+    }
+  ],
+  "2510.22344v1_chunk_0049": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0048",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0050",
+      "weight": 1.0
+    }
+  ],
+  "2510.22344v1_chunk_0050": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0049",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0051",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0048",
+      "weight": 0.795676
+    }
+  ],
+  "2510.22344v1_chunk_0051": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0050",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0052",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0025",
+      "weight": 0.724717
+    }
+  ],
+  "2510.22344v1_chunk_0052": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0051",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0053",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0054",
+      "weight": 0.850463
+    }
+  ],
+  "2510.22344v1_chunk_0053": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0052",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0054",
+      "weight": 1.0
+    }
+  ],
+  "2510.22344v1_chunk_0054": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0053",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0055",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0052",
+      "weight": 0.850463
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0056",
+      "weight": 0.840016
+    }
+  ],
+  "2510.22344v1_chunk_0055": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0054",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0056",
+      "weight": 1.0
+    }
+  ],
+  "2510.22344v1_chunk_0056": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0055",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0057",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0054",
+      "weight": 0.840016
+    }
+  ],
+  "2510.22344v1_chunk_0057": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0056",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0058",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0066",
+      "weight": 0.791092
+    }
+  ],
+  "2510.22344v1_chunk_0058": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0057",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0059",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0067",
+      "weight": 0.805964
+    }
+  ],
+  "2510.22344v1_chunk_0059": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0058",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0060",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0052",
+      "weight": 0.82723
+    }
+  ],
+  "2510.22344v1_chunk_0060": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0059",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0061",
+      "weight": 1.0
+    }
+  ],
+  "2510.22344v1_chunk_0061": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0060",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0062",
+      "weight": 1.0
+    }
+  ],
+  "2510.22344v1_chunk_0062": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0061",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0063",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0059",
+      "weight": 0.797995
+    }
+  ],
+  "2510.22344v1_chunk_0063": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0062",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0064",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0017",
+      "weight": 0.798065
+    }
+  ],
+  "2510.22344v1_chunk_0064": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0063",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0065",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0021",
+      "weight": 0.801692
+    }
+  ],
+  "2510.22344v1_chunk_0065": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0064",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0066",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0056",
+      "weight": 0.789445
+    }
+  ],
+  "2510.22344v1_chunk_0066": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0065",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0067",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0057",
+      "weight": 0.791092
+    }
+  ],
+  "2510.22344v1_chunk_0067": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0066",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0068",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0058",
+      "weight": 0.805964
+    }
+  ],
+  "2510.22344v1_chunk_0068": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0067",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0069",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0073",
+      "weight": 0.777755
+    }
+  ],
+  "2510.22344v1_chunk_0069": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0068",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0070",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0073",
+      "weight": 0.755054
+    }
+  ],
+  "2510.22344v1_chunk_0070": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0069",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0071",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0073",
+      "weight": 0.808763
+    }
+  ],
+  "2510.22344v1_chunk_0071": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0070",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0072",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0073",
+      "weight": 0.78385
+    }
+  ],
+  "2510.22344v1_chunk_0072": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0071",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0073",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0041",
+      "weight": 0.845457
+    }
+  ],
+  "2510.22344v1_chunk_0073": [
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0072",
+      "weight": 1.0
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0041",
+      "weight": 0.847793
+    },
+    {
+      "target_chunk_id": "2510.22344v1_chunk_0052",
+      "weight": 0.83119
+    }
+  ]
+}

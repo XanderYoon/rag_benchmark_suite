@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import streamlit as st
 
-from Benchmark.domain.difficulty_profiles import canonical_profile_label, difficulty_profile_labels
-from Benchmark.domain.models import BenchmarkRecord
+from benchmark.domain.difficulty_profiles import canonical_profile_label, difficulty_profile_labels
+from benchmark.domain.models import BenchmarkRecord
 
 
 DIFFICULTY_OPTIONS = difficulty_profile_labels()

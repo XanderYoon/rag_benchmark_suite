@@ -5,13 +5,13 @@ from pathlib import Path
 
 import streamlit as st
 
-from Benchmark.config import AppConfig
-from Benchmark.domain.difficulty_profiles import difficulty_from_profile_label
-from Benchmark.domain.enums import DifficultyLabel, QuestionStatus
-from Benchmark.domain.models import BenchmarkRecord, Chunk, EvidenceCandidate
-from Benchmark.llm import generate_llm_text
-from Benchmark.persistence.unverified_question_store import UnverifiedQuestionStore
-from Benchmark.persistence.verified_question_store import VerifiedQuestionStore
+from benchmark.config import AppConfig
+from benchmark.domain.difficulty_profiles import difficulty_from_profile_label
+from benchmark.domain.enums import DifficultyLabel, QuestionStatus
+from benchmark.domain.models import BenchmarkRecord, Chunk, EvidenceCandidate
+from RAG.llm import generate_llm_text
+from benchmark.persistence.unverified_question_store import UnverifiedQuestionStore
+from benchmark.persistence.verified_question_store import VerifiedQuestionStore
 from UI.components.difficulty_editor import render_difficulty_editor
 from UI.components.evidence_picker import render_evidence_picker
 from UI.state.session_state import (
@@ -23,13 +23,19 @@ from UI.state.session_state import (
 
 OPENAI_EMBEDDING_MODELS = ["text-embedding-3-small", "text-embedding-3-large", "text-embedding-ada-002"]
 OLLAMA_EMBEDDING_MODELS = ["nomic-embed-text"]
+RETRIEVAL_METHODS = {
+    "none": "None",
+    "faiss": "FAISS",
+    "lightrag": "LightRAG",
+    "graphrag": "GraphRAG",
+}
 
 
 def _show_title(show_title: bool) -> None:
     if show_title:
-        st.title("Verify Questions")
+        st.title("Verify Probes")
     else:
-        st.subheader("Verify Questions")
+        st.subheader("Verify Probes")
 
 
 def _generate_ground_truth(
@@ -159,8 +165,8 @@ def _candidate_matches_filters(
     return True
 
 
-def _resolve_faiss_retrieval_model() -> tuple[str, str]:
-    """Return selected FAISS retrieval `(provider, model)` from enabled providers."""
+def _resolve_retrieval_model() -> tuple[str, str]:
+    """Return selected retrieval `(provider, model)` from enabled providers."""
     enabled_providers = list(st.session_state.get("llm_providers", ["openai"]))
     options: list[tuple[str, str, str]] = []
     if "openai" in enabled_providers:
@@ -173,43 +179,50 @@ def _resolve_faiss_retrieval_model() -> tuple[str, str]:
         options.append(("openai::text-embedding-3-small", "openai", "text-embedding-3-small"))
 
     option_lookup = {key: (provider, model) for key, provider, model in options}
-    default_provider = str(st.session_state.get("verify_faiss_retrieval_provider", "")).strip().lower()
-    default_model = str(st.session_state.get("verify_faiss_retrieval_model", "")).strip()
+    default_provider = str(st.session_state.get("verify_retrieval_provider", "")).strip().lower()
+    default_model = str(st.session_state.get("verify_retrieval_model", "")).strip()
     default_key = f"{default_provider}::{default_model}" if default_provider and default_model else options[0][0]
     if default_key not in option_lookup:
         default_key = options[0][0]
 
     selected_key = st.selectbox(
-        "FAISS retrieval model",
+        "Retrieval model",
         options=[key for key, _, _ in options],
         index=[key for key, _, _ in options].index(default_key),
         format_func=lambda key: f"{option_lookup[key][1]} ({option_lookup[key][0]})",
-        key="verify_faiss_retrieval_model_select",
+        key="verify_retrieval_model_select",
     )
     provider, model = option_lookup[selected_key]
-    st.session_state["verify_faiss_retrieval_provider"] = provider
-    st.session_state["verify_faiss_retrieval_model"] = model
+    st.session_state["verify_retrieval_provider"] = provider
+    st.session_state["verify_retrieval_model"] = model
     return provider, model
 
 
-def _discover_faiss_directories() -> list[Path]:
-    """Return FAISS artifact directories available under the data root."""
+def _discover_retrieval_directories(method_id: str) -> list[Path]:
+    """Return artifact directories available for the selected retrieval method."""
     project_root = Path(__file__).resolve().parents[2]
     data_root = project_root / "data"
     candidates: set[Path] = set()
     if data_root.exists():
         for manifest_path in data_root.rglob("index_manifest.json"):
             parent = manifest_path.parent
-            if (parent / "chunks.faiss").exists() and (parent / "chunks_metadata.jsonl").exists():
+            if not (parent / "chunks_metadata.jsonl").exists():
+                continue
+            try:
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            except Exception:
+                continue
+            manifest_method = str(manifest.get("method_id", "faiss")).strip().lower() or "faiss"
+            if manifest_method == method_id:
                 candidates.add(parent.resolve())
-    default_dir = (data_root / "faiss_rag_index").resolve()
-    if (default_dir / "chunks.faiss").exists() and (default_dir / "chunks_metadata.jsonl").exists():
+    default_dir = (data_root / f"{method_id}_index").resolve()
+    if (default_dir / "index_manifest.json").exists() and (default_dir / "chunks_metadata.jsonl").exists():
         candidates.add(default_dir)
     return sorted(candidates)
 
 
-def _fallback_candidates_without_faiss(chunks_by_id: dict[str, Chunk]) -> list[EvidenceCandidate]:
-    """Create deterministic non-FAISS candidates from loaded chunks."""
+def _fallback_candidates_without_retrieval(chunks_by_id: dict[str, Chunk]) -> list[EvidenceCandidate]:
+    """Create deterministic non-retrieval candidates from loaded chunks."""
     ordered_chunk_ids = sorted(chunks_by_id.keys())
     return [
         EvidenceCandidate(chunk_id=chunk_id, score=0.0, rank=index + 1)
@@ -249,7 +262,7 @@ def render(show_title: bool = True) -> None:
     rows = unverified_store.read_all()
 
     if not rows:
-        st.info("No unverified questions found. Accept questions on Question Generation first.")
+        st.info("No unverified probes found. Accept probes on Probe Generation first.")
         return
 
     scope_keys: list[str] = []
@@ -270,7 +283,7 @@ def render(show_title: bool = True) -> None:
     paper_rows = [row for row in rows if _paper_scope_key(_paper_ids_for_row(row)) == scope_key]
 
     if not paper_rows:
-        st.info("No unverified questions found for this paper.")
+        st.info("No unverified probes found for this paper.")
         return
 
     st.subheader(f"Papers: {paper_scope_label}")
@@ -279,55 +292,62 @@ def render(show_title: bool = True) -> None:
         for chunk in pipeline.load_chunks(selected_paper_id):
             chunks_by_id[chunk.chunk_id] = chunk
 
-    enable_faiss = st.toggle(
-        "Enable FAISS retrieval",
-        value=True,
-        key="verify_enable_faiss_retrieval",
+    default_retrieval_method = str(st.session_state.get("verify_retrieval_method", "faiss")).strip().lower()
+    if default_retrieval_method not in RETRIEVAL_METHODS:
+        default_retrieval_method = "faiss"
+    retrieval_method = st.selectbox(
+        "Retrieval method",
+        options=list(RETRIEVAL_METHODS.keys()),
+        index=list(RETRIEVAL_METHODS.keys()).index(default_retrieval_method),
+        format_func=lambda method_id: RETRIEVAL_METHODS[method_id],
+        key="verify_retrieval_method",
     )
-    faiss_top_k = 20
+    retrieval_top_k = 20
     limit_to_top_k = False
     retrieval_provider = ""
     retrieval_model = ""
-    selected_faiss_directory = ""
-    if enable_faiss:
-        with st.expander("FAISS settings", expanded=False):
-            faiss_directories = _discover_faiss_directories()
-            if faiss_directories:
-                faiss_directory_options = [str(path) for path in faiss_directories]
-                saved_faiss_directory = str(st.session_state.get("verify_faiss_directory", faiss_directory_options[0]))
-                if saved_faiss_directory not in faiss_directory_options:
-                    saved_faiss_directory = faiss_directory_options[0]
-                selected_faiss_directory = st.selectbox(
-                    "FAISS directory",
-                    options=faiss_directory_options,
-                    index=faiss_directory_options.index(saved_faiss_directory),
-                    key="verify_faiss_directory_select",
+    selected_artifact_directory = ""
+    if retrieval_method != "none":
+        with st.expander("Retrieval settings", expanded=False):
+            retrieval_directories = _discover_retrieval_directories(retrieval_method)
+            if retrieval_directories:
+                directory_options = [str(path) for path in retrieval_directories]
+                saved_directory = str(
+                    st.session_state.get(f"verify_{retrieval_method}_directory", directory_options[0])
                 )
-                st.session_state["verify_faiss_directory"] = selected_faiss_directory
+                if saved_directory not in directory_options:
+                    saved_directory = directory_options[0]
+                selected_artifact_directory = st.selectbox(
+                    "Artifact directory",
+                    options=directory_options,
+                    index=directory_options.index(saved_directory),
+                    key=f"verify_{retrieval_method}_directory_select",
+                )
+                st.session_state[f"verify_{retrieval_method}_directory"] = selected_artifact_directory
             else:
-                st.warning("No FAISS directories found. Using chunk-only fallback.")
-                enable_faiss = False
+                st.warning(f"No {RETRIEVAL_METHODS[retrieval_method]} artifact directories found. Using chunk-only fallback.")
+                retrieval_method = "none"
 
-            if enable_faiss:
-                retrieval_provider, retrieval_model = _resolve_faiss_retrieval_model()
+            if retrieval_method != "none":
+                retrieval_provider, retrieval_model = _resolve_retrieval_model()
                 limit_to_top_k = st.toggle(
                     "Restrict displayed chunks to top-k",
                     value=True,
-                    key=f"verify_limit_top_k_{scope_key or 'none'}",
+                    key=f"verify_limit_top_k_{retrieval_method}_{scope_key or 'none'}",
                 )
                 if limit_to_top_k:
-                    faiss_top_k = int(
+                    retrieval_top_k = int(
                         st.number_input(
                             "Top-k",
                             min_value=1,
                             max_value=200,
-                            value=int(st.session_state.get("verify_faiss_top_k", 20)),
+                            value=int(st.session_state.get("verify_retrieval_top_k", 20)),
                             step=1,
-                            key="verify_faiss_top_k",
+                            key="verify_retrieval_top_k",
                         )
                     )
                 else:
-                    faiss_top_k = 200
+                    retrieval_top_k = 200
 
     verify_idx_key = f"verify_question_index_{scope_key or 'none'}"
     if verify_idx_key not in st.session_state:
@@ -351,36 +371,40 @@ def render(show_title: bool = True) -> None:
         difficulty_final=target_difficulty,
     )
 
-    st.markdown(f"### Question {verify_idx + 1} of {len(paper_rows)}")
-    record.question_text = st.text_area("Question", value=record.question_text, key=f"verify_q_{record.question_id}")
+    st.markdown(f"### Probe {verify_idx + 1} of {len(paper_rows)}")
+    record.question_text = st.text_area("Probe", value=record.question_text, key=f"verify_q_{record.question_id}")
 
-    faiss_results_applied = False
-    if enable_faiss:
-        faiss_candidates = pipeline.question_service.retrieval.retrieve_top_faiss(
+    retrieval_results_applied = False
+    if retrieval_method != "none":
+        retrieved_candidates = pipeline.question_service.retrieval.retrieve_top_artifact(
             record.question_text,
-            limit=faiss_top_k,
+            retrieval_method=retrieval_method,
+            limit=retrieval_top_k,
             retrieval_model=retrieval_model,
             retrieval_provider=retrieval_provider,
-            faiss_output_dir=selected_faiss_directory,
+            artifact_output_dir=selected_artifact_directory,
         )
-        if faiss_candidates:
-            record.retrieval_candidates = faiss_candidates
-            faiss_results_applied = True
+        if retrieved_candidates:
+            record.retrieval_candidates = retrieved_candidates
+            retrieval_results_applied = True
         else:
-            faiss_error = pipeline.question_service.retrieval.faiss_error
-            if faiss_error:
-                st.warning(f"FAISS retrieval unavailable: {faiss_error}. Showing chunks without FAISS.")
-            record.retrieval_candidates = _fallback_candidates_without_faiss(chunks_by_id)
+            retrieval_error = pipeline.question_service.retrieval.retrieval_error
+            if retrieval_error:
+                st.warning(
+                    f"{RETRIEVAL_METHODS[retrieval_method]} retrieval unavailable: {retrieval_error}. "
+                    "Showing chunks without retrieval."
+                )
+            record.retrieval_candidates = _fallback_candidates_without_retrieval(chunks_by_id)
     else:
-        record.retrieval_candidates = _fallback_candidates_without_faiss(chunks_by_id)
+        record.retrieval_candidates = _fallback_candidates_without_retrieval(chunks_by_id)
 
-    faiss_chunks_by_id = pipeline.question_service.retrieval.load_chunks_for_candidates(record.retrieval_candidates)
-    chunks_by_id.update(faiss_chunks_by_id)
+    retrieved_chunks_by_id = pipeline.question_service.retrieval.load_chunks_for_candidates(record.retrieval_candidates)
+    chunks_by_id.update(retrieved_chunks_by_id)
     display_candidates = _build_display_candidates(
         record,
         chunks_by_id,
         limit_to_top_k=limit_to_top_k,
-        top_k=faiss_top_k,
+        top_k=retrieval_top_k,
     )
 
     available_chunk_docs = sorted(
@@ -417,7 +441,7 @@ def render(show_title: bool = True) -> None:
         chunks_by_id=chunks_by_id,
         key_prefix=f"verify_{scope_key or 'none'}_{verify_idx}",
         candidates=filtered_candidates,
-        show_scores=faiss_results_applied,
+        show_scores=retrieval_results_applied,
     )
     st.divider()
     record.top_k_chunk_ids = _render_top_k_picker(record, filtered_candidates)
@@ -486,7 +510,7 @@ def render(show_title: bool = True) -> None:
             difficulty_label=selected_difficulty_profile,
         )
         unverified_store.remove_question(final.question_id)
-        st.success("Question saved to data/verified_questions.json")
+        st.success("Probe saved to data/verified_questions.json")
         st.rerun()
 
     if c2.button("Needs revision", key=f"revise_btn_{record.question_id}"):

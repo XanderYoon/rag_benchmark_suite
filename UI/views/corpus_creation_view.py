@@ -4,7 +4,7 @@ from pathlib import Path
 
 import streamlit as st
 
-from Benchmark.ingestion.arxiv_corpus_creator import scrape_arxiv_corpus
+from scripts.arxiv_corpus_creator import scrape_arxiv_corpus
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]

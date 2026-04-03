@@ -8,10 +8,13 @@ from urllib.parse import urlparse
 import requests
 import streamlit as st
 
-from Benchmark.llm.provider_client import DEFAULT_OLLAMA_BASE_URL, DEFAULT_OLLAMA_MODEL, normalize_llm_provider
+from RAG.llm.provider_client import DEFAULT_OLLAMA_BASE_URL, DEFAULT_OLLAMA_MODEL, normalize_llm_provider
 from UI.views.benchmarking_view import render as render_benchmarking
 from UI.views.corpus_creation_view import render as render_corpus_creation
 from UI.views.ingest_view import render as render_ingest
+from UI.views.knowledge_graph_view import render as render_knowledge_graph
+from UI.views.load_append_model_view import render as render_load_append_model
+from UI.views.query_model_view import render as render_query_model
 from UI.views.question_generation_view import render as render_question_generation
 from UI.views.rag_model_creator_view import render as render_rag_model_creator
 from UI.views.verify_questions_view import render as render_verify_questions
@@ -22,23 +25,103 @@ st.set_page_config(page_title="RAG Benchmark Builder", layout="wide")
 st.markdown(
     """
     <style>
+    [data-testid="stSidebar"] .stButton {
+        margin: 0 0 0.4rem 0;
+        width: 100%;
+    }
+    [data-testid="stSidebar"] .stButton > button {
+        align-items: center;
+        border-radius: 12px;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        margin: 0;
+        min-height: 2.75rem;
+        padding: 0 0.85rem;
+        width: 100%;
+    }
+    [data-testid="stSidebar"] div[data-testid="stMarkdown"] {
+        margin: 0;
+    }
+    [data-testid="stSidebar"] div[data-testid="stMarkdown"]:has(.nav-card-slot) {
+        margin: 0 0 0.4rem 0;
+    }
+    [data-testid="stSidebar"] div[data-testid="stMarkdown"]:has(.nav-card-slot) > div {
+        margin: 0;
+        width: 100%;
+    }
+    [data-testid="stSidebar"] div[data-testid="stMarkdown"] p {
+        margin: 0;
+    }
+    [data-testid="stSidebar"] .stButton > button:hover {
+        background: transparent;
+        border-color: #7dd3fc;
+        color: #0369a1;
+        box-shadow: inset 0 0 0 1px #7dd3fc;
+    }
     [data-testid="stSidebar"] .nav-active-card {
+        align-items: center;
         background: #f0f9ff;
         border: 1px solid #bae6fd;
-        border-left: 6px solid #7dd3fc;
         border-radius: 12px;
-        box-shadow: 0 8px 22px rgba(14, 165, 233, 0.14);
+        box-sizing: border-box;
+        box-shadow: inset 6px 0 0 #7dd3fc;
         color: #0b1220;
+        display: flex;
         font-weight: 700;
-        margin: 0.15rem 0 0.4rem 0;
-        padding: 0.65rem 0.85rem;
-        transform: translateX(2px);
+        line-height: 1;
+        margin: 0;
+        height: 2.75rem;
+        min-height: 2.75rem;
+        padding: 0 0.85rem;
+        width: 100%;
     }
     [data-testid="stSidebar"] .nav-active-card span {
-        display: block;
+        align-items: center;
+        display: flex;
+        justify-content: center;
         letter-spacing: 0.01em;
+        line-height: 1;
+        margin: 0;
         text-align: center;
         width: 100%;
+    }
+    [data-testid="stSidebar"] .nav-card-slot {
+        margin: 0;
+        min-height: 2.75rem;
+        width: 100%;
+    }
+    [data-testid="stSidebar"] .nav-section-heading {
+        font-size: 1.45rem;
+        font-weight: 500;
+        line-height: 1.2;
+        margin: 0 0 0.75rem 0;
+    }
+    [data-testid="stSidebar"] .nav-section-heading-active {
+        font-size: 1.45rem;
+        font-weight: 700;
+        line-height: 1.2;
+        margin: 0 0 0.75rem 0;
+    }
+    [data-testid="stSidebar"] .nav-group-heading {
+        font-size: 1.18rem;
+        font-weight: 500;
+        line-height: 1.3;
+        margin: 0 0 0.55rem 0;
+    }
+    [data-testid="stSidebar"] .nav-subsection-heading {
+        font-size: 0.95rem;
+        font-weight: 500;
+        line-height: 1.25;
+        margin: 0.1rem 0 0.4rem 0;
+        padding-left: 0.1rem;
+    }
+    [data-testid="stSidebar"] .nav-subsection-heading-active {
+        font-size: 0.95rem;
+        font-weight: 700;
+        line-height: 1.25;
+        margin: 0.1rem 0 0.4rem 0;
+        padding-left: 0.1rem;
     }
     </style>
     """,
@@ -47,11 +130,34 @@ st.markdown(
 
 SECTIONS: dict[str, list[str]] = {
     "RAG Creation": ["Corpus Creation", "Ingest", "RAG Model Creator"],
-    "Query Creation": ["Question Generation", "Verify Questions"],
+    "Knowledge-Base": ["Load / Append Knowledge Base", "Query Knowledge Base", "MCP", "View Knowledge Graph"],
+    "Probe Creation": ["Probe Generation", "Verify Probes"],
     "Benchmarking": ["Run Benchmarks", "Compare Benchmarks"],
 }
 BENCHMARK_RUN_IN_PROGRESS_KEY = "benchmark_run_in_progress"
 SUPPORTED_LLM_PROVIDERS = ("openai", "ollama")
+PAGE_LABELS: dict[str, str] = {
+    "Ingest": "Parse and Chunk",
+}
+PAGE_ALIASES: dict[str, str] = {
+    "Parse and Chunk": "Ingest",
+    "Question Generation": "Probe Generation",
+    "Verify Questions": "Verify Probes",
+}
+SECTION_ALIASES: dict[str, str] = {
+    "Query Creation": "Probe Creation",
+    "Chat": "Knowledge-Base",
+    "Model Workspace": "Knowledge-Base",
+}
+SECTION_GROUPS: dict[str, str] = {
+    "Probe Creation": "Benchmarks",
+    "Benchmarking": "Benchmarks",
+}
+GROUP_SECTIONS: dict[str, list[str]] = {
+    "RAG Creation": ["RAG Creation"],
+    "Knowledge-Base": ["Knowledge-Base"],
+    "Benchmarks": ["Probe Creation", "Benchmarking"],
+}
 
 
 def _default_subpage(section: str) -> str:
@@ -61,6 +167,53 @@ def _default_subpage(section: str) -> str:
 def _set_navigation(section: str, subpage: str) -> None:
     st.session_state["nav_section"] = section
     st.session_state["nav_subpage"] = subpage
+
+
+def _page_label(page_name: str) -> str:
+    """Return the user-facing label for a navigation page."""
+    return PAGE_LABELS.get(page_name, page_name)
+
+
+def _render_active_navigation_card(page_name: str) -> None:
+    """Render an active navigation card without changing layout slot size."""
+    st.markdown(
+        f"<div class='nav-card-slot'><div class='nav-active-card'><span>{_page_label(page_name)}</span></div></div>",
+        unsafe_allow_html=True,
+    )
+
+
+def _render_section_heading(*, section_name: str, is_active: bool) -> None:
+    """Render a section heading with active-state emphasis."""
+    class_name = "nav-section-heading-active" if is_active else "nav-section-heading"
+    st.markdown(f"<div class='{class_name}'>{section_name}</div>", unsafe_allow_html=True)
+
+
+def _render_subsection_heading(*, section_name: str, is_active: bool) -> None:
+    """Render a subsection heading with active-state emphasis."""
+    class_name = "nav-subsection-heading-active" if is_active else "nav-subsection-heading"
+    st.markdown(f"<div class='{class_name}'>{section_name}</div>", unsafe_allow_html=True)
+
+
+def _normalize_subpage_name(subpage: str) -> str:
+    """Map legacy or display-only page labels to internal route ids."""
+    return PAGE_ALIASES.get(subpage, subpage)
+
+
+def _normalize_navigation_state() -> None:
+    """Keep navigation state aligned with current internal route ids."""
+    raw_section = str(st.session_state.get("nav_section", "RAG Creation"))
+    section = SECTION_ALIASES.get(raw_section, raw_section)
+    if section not in SECTIONS:
+        section = "RAG Creation"
+    st.session_state["nav_section"] = section
+
+    normalized_subpage = _normalize_subpage_name(
+        str(st.session_state.get("nav_subpage", _default_subpage(section)))
+    )
+    valid_subpages = SECTIONS.get(section, [])
+    if normalized_subpage not in valid_subpages:
+        normalized_subpage = _default_subpage(section)
+    st.session_state["nav_subpage"] = normalized_subpage
 
 
 def _is_valid_openai_api_key(api_key: str) -> bool:
@@ -302,67 +455,56 @@ else:
 
 
 with st.sidebar:
-    st.title("Navigation")
     navigation_locked = bool(st.session_state.get(BENCHMARK_RUN_IN_PROGRESS_KEY, False))
     if "nav_section" not in st.session_state:
         st.session_state["nav_section"] = "RAG Creation"
     if "nav_subpage" not in st.session_state:
-        st.session_state["nav_subpage"] = _default_subpage(st.session_state["nav_section"])
+        initial_section = SECTION_ALIASES.get(
+            str(st.session_state["nav_section"]),
+            str(st.session_state["nav_section"]),
+        )
+        if initial_section not in SECTIONS:
+            initial_section = "RAG Creation"
+        st.session_state["nav_section"] = initial_section
+        st.session_state["nav_subpage"] = _default_subpage(initial_section)
+    _normalize_navigation_state()
     if navigation_locked:
         st.session_state["nav_section"] = "Benchmarking"
         st.session_state["nav_subpage"] = "Run Benchmarks"
         st.warning("Benchmark in progress: navigation is temporarily locked.")
 
-    for section_name, pages in SECTIONS.items():
-        is_active_section = st.session_state.get("nav_section") == section_name
-        if section_name == "Benchmarking":
-            st.markdown(f"**{section_name}**" if is_active_section else section_name)
+    for group_name, group_sections in GROUP_SECTIONS.items():
+        group_is_active = st.session_state.get("nav_section") in group_sections
+        _render_section_heading(section_name=group_name, is_active=group_is_active)
+
+        for section_name in group_sections:
+            pages = SECTIONS[section_name]
+            is_active_section = st.session_state.get("nav_section") == section_name
+            if group_name == "Benchmarks":
+                _render_subsection_heading(section_name=section_name, is_active=is_active_section)
+
             for page_name in pages:
                 is_active_page = (
-                    st.session_state.get("nav_section") == "Benchmarking"
+                    st.session_state.get("nav_section") == section_name
                     and st.session_state.get("nav_subpage") == page_name
                 )
                 if is_active_page:
-                    st.markdown(
-                        f"<div class='nav-active-card'><span>{page_name}</span></div>",
-                        unsafe_allow_html=True,
-                    )
+                    _render_active_navigation_card(page_name)
                 else:
                     if st.button(
-                        page_name,
-                        key=f"nav_benchmarking_{page_name}",
-                        width="stretch",
+                        _page_label(page_name),
+                        key=f"nav_{section_name}_{page_name}",
                         disabled=navigation_locked,
                     ):
-                        _set_navigation("Benchmarking", page_name)
+                        _set_navigation(section_name, page_name)
                         st.rerun()
-            st.write("")
-            continue
-
-        st.markdown(f"**{section_name}**" if is_active_section else section_name)
-        for page_name in pages:
-            is_active_page = (
-                st.session_state.get("nav_section") == section_name
-                and st.session_state.get("nav_subpage") == page_name
-            )
-            if is_active_page:
-                st.markdown(
-                    f"<div class='nav-active-card'><span>{page_name}</span></div>",
-                    unsafe_allow_html=True,
-                )
-            else:
-                if st.button(
-                    page_name,
-                    key=f"nav_{section_name}_{page_name}",
-                    width="stretch",
-                    disabled=navigation_locked,
-                ):
-                    _set_navigation(section_name, page_name)
-                    st.rerun()
         st.write("")
 
     section = str(st.session_state.get("nav_section", "RAG Creation"))
-    subpage = str(st.session_state.get("nav_subpage", _default_subpage(section)))
+    subpage = _normalize_subpage_name(
+        str(st.session_state.get("nav_subpage", _default_subpage(section)))
+    )
+    st.session_state["nav_subpage"] = subpage
 
     st.divider()
     with st.expander("Settings", expanded=False):
@@ -503,17 +645,40 @@ with st.sidebar:
             else:
                 st.caption("Ollama CLI not found. Set 'Ollama CLI Path' to enable auto-start.")
 
-st.caption(f"{section} / {subpage}")
+section = str(st.session_state.get("nav_section", "RAG Creation"))
+section = SECTION_ALIASES.get(section, section)
+if section not in SECTIONS:
+    section = "RAG Creation"
+subpage = _normalize_subpage_name(
+    str(st.session_state.get("nav_subpage", _default_subpage(section)))
+)
+if subpage not in SECTIONS[section]:
+    subpage = _default_subpage(section)
+    st.session_state["nav_subpage"] = subpage
+
+st.caption(f"{section} / {_page_label(subpage)}")
 
 if section == "RAG Creation" and subpage == "Corpus Creation":
     render_corpus_creation(show_title=True)
-elif section == "RAG Creation" and subpage == "Ingest":
+elif section == "RAG Creation" and subpage in {"Ingest", "Parse and Chunk"}:
     render_ingest(show_title=True)
 elif section == "RAG Creation" and subpage == "RAG Model Creator":
     render_rag_model_creator(show_title=True)
-elif section == "Query Creation" and subpage == "Question Generation":
+elif section == "Knowledge-Base" and subpage == "Load / Append Knowledge Base":
+    render_load_append_model(show_title=True)
+elif section == "Knowledge-Base" and subpage == "Query Knowledge Base":
+    render_query_model(show_title=True)
+elif section == "Knowledge-Base" and subpage == "MCP":
+    st.title("Knowledge-Base")
+    st.subheader("MCP")
+    st.info("Placeholder page for MCP integration.")
+elif section == "Knowledge-Base" and subpage == "View Knowledge Graph":
+    render_knowledge_graph(show_title=True)
+elif section == "Probe Creation" and subpage in {"Question Generation", "Probe Generation"}:
     render_question_generation(show_title=True)
-elif section == "Query Creation" and subpage == "Verify Questions":
+elif section == "Probe Creation" and subpage in {"Verify Questions", "Verify Probes"}:
     render_verify_questions(show_title=True)
-else:
+elif section == "Benchmarking":
     render_benchmarking(show_title=False)
+else:
+    st.error(f"Unknown navigation target: {section} / {subpage}")

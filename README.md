@@ -9,9 +9,9 @@ Streamlit app for building and evaluating paper-grounded RAG benchmarks with a h
 ## What This Project Does
 
 1. Ingests PDFs and creates deterministic text chunks.
-2. Generates candidate questions per paper.
-3. Queues accepted questions for human verification.
-4. Verifies questions with retrieval-backed evidence selection.
+2. Generates candidate probes per paper.
+3. Queues accepted probes for human verification.
+4. Verifies probes with retrieval-backed evidence selection.
 5. Persists verified benchmark cases to JSON.
 6. Runs source-aware retrieval benchmarks with parallel orchestration.
 7. Exports benchmark summaries to PDF from persisted session snapshots.
@@ -52,7 +52,7 @@ UI/
   state/
   views/
 
-Benchmark/
+benchmark/
   benchmark_tools/
     api/
     contracts/
@@ -139,18 +139,18 @@ Put source PDFs in `data/rag_corpus_pdf/`.
 
 ### 2) Ingest and chunk
 
-In **RAG Creation / Ingest**, run chunking.
+In **RAG Creation / Parse and Chunk**, run chunking.
 
 Chunk output format:
 
 - `data/rag_corpus_chunked/<paper_id>/<paper_id>_chunk_XXXX.txt`
 
-Chunking defaults are configured in `Benchmark/config.py` (300 tokens with 60-token overlap).
+Chunking defaults are configured in `benchmark/config.py` (300 tokens with 60-token overlap).
 
 ### 3) Build FAISS index
 
 ```bash
-python3 Benchmark/embedding/build_faiss_rag_index.py --overwrite
+python3 RAG/embedding/build_faiss_rag_index.py --overwrite
 ```
 
 Expected index artifacts:
@@ -159,17 +159,17 @@ Expected index artifacts:
 - `data/faiss_rag_index/chunks_metadata.jsonl`
 - `data/faiss_rag_index/index_manifest.json`
 
-### 4) Generate and accept questions
+### 4) Generate and accept probes
 
-In **Query Creation / Question Generation**:
+In **Query Creation / Probe Generation**:
 
-- Generate questions for the selected paper.
+- Generate probes for the selected paper.
 - Decline/regenerate as needed.
-- Accept questions to append them to `data/unverified_questions.json`.
+- Accept probes to append them to `data/unverified_questions.json`.
 
-### 5) Verify questions
+### 5) Verify probes
 
-In **Query Creation / Verify Questions**:
+In **Query Creation / Verify Probes**:
 
 - Load pending items from `data/unverified_questions.json`.
 - Review retrieval candidates and select evidence chunks.
@@ -178,8 +178,8 @@ In **Query Creation / Verify Questions**:
 
 Persisted results:
 
-- verified question appended to `data/verified_questions.json`
-- question removed from `data/unverified_questions.json`
+- verified probe appended to `data/verified_questions.json`
+- probe removed from `data/unverified_questions.json`
 
 ### 6) Run benchmarking
 
@@ -210,7 +210,7 @@ In **Benchmarking / Compare Benchmarks**:
 
 ## Benchmarking Architecture
 
-`Benchmark/benchmark_tools` is intentionally layered:
+`benchmark/benchmark_tools` is intentionally layered:
 
 - `contracts/`: request validation and normalized contracts
 - `probe_sources/`: probe loading/composition by source
@@ -231,9 +231,9 @@ In **Benchmarking / Compare Benchmarks**:
 ## Key Data Artifacts
 
 - `data/unverified_questions.json`
-  - accepted questions pending verification
+  - accepted probes pending verification
 - `data/verified_questions.json`
-  - finalized benchmark questions with ground truth and ordered evidence
+  - finalized benchmark probes with ground truth and ordered evidence
 - `data/question_id_counter.txt`
   - persistent global sequential question ID allocator
 - `data/benchmark_runs/csv_exports/`
@@ -244,7 +244,7 @@ In **Benchmarking / Compare Benchmarks**:
 Run benchmark-focused tests:
 
 ```bash
-pytest Benchmark/tests -q
+pytest benchmark/tests -q
 ```
 
 ## Notes

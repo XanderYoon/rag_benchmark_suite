@@ -2,15 +2,15 @@ from __future__ import annotations
 
 import streamlit as st
 
-from Benchmark.domain.difficulty_profiles import (
+from benchmark.domain.difficulty_profiles import (
     canonical_profile_label,
     difficulty_from_profile_label,
     difficulty_profile_labels,
 )
-from Benchmark.domain.models import BenchmarkRecord
-from Benchmark.domain.enums import DifficultyLabel, QuestionStatus
-from Benchmark.persistence.question_id_allocator import QuestionIdAllocator
-from Benchmark.persistence.unverified_question_store import UnverifiedQuestionStore
+from benchmark.domain.models import BenchmarkRecord
+from benchmark.domain.enums import DifficultyLabel, QuestionStatus
+from benchmark.persistence.question_id_allocator import QuestionIdAllocator
+from benchmark.persistence.unverified_question_store import UnverifiedQuestionStore
 from UI.components.paper_selector import render_paper_selector
 from UI.state.session_state import (
     get_current_paper_index,
@@ -26,9 +26,9 @@ OPENAI_QUESTION_MODELS = ["gpt-4o-mini", "gpt-4.1-mini", "gpt-4.1"]
 
 def _show_title(show_title: bool) -> None:
     if show_title:
-        st.title("Question Generation")
+        st.title("Probe Generation")
     else:
-        st.subheader("Question Generation")
+        st.subheader("Probe Generation")
 
 
 def _text_area_height(text: str) -> int:
@@ -45,14 +45,14 @@ def _render_user_created_questions_section() -> None:
         st.session_state["user_created_question_paper_ids"] = []
     if "user_created_question_paper_ids" not in st.session_state:
         st.session_state["user_created_question_paper_ids"] = []
-    st.subheader("User Created Questions")
+    st.subheader("User Created Probes")
     custom_question = str(st.session_state.get("user_created_question_text", ""))
     st.text_area(
-        "Question text",
+        "Probe text",
         value=custom_question,
         key="user_created_question_text",
         height=_text_area_height(custom_question),
-        placeholder="Write a question manually...",
+        placeholder="Write a probe manually...",
     )
     difficulty_options = difficulty_profile_labels()
     default_difficulty = difficulty_options[0]
@@ -73,10 +73,10 @@ def _add_user_created_question(
     unverified_store: UnverifiedQuestionStore,
     id_allocator: QuestionIdAllocator,
 ) -> bool:
-    """Validate and append a manually authored question to the unverified queue."""
+    """Validate and append a manually authored probe to the unverified queue."""
     question_text = str(st.session_state.get("user_created_question_text", "")).strip()
     if not question_text:
-        st.error("Enter a question before adding it.")
+        st.error("Enter a probe before adding it.")
         return False
 
     difficulty_value = canonical_profile_label(
@@ -97,7 +97,7 @@ def _add_user_created_question(
     record.audit["accepted_for_verification"] = True
     unverified_store.append_accepted(record)
     st.session_state[USER_CREATED_RESET_KEY] = True
-    st.success("Added manual question to data/unverified_questions.json")
+    st.success("Added manual probe to data/unverified_questions.json")
     return True
 
 
@@ -126,7 +126,7 @@ def _render_user_created_question_actions(
 
 
 def _question_model_options() -> list[tuple[str, str, str]]:
-    """Return selectable `(key, provider, model)` options for question generation."""
+    """Return selectable `(key, provider, model)` options for probe generation."""
     enabled_providers = list(st.session_state.get("llm_providers", ["openai"]))
     options: list[tuple[str, str, str]] = []
     if "openai" in enabled_providers:
@@ -142,7 +142,7 @@ def _question_model_options() -> list[tuple[str, str, str]]:
 
 
 def _render_question_model_picker() -> None:
-    """Render AI question model dropdown and persist provider/model selection."""
+    """Render AI probe model dropdown and persist provider/model selection."""
     options = _question_model_options()
     option_keys = [key for key, _, _ in options]
     option_lookup = {key: (provider, model) for key, provider, model in options}
@@ -154,7 +154,7 @@ def _render_question_model_picker() -> None:
         default_key = option_keys[0]
 
     selected_key = st.selectbox(
-        "Question generation model",
+        "Probe generation model",
         options=option_keys,
         index=option_keys.index(default_key),
         format_func=lambda key: f"{option_lookup[key][1]} ({option_lookup[key][0]})",
@@ -176,7 +176,7 @@ def render(show_title: bool = True) -> None:
     all_paper_ids = [p.paper_id for p in papers]
 
     if not all_paper_ids:
-        st.info("No papers detected. Run ingestion first.")
+        st.info("No papers detected. Run Parse and Chunk first.")
         return
 
     approved_papers: set[str] = set()
@@ -187,7 +187,7 @@ def render(show_title: bool = True) -> None:
     paper_ids = [paper_id for paper_id in all_paper_ids if paper_id not in approved_papers]
 
     if not paper_ids:
-        st.success("All papers already have approved questions. Nothing left to generate.")
+        st.success("All papers already have approved probes. Nothing left to generate.")
         return
 
     current_index = min(get_current_paper_index(), len(paper_ids) - 1)
@@ -201,20 +201,20 @@ def render(show_title: bool = True) -> None:
         id_allocator=id_allocator,
     )
 
-    st.subheader("AI Generated Questions")
+    st.subheader("AI Generated Probes")
     _render_question_model_picker()
     current_index = render_paper_selector(paper_ids, current_index)
     set_current_paper_index(current_index)
     paper_id = paper_ids[current_index]
 
-    if st.button("Generate 5 questions for current paper", key="generate_questions_for_paper"):
+    if st.button("Generate 5 probes for current paper", key="generate_questions_for_paper"):
         records = pipeline.generate_for_paper(paper_id)
         records_by_paper[paper_id] = records
 
 
     records = records_by_paper.get(paper_id, [])
     if not records:
-        st.info("No generated questions yet for this paper.")
+        st.info("No generated probes yet for this paper.")
         return
 
     st.write(
@@ -228,7 +228,7 @@ def render(show_title: bool = True) -> None:
 
     display_records = [r for r in records if not bool(r.audit.get("accepted_for_verification"))]
     if not display_records:
-        st.success("All generated questions for this paper were accepted.")
+        st.success("All generated probes for this paper were accepted.")
         return
 
     profile_to_slot: dict[str, int] = {
@@ -243,7 +243,7 @@ def render(show_title: bool = True) -> None:
         question_key = f"qgen_{paper_id}_q_{record.question_id}"
         current_text = st.session_state.get(question_key, record.question_text)
         record.question_text = st.text_area(
-            f"Question {i + 1}",
+            f"Probe {i + 1}",
             value=current_text,
             key=question_key,
             height=_text_area_height(current_text),
@@ -251,12 +251,12 @@ def render(show_title: bool = True) -> None:
         record.touch()
 
         profile_label = str(record.audit.get("difficulty_profile", record.target_difficulty.value))
-        st.caption(f"Question {i + 1} type: {profile_label}")
+        st.caption(f"Probe {i + 1} type: {profile_label}")
         decline_feedback = st.text_input(
             "Decline feedback (required for regenerate)",
             value="",
             key=f"decline_feedback_{paper_id}_{record.question_id}",
-            placeholder="Why should this question be replaced?",
+            placeholder="Why should this probe be replaced?",
         )
 
         c_decline, c_accept, c_remove = st.columns([1.2, 1.2, 0.6])
@@ -277,17 +277,17 @@ def render(show_title: bool = True) -> None:
                 )
                 records[record_idx] = new_record
                 records_by_paper[paper_id] = records
-                st.success(f"Replaced question {i + 1} based on your feedback.")
+                st.success(f"Replaced probe {i + 1} based on your feedback.")
                 st.rerun()
         if c_accept.button("Accept", key=f"accept_q_{paper_id}_{record.question_id}"):
             record.audit["accepted_for_verification"] = True
             unverified_store.append_accepted(record)
-            st.success("Accepted question and saved to data/unverified_questions.json")
+            st.success("Accepted probe and saved to data/unverified_questions.json")
             st.rerun()
         if c_remove.button("X", key=f"remove_q_{paper_id}_{record.question_id}"):
             records.pop(record_idx)
             records_by_paper[paper_id] = records
-            st.success(f"Removed Question {i + 1}.")
+            st.success(f"Removed Probe {i + 1}.")
             st.rerun()
 
         if i < len(display_rows) - 1:

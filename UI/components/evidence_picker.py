@@ -4,9 +4,9 @@ import html
 
 import streamlit as st
 
-from Benchmark.domain.models import Chunk
-from Benchmark.domain.models import BenchmarkRecord
-from Benchmark.domain.models import EvidenceCandidate
+from benchmark.domain.models import Chunk
+from benchmark.domain.models import BenchmarkRecord
+from benchmark.domain.models import EvidenceCandidate
 
 
 def render_evidence_picker(

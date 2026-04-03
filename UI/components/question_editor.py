@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import streamlit as st
 
-from Benchmark.domain.models import BenchmarkRecord
+from benchmark.domain.models import BenchmarkRecord
 
 
 def render_question_editor(records: list[BenchmarkRecord], key_prefix: str) -> None:

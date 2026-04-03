@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import base64
 from pathlib import Path
 
 import streamlit as st
@@ -14,9 +13,9 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 def _show_title(show_title: bool) -> None:
     if show_title:
-        st.title("Ingest")
+        st.title("Parse and Chunk")
     else:
-        st.subheader("Ingest")
+        st.subheader("Parse and Chunk")
 
 
 def _display_path(path: Path) -> str:
@@ -28,39 +27,29 @@ def _display_path(path: Path) -> str:
 
 def _render_pdf_viewer(pdf_path: Path) -> None:
     """Render an inline PDF preview for the selected paper."""
-    try:
-        pdf_bytes = pdf_path.read_bytes()
-    except OSError:
+    if not pdf_path.exists():
         st.error(f"Failed to load PDF preview from {pdf_path}.")
         return
 
     pdf_renderer = getattr(st, "pdf", None)
     if callable(pdf_renderer):
-        pdf_renderer(pdf_bytes)
+        try:
+            pdf_renderer(str(pdf_path), height=720)
+        except TypeError:
+            pdf_renderer(str(pdf_path))
     else:
-        html_renderer = getattr(st, "html", None)
-        if callable(html_renderer):
-            pdf_data = base64.b64encode(pdf_bytes).decode("utf-8")
-            html_renderer(
-                f"""
-                <div style="border: 1px solid #d9d9d9; border-radius: 0.5rem; overflow: hidden;">
-                  <embed
-                    src="data:application/pdf;base64,{pdf_data}#view=FitH"
-                    type="application/pdf"
-                    width="100%"
-                    height="720px"
-                  />
-                </div>
-                """
-            )
-        else:
-            st.info("Inline PDF preview is not available in this Streamlit version.")
+        st.info("Inline PDF preview is unavailable in this Streamlit build. Use the download button below.")
+
+    try:
+        pdf_bytes = pdf_path.read_bytes()
+    except OSError:
+        st.error(f"Failed to load PDF download from {pdf_path}.")
+        return
     st.download_button(
         "Download PDF",
         data=pdf_bytes,
         file_name=pdf_path.name,
         mime="application/pdf",
-        width="stretch",
         key=f"download_pdf_{pdf_path.stem}",
     )
 
@@ -87,7 +76,7 @@ def _render_directory_browser() -> tuple[Path, str]:
 
 
 def _render_ingest_progress(total_pdfs: int) -> tuple[object, object]:
-    """Create Streamlit progress UI for chunk ingestion."""
+    """Create Streamlit progress UI for PDF parsing and chunking."""
     status_placeholder = st.empty()
     progress_bar = st.progress(0.0)
     if total_pdfs > 0:
@@ -107,7 +96,7 @@ def render(show_title: bool = True) -> None:
     pipeline = get_pipeline()
 
     c_use, c_chunk = st.columns(2)
-    if c_use.button("Use selected folder", key=f"use_corpus_dir_{_display_path(browser_dir)}", width="stretch"):
+    if c_use.button("Use selected folder", key=f"use_corpus_dir_{_display_path(browser_dir)}"):
         if selected == "..":
             next_dir = browser_dir.parent
         else:
@@ -115,7 +104,7 @@ def render(show_title: bool = True) -> None:
         st.session_state["corpus_dir"] = _display_path(next_dir)
         st.rerun()
 
-    if c_chunk.button("Chunk all", key="chunk_all_pdfs", width="stretch"):
+    if c_chunk.button("Chunk all", key="chunk_all_pdfs"):
         total_pdfs = len(pipeline.paper_service.list_pdfs())
         progress_bar, status_placeholder = _render_ingest_progress(total_pdfs)
 

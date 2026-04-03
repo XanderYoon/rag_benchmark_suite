@@ -5,17 +5,27 @@ from pathlib import Path
 
 import streamlit as st
 
-from Benchmark.config import AppConfig, DEFAULT_CONFIG
-from Benchmark.llm import normalize_llm_provider
-from Benchmark.services.pipeline import PipelineService
-from Benchmark.verification.verifier import Verifier
+from benchmark.config import AppConfig, DEFAULT_CONFIG
+from RAG.llm import normalize_llm_provider
+from benchmark.services.pipeline import PipelineService
+from benchmark.verification.verifier import Verifier
 
 BENCHMARK_SNAPSHOT_KEY = "benchmark_snapshot"
+LOADED_KNOWLEDGE_BASE_KEY = "loaded_knowledge_base"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 
 def _config_key(config: AppConfig) -> str:
     payload = asdict(config)
     return "|".join(f"{k}={v}" for k, v in sorted(payload.items()))
+
+
+def _resolve_corpus_dir(raw_corpus_dir: str | Path) -> Path:
+    """Resolve corpus directories relative to the app project root."""
+    candidate = Path(raw_corpus_dir).expanduser()
+    if candidate.is_absolute():
+        return candidate
+    return (PROJECT_ROOT / candidate).resolve()
 
 
 def get_config() -> AppConfig:
@@ -45,7 +55,7 @@ def get_config() -> AppConfig:
         llm_provider=selected_question_provider,
         ollama_base_url=ollama_base_url or DEFAULT_CONFIG.ollama_base_url,
         ollama_model=ollama_model or DEFAULT_CONFIG.ollama_model,
-        corpus_dir=Path(corpus_dir),
+        corpus_dir=_resolve_corpus_dir(corpus_dir),
         text_cache_dir=DEFAULT_CONFIG.text_cache_dir,
         chunk_dir=DEFAULT_CONFIG.chunk_dir,
         benchmark_runs_dir=DEFAULT_CONFIG.benchmark_runs_dir,
@@ -105,3 +115,27 @@ def get_benchmark_snapshot() -> dict | None:
 def clear_benchmark_snapshot() -> None:
     """Remove the persisted benchmark snapshot from Streamlit session state."""
     st.session_state.pop(BENCHMARK_SNAPSHOT_KEY, None)
+
+
+def set_loaded_knowledge_base(*, knowledge_base: dict) -> None:
+    """Persist the active knowledge base selection for later query workflows."""
+    if not isinstance(knowledge_base, dict):
+        raise ValueError("Invalid knowledge base payload. Expected a dictionary suitable for session storage.")
+    st.session_state[LOADED_KNOWLEDGE_BASE_KEY] = dict(knowledge_base)
+
+
+def get_loaded_knowledge_base() -> dict | None:
+    """Return the active knowledge base payload if one has been loaded."""
+    raw_payload = st.session_state.get(LOADED_KNOWLEDGE_BASE_KEY)
+    if raw_payload is None:
+        return None
+    if not isinstance(raw_payload, dict):
+        raise ValueError(
+            f"Invalid knowledge base payload found in session key '{LOADED_KNOWLEDGE_BASE_KEY}'."
+        )
+    return dict(raw_payload)
+
+
+def clear_loaded_knowledge_base() -> None:
+    """Remove the active knowledge base from session state."""
+    st.session_state.pop(LOADED_KNOWLEDGE_BASE_KEY, None)

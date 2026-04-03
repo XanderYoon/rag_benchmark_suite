@@ -13,10 +13,10 @@ from typing import Any
 
 import streamlit as st
 
-from Benchmark.benchmark_tools import estimate_benchmark_runtime, run_retrieval_benchmarks
-from Benchmark.benchmark_tools.probe_sources import count_verified_questions
-from Benchmark.config import DEFAULT_CONFIG
-from Benchmark.embedding.build_faiss_rag_index import build_faiss_index
+from benchmark.benchmark_tools import estimate_benchmark_runtime, run_retrieval_benchmarks
+from benchmark.benchmark_tools.probe_sources import count_verified_questions
+from benchmark.config import DEFAULT_CONFIG
+from RAG.retrieval.index_builder import build_retrieval_index
 from UI.state.session_state import (
     get_benchmark_snapshot,
     set_benchmark_snapshot,
@@ -189,21 +189,23 @@ def _embedding_provider_for_model(model: str) -> str:
     return "ollama"
 
 
-def _index_output_dir(corpus_root: Path, embedding_model: str) -> Path:
-    """Return the persistent index output directory for a corpus/model pair."""
+def _index_output_dir(corpus_root: Path, embedding_model: str, retrieval_method: str) -> Path:
+    """Return the persistent index output directory for a corpus/model/method triple."""
     corpus_slug = _sanitize_slug(_display_path(corpus_root))
     embedding_slug = _sanitize_slug(embedding_model)
-    return DATA_ROOT / "benchmark_runs" / "retrieval_indexes" / corpus_slug / embedding_slug
+    method_slug = _sanitize_slug(retrieval_method)
+    return DATA_ROOT / "benchmark_runs" / "retrieval_indexes" / corpus_slug / method_slug / embedding_slug
 
 
 def _render_index_build(
     *,
+    retrieval_method: str,
     corpus_root: Path,
     output_dir: Path,
     embedding_model: str,
     rebuild_index: bool,
 ) -> dict[str, Any]:
-    """Build or reuse a FAISS index for the selected benchmark run."""
+    """Build or reuse retrieval artifacts for the selected benchmark run."""
     manifest_path = output_dir / "index_manifest.json"
     if manifest_path.exists() and not rebuild_index:
         return {
@@ -214,7 +216,7 @@ def _render_index_build(
 
     status_placeholder = st.empty()
     progress_bar = st.progress(0.0)
-    status_placeholder.info("Building FAISS index for selected corpus...")
+    status_placeholder.info(f"Building {retrieval_method} index for selected corpus...")
 
     def update_progress(progress: float, message: str) -> None:
         progress_bar.progress(min(max(progress, 0.0), 1.0))
@@ -222,7 +224,8 @@ def _render_index_build(
 
     try:
         embedding_provider = _embedding_provider_for_model(embedding_model)
-        result = build_faiss_index(
+        result = build_retrieval_index(
+            method_id=retrieval_method,
             chunks_root=corpus_root,
             output_dir=output_dir,
             embedding_provider=embedding_provider,
@@ -239,7 +242,7 @@ def _render_index_build(
         raise
 
     progress_bar.progress(1.0)
-    status_placeholder.success("FAISS index ready.")
+    status_placeholder.success(f"{retrieval_method} index ready.")
     return result
 
 
@@ -354,7 +357,7 @@ def _render_case_chart(result: dict[str, Any]) -> None:
             "produce a usable numeric value, for example due to weak retrieved context, missing support, "
             "or a row-level evaluator failure."
         )
-        st.dataframe(_build_case_detail_rows(result=result, cases=cases), width="stretch")
+        st.dataframe(_build_case_detail_rows(result=result, cases=cases))
 
 
 def _render_tool_debug_details(*, tool_name: str, tool_result: dict[str, Any]) -> None:
@@ -389,7 +392,7 @@ def _render_tool_debug_details(*, tool_name: str, tool_result: dict[str, Any]) -
 
     with st.expander(f"{tool_name.upper()} debug details", expanded=False):
         if debug_rows:
-            st.dataframe(debug_rows, width="stretch")
+            st.dataframe(debug_rows)
         traceback_text = str(details.get("traceback", "")).strip()
         if traceback_text:
             st.code(traceback_text, language="text")
@@ -652,6 +655,7 @@ def _run_benchmark_with_loading_feedback(
 
     stage_message.info("🧱 Stage 1/2: Preparing retrieval index...")
     index_result = _render_index_build(
+        retrieval_method=selected_method,
         corpus_root=selected_corpus,
         output_dir=output_dir,
         embedding_model=embedding_model,
@@ -831,7 +835,7 @@ def _render_execution_failure_details(*, result: dict[str, Any], display_result:
             }
         )
     if failed_jobs:
-        st.dataframe(failed_jobs, width="stretch")
+        st.dataframe(failed_jobs)
 
 
 def _load_verified_question_count(*, verified_path: Path) -> tuple[int, str | None]:
@@ -966,9 +970,9 @@ def _render_csv_export_schema_preview() -> None:
             "Token columns reflect chunk configuration, not provider token billing."
         )
         st.markdown("**Probe details CSV**")
-        st.dataframe(_probe_details_schema(), width="stretch")
+        st.dataframe(_probe_details_schema())
         st.markdown("**Metadata CSV**")
-        st.dataframe(_metadata_schema(), width="stretch")
+        st.dataframe(_metadata_schema())
 
 
 def _serialize_json_cell(value: Any) -> str:
@@ -1530,7 +1534,6 @@ def _render_compare_view(*, show_title: bool) -> None:
         file_name="benchmark_compare_dashboard.html",
         mime="text/html",
         key="benchmark_compare_download",
-        width="stretch",
     )
 
     headline_metrics = [
@@ -1555,7 +1558,7 @@ def _render_compare_view(*, show_title: bool) -> None:
         top_k_columns[index].metric(str(row["run_alias"]), int(row.get("top_k", 0) or 0))
 
     st.subheader("Run Comparison")
-    st.dataframe(summary_rows, width="stretch")
+    st.dataframe(summary_rows)
 
     quality_chart_rows = [
         {
@@ -1630,7 +1633,7 @@ def _render_compare_view(*, show_title: bool) -> None:
         for row in metadata_rows:
             branch_rows.append(dict(row))
     if branch_rows:
-        st.dataframe(branch_rows, width="stretch")
+        st.dataframe(branch_rows)
 
 
 def _render_runtime_estimate_preview(*, request: dict[str, Any]) -> None:
@@ -1669,7 +1672,7 @@ def _render_timing_summary(*, result: dict[str, Any]) -> None:
             if isinstance(seconds, (int, float))
         ]
         if rows:
-            st.dataframe(rows, width="stretch")
+            st.dataframe(rows)
 
 
 def _render_benchmark_tool_info() -> None:
@@ -1713,7 +1716,7 @@ def render(show_title: bool = True) -> None:
 
     corpora = _find_chunk_corpora()
     if not corpora:
-        st.info("No chunk corpora found. Run ingestion first.")
+        st.info("No chunk corpora found. Run Parse and Chunk first.")
         return
 
     corpus_labels = {_display_path(path): path for path in corpora}
@@ -1790,7 +1793,7 @@ def render(show_title: bool = True) -> None:
     ).strip().lower()
     if selected_method in {"graphrag", "lightrag"}:
         st.caption(
-            "GraphRAG and LightRAG adapters are optional and may report planned/not-implemented failures."
+            "GraphRAG and LightRAG use local graph-aware retrieval artifacts built from the chunk corpus."
         )
 
     control_col_1, control_col_2, control_col_3 = st.columns(3)
@@ -1835,7 +1838,7 @@ def render(show_title: bool = True) -> None:
             "Evaluation model is passed to RAGAS/DeepEval when supported."
         )
 
-    suggested_output_dir = _index_output_dir(selected_corpus, embedding_model)
+    suggested_output_dir = _index_output_dir(selected_corpus, embedding_model, selected_method)
     discovered_faiss_dirs = _find_faiss_index_dirs()
     faiss_directory_options: list[str] = [str(suggested_output_dir)]
     for path in discovered_faiss_dirs:
@@ -1877,7 +1880,6 @@ def render(show_title: bool = True) -> None:
     run_clicked = st.button(
         "Run retrieval benchmarks",
         key="run_retrieval_benchmarks",
-        width="stretch",
         disabled=is_benchmark_running,
     )
 

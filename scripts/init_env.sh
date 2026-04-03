@@ -34,7 +34,7 @@ Activate it with:
   source "${VENV_DIR}/bin/activate"
 
 Run tests with:
-  "${VENV_DIR}/bin/python" -m pytest Benchmark/tests -q
+  "${VENV_DIR}/bin/python" -m pytest benchmark/tests -q
 
 Start the app with:
   "${VENV_DIR}/bin/python" -m streamlit run app.py
