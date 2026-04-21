@@ -9,6 +9,7 @@ import requests
 import streamlit as st
 
 from RAG.llm.provider_client import DEFAULT_OLLAMA_BASE_URL, DEFAULT_OLLAMA_MODEL, normalize_llm_provider
+from UI.state.session_state import get_loaded_knowledge_base
 from UI.views.benchmarking_view import render as render_benchmarking
 from UI.views.corpus_creation_view import render as render_corpus_creation
 from UI.views.ingest_view import render as render_ingest
@@ -119,6 +120,58 @@ st.markdown(
     [data-testid="stSidebar"] .stButton > button {
         width: 100% !important;
     }
+    [data-testid="stSidebar"] [data-testid="stExpander"] .stButton {
+        box-sizing: border-box;
+        display: block;
+        margin: 0;
+        min-width: 100%;
+        width: 100%;
+    }
+    [data-testid="stSidebar"] [data-testid="stExpander"] .stButton > div {
+        box-sizing: border-box;
+        min-width: 100%;
+        width: 100%;
+    }
+    [data-testid="stSidebar"] [data-testid="stExpander"] .stButton > button {
+        align-items: center;
+        align-self: stretch;
+        border-radius: 0.5rem;
+        box-shadow: none;
+        display: flex;
+        font-weight: 400;
+        height: auto;
+        justify-content: center;
+        margin: 0;
+        max-width: 100%;
+        min-height: 2.5rem;
+        min-width: 100%;
+        padding: 0.25rem 0.75rem;
+        width: 100% !important;
+    }
+    [data-testid="stSidebar"] [data-testid="stExpander"] .stButton > button > div,
+    [data-testid="stSidebar"] [data-testid="stExpander"] .stButton > button p {
+        width: 100%;
+    }
+    [data-testid="stSidebar"] [data-testid="stExpander"] .stButton > button p {
+        text-align: center;
+    }
+    [data-testid="stSidebar"] [data-testid="stExpander"] .stButton > button:hover {
+        background: initial;
+        border-color: initial;
+        color: inherit;
+        box-shadow: none;
+    }
+    [data-testid="stSidebar"] [data-testid="stExpander"] .stButton > button[kind="secondary"]:disabled {
+        background: #f3f4f6;
+        border: 1px solid #d1d5db;
+        box-shadow: none;
+        color: #6b7280;
+        font-weight: 400;
+    }
+    [data-testid="stSidebar"] [data-testid="stExpander"] .stButton > button[kind="secondary"]:disabled p {
+        color: #6b7280;
+        font-weight: 400;
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -156,6 +209,7 @@ GROUP_SECTIONS: dict[str, list[str]] = {
     "Benchmarks": ["Probe Creation", "Benchmarking"],
     "MCP": ["MCP"],
 }
+GRAPH_KNOWLEDGE_BASE_METHODS = {"lightrag", "graphrag"}
 
 
 def _default_subpage(section: str) -> str:
@@ -204,7 +258,40 @@ def _normalize_navigation_state() -> None:
     valid_subpages = SECTIONS.get(section, [])
     if normalized_subpage not in valid_subpages:
         normalized_subpage = _default_subpage(section)
+    if _is_navigation_page_disabled(section=section, page_name=normalized_subpage):
+        section = "Knowledge-Base"
+        normalized_subpage = "Load / Append Knowledge Base"
+        st.session_state["nav_section"] = section
     st.session_state["nav_subpage"] = normalized_subpage
+
+
+def _loaded_knowledge_base_method() -> str:
+    """Return the currently loaded knowledge-base method id, if available."""
+    loaded_knowledge_base = get_loaded_knowledge_base()
+    if loaded_knowledge_base is None:
+        return ""
+    return str(loaded_knowledge_base.get("method_id", "")).strip().lower()
+
+
+def _navigation_page_help(*, section: str, page_name: str) -> str | None:
+    """Return contextual tooltip text for gated navigation pages."""
+    if section != "Knowledge-Base":
+        return None
+
+    loaded_method = _loaded_knowledge_base_method()
+    if page_name == "Query Knowledge Base" and not loaded_method:
+        return "Load a knowledge base first before querying."
+    if page_name == "View Knowledge Graph":
+        if not loaded_method:
+            return "Load a knowledge base first before viewing the graph."
+        if loaded_method not in GRAPH_KNOWLEDGE_BASE_METHODS:
+            return "Load a LightRAG or GraphRAG knowledge base first before viewing the graph."
+    return None
+
+
+def _is_navigation_page_disabled(*, section: str, page_name: str) -> bool:
+    """Return True when one navigation page should be disabled."""
+    return _navigation_page_help(section=section, page_name=page_name) is not None
 
 
 def _is_valid_openai_api_key(api_key: str) -> bool:
@@ -479,11 +566,14 @@ with st.sidebar:
                     st.session_state.get("nav_section") == section_name
                     and st.session_state.get("nav_subpage") == page_name
                 )
+                page_disabled = _is_navigation_page_disabled(section=section_name, page_name=page_name)
+                button_help = _navigation_page_help(section=section_name, page_name=page_name)
                 if st.button(
                     _page_label(page_name),
                     key=f"nav_{section_name}_{page_name}",
-                    disabled=navigation_locked or is_active_page,
+                    disabled=navigation_locked or is_active_page or page_disabled,
                     type="secondary",
+                    help=button_help,
                 ) and not is_active_page:
                     _set_navigation(section_name, page_name)
                     st.rerun()
@@ -528,8 +618,11 @@ with st.sidebar:
             placeholder="sk-...",
             disabled=not openai_settings_enabled,
         )
-        openai_action_col1, openai_action_col2 = st.columns(2)
-        if openai_action_col1.button("Set OpenAI Key", key="set_openai_key", disabled=not openai_settings_enabled):
+        if st.button(
+            "Set OpenAI Key",
+            key="set_openai_key",
+            disabled=not openai_settings_enabled,
+        ):
             candidate_key = api_key_input.strip()
             if not candidate_key:
                 st.error("Enter an API key first.")
@@ -540,17 +633,6 @@ with st.sidebar:
                 st.rerun()
             else:
                 st.error("That key could not be verified with OpenAI. It was not saved.")
-
-        if openai_action_col2.button(
-            "Clear OpenAI Key",
-            key="clear_openai_key",
-            disabled=not openai_settings_enabled,
-        ):
-            st.session_state["openai_api_key"] = ""
-            st.session_state["settings_openai_api_key_input"] = ""
-            os.environ.pop("OPENAI_API_KEY", None)
-            st.success("Cleared session and environment key.")
-            st.rerun()
 
         st.markdown("**Ollama Settings**")
         ollama_settings_enabled = "ollama" in st.session_state.get("llm_providers", [])
