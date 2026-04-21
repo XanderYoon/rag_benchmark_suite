@@ -18,6 +18,7 @@ MCP_PROCESS_PID_KEY = "mcp_server_pid"
 MCP_PROCESS_HOST_KEY = "mcp_server_host"
 MCP_PROCESS_PORT_KEY = "mcp_server_port"
 MCP_PROCESS_STARTED_AT_KEY = "mcp_server_started_at"
+MCP_PROCESS_LOG_PATH_KEY = "mcp_server_log_path"
 
 
 def render(show_title: bool = True) -> None:
@@ -70,6 +71,8 @@ def render(show_title: bool = True) -> None:
     if status["running"]:
         st.code(status["endpoint"], language="text")
         st.caption(f"Health check: {status['health_url']}")
+        if status["log_path"]:
+            st.caption(f"Server log: {status['log_path']}")
         st.markdown("**MCP Inspector**")
         st.write("Choose `Streamable HTTP` in MCP Inspector and use the endpoint above as the server URL.")
     else:
@@ -91,18 +94,20 @@ def _start_mcp_server(*, host: str, port: int) -> tuple[bool, str]:
     command = [
         sys.executable,
         "-m",
-        "mcp.server",
+        "rag_benchmark_mcp.server",
         "--host",
         host,
         "--port",
         str(port),
     ]
+    log_path = Path("/tmp") / f"rag_benchmark_mcp_{port}.log"
     try:
+        log_file = log_path.open("ab")
         process = subprocess.Popen(
             command,
             cwd=PROJECT_ROOT,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
+            stdout=log_file,
+            stderr=subprocess.STDOUT,
             start_new_session=True,
         )
     except Exception as exc:
@@ -112,13 +117,14 @@ def _start_mcp_server(*, host: str, port: int) -> tuple[bool, str]:
     st.session_state[MCP_PROCESS_HOST_KEY] = host
     st.session_state[MCP_PROCESS_PORT_KEY] = int(port)
     st.session_state[MCP_PROCESS_STARTED_AT_KEY] = time.time()
+    st.session_state[MCP_PROCESS_LOG_PATH_KEY] = str(log_path)
 
     health_url = _health_url(host=host, port=port)
     for _ in range(10):
         if _is_mcp_server_ready(health_url=health_url):
             return True, f"Started MCP server on {_endpoint(host=host, port=port)}."
         time.sleep(0.3)
-    return False, f"Started MCP process but could not verify readiness at {health_url}."
+    return False, f"Started MCP process but could not verify readiness at {health_url}. Check log: {log_path}"
 
 
 def _stop_mcp_server() -> tuple[bool, str]:
@@ -144,6 +150,7 @@ def _server_status() -> dict[str, object]:
     pid = st.session_state.get(MCP_PROCESS_PID_KEY)
     host = str(st.session_state.get(MCP_PROCESS_HOST_KEY, DEFAULT_HOST))
     port = int(st.session_state.get(MCP_PROCESS_PORT_KEY, DEFAULT_PORT))
+    log_path = st.session_state.get(MCP_PROCESS_LOG_PATH_KEY)
     endpoint = _endpoint(host=host, port=port)
     health_url = _health_url(host=host, port=port)
     running = isinstance(pid, int) and _process_exists(pid) and _is_mcp_server_ready(health_url=health_url)
@@ -154,6 +161,7 @@ def _server_status() -> dict[str, object]:
         "pid": pid,
         "endpoint": endpoint,
         "health_url": health_url,
+        "log_path": log_path,
     }
 
 
@@ -191,3 +199,4 @@ def _clear_mcp_session_state() -> None:
     st.session_state.pop(MCP_PROCESS_HOST_KEY, None)
     st.session_state.pop(MCP_PROCESS_PORT_KEY, None)
     st.session_state.pop(MCP_PROCESS_STARTED_AT_KEY, None)
+    st.session_state.pop(MCP_PROCESS_LOG_PATH_KEY, None)

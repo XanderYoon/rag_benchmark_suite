@@ -3,3 +3,4 @@ pypdf>=4.2.0
 streamlit-sortables>=0.3.1
 langchain-ollama
 pydantic>=2.8.2
+mcp[cli]>=1,<2

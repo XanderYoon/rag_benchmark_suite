@@ -1,12 +1,14 @@
 from __future__ import annotations
 
-from mcp.contracts import RetrieveEvidenceRequest, RunRetrievalBenchmarkRequest
-from mcp.tools import build_tool_definitions, retrieve_evidence, run_retrieval_benchmark
+import pytest
+
+from rag_benchmark_mcp.contracts import RetrieveEvidenceRequest, RunRetrievalBenchmarkRequest
+from rag_benchmark_mcp.tools import build_tool_definitions, retrieve_evidence, run_retrieval_benchmark
 
 
 def test_retrieve_evidence_returns_typed_payload(monkeypatch) -> None:
     monkeypatch.setattr(
-        "mcp.tools.load_knowledge_base",
+        "rag_benchmark_mcp.tools.load_knowledge_base",
         lambda **_: {
             "knowledge_base_dir": "/tmp/kb",
             "method_id": "faiss",
@@ -29,11 +31,11 @@ def test_retrieve_evidence_returns_typed_payload(monkeypatch) -> None:
         index = 1
 
     monkeypatch.setattr(
-        "mcp.tools.RetrievalService.retrieve_top_artifact",
+        "rag_benchmark_mcp.tools.RetrievalService.retrieve_top_artifact",
         lambda self, *args, **kwargs: [FakeCandidate()],
     )
     monkeypatch.setattr(
-        "mcp.tools.RetrievalService.load_chunks_for_candidates",
+        "rag_benchmark_mcp.tools.RetrievalService.load_chunks_for_candidates",
         lambda self, candidates: {"paper_a_chunk_0001": FakeChunk()},
     )
 
@@ -53,7 +55,7 @@ def test_retrieve_evidence_returns_typed_payload(monkeypatch) -> None:
 
 def test_run_retrieval_benchmark_returns_compact_summary(monkeypatch) -> None:
     monkeypatch.setattr(
-        "mcp.tools.run_improved_benchmarks",
+        "rag_benchmark_mcp.tools.run_improved_benchmarks",
         lambda **_: {
             "retrieval_methods": ["faiss"],
             "probe_source_breakdown": {"auto_cases": 3, "verified_cases": 0, "total_cases": 3},
@@ -98,3 +100,16 @@ def test_build_tool_definitions_exposes_expected_tools() -> None:
         "run_retrieval_benchmark",
     ]
     assert "properties" in definitions[0]["inputSchema"]
+
+
+def test_build_http_app_exposes_healthcheck() -> None:
+    pytest.importorskip("mcp")
+    testclient = pytest.importorskip("starlette.testclient")
+
+    from rag_benchmark_mcp.server import build_http_app
+
+    with testclient.TestClient(build_http_app()) as client:
+        response = client.get("/healthz")
+
+    assert response.status_code == 200
+    assert response.json()["server"] == "rag-benchmark-mcp"

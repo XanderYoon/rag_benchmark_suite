@@ -7,7 +7,7 @@ from benchmark.benchmark_tools.api.service import run_improved_benchmarks
 from benchmark.config import DEFAULT_CONFIG
 from benchmark.domain.models import Chunk
 from benchmark.services.retrieval_service import RetrievalService
-from mcp.contracts import (
+from rag_benchmark_mcp.contracts import (
     BenchmarkPrimarySummary,
     BenchmarkTimingSummary,
     EvidenceItem,
