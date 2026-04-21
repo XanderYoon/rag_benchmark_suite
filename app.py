@@ -14,6 +14,7 @@ from UI.views.corpus_creation_view import render as render_corpus_creation
 from UI.views.ingest_view import render as render_ingest
 from UI.views.knowledge_graph_view import render as render_knowledge_graph
 from UI.views.load_append_model_view import render as render_load_append_model
+from UI.views.mcp_view import render as render_mcp
 from UI.views.query_model_view import render as render_query_model
 from UI.views.question_generation_view import render as render_question_generation
 from UI.views.rag_model_creator_view import render as render_rag_model_creator
@@ -25,33 +26,46 @@ st.set_page_config(page_title="RAG Benchmark Builder", layout="wide")
 st.markdown(
     """
     <style>
+    [data-testid="stSidebar"] div[data-testid="stElementContainer"] {
+        width: 100%;
+    }
+    [data-testid="stSidebar"] div[data-testid="stElementContainer"] > div {
+        width: 100%;
+    }
     [data-testid="stSidebar"] .stButton {
+        box-sizing: border-box;
+        display: block;
         margin: 0 0 0.4rem 0;
+        min-width: 100%;
+        width: 100%;
+    }
+    [data-testid="stSidebar"] .stButton > div {
+        box-sizing: border-box;
+        min-width: 100%;
         width: 100%;
     }
     [data-testid="stSidebar"] .stButton > button {
         align-items: center;
+        align-self: stretch;
         border-radius: 12px;
         box-sizing: border-box;
         display: flex;
+        height: 2.75rem;
         justify-content: center;
+        max-width: 100%;
         margin: 0;
         min-height: 2.75rem;
+        min-width: 100%;
         padding: 0 0.85rem;
         width: 100%;
     }
-    [data-testid="stSidebar"] div[data-testid="stMarkdown"] {
-        margin: 0;
-    }
-    [data-testid="stSidebar"] div[data-testid="stMarkdown"]:has(.nav-card-slot) {
-        margin: 0 0 0.4rem 0;
-    }
-    [data-testid="stSidebar"] div[data-testid="stMarkdown"]:has(.nav-card-slot) > div {
-        margin: 0;
+    [data-testid="stSidebar"] .stButton > button > div {
+        justify-content: center;
         width: 100%;
     }
-    [data-testid="stSidebar"] div[data-testid="stMarkdown"] p {
-        margin: 0;
+    [data-testid="stSidebar"] .stButton > button p {
+        text-align: center;
+        width: 100%;
     }
     [data-testid="stSidebar"] .stButton > button:hover {
         background: transparent;
@@ -59,37 +73,16 @@ st.markdown(
         color: #0369a1;
         box-shadow: inset 0 0 0 1px #7dd3fc;
     }
-    [data-testid="stSidebar"] .nav-active-card {
-        align-items: center;
+    [data-testid="stSidebar"] .stButton > button[kind="secondary"]:disabled {
         background: #f0f9ff;
         border: 1px solid #bae6fd;
-        border-radius: 12px;
-        box-sizing: border-box;
         box-shadow: inset 6px 0 0 #7dd3fc;
         color: #0b1220;
-        display: flex;
         font-weight: 700;
-        line-height: 1;
-        margin: 0;
-        height: 2.75rem;
-        min-height: 2.75rem;
-        padding: 0 0.85rem;
-        width: 100%;
     }
-    [data-testid="stSidebar"] .nav-active-card span {
-        align-items: center;
-        display: flex;
-        justify-content: center;
-        letter-spacing: 0.01em;
-        line-height: 1;
-        margin: 0;
-        text-align: center;
-        width: 100%;
-    }
-    [data-testid="stSidebar"] .nav-card-slot {
-        margin: 0;
-        min-height: 2.75rem;
-        width: 100%;
+    [data-testid="stSidebar"] .stButton > button[kind="secondary"]:disabled p {
+        color: #0b1220;
+        font-weight: 700;
     }
     [data-testid="stSidebar"] .nav-section-heading {
         font-size: 1.45rem;
@@ -123,6 +116,9 @@ st.markdown(
         margin: 0.1rem 0 0.4rem 0;
         padding-left: 0.1rem;
     }
+    [data-testid="stSidebar"] .stButton > button {
+        width: 100% !important;
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -130,9 +126,10 @@ st.markdown(
 
 SECTIONS: dict[str, list[str]] = {
     "RAG Creation": ["Corpus Creation", "Ingest", "RAG Model Creator"],
-    "Knowledge-Base": ["Load / Append Knowledge Base", "Query Knowledge Base", "MCP", "View Knowledge Graph"],
+    "Knowledge-Base": ["Load / Append Knowledge Base", "Query Knowledge Base", "View Knowledge Graph"],
     "Probe Creation": ["Probe Generation", "Verify Probes"],
     "Benchmarking": ["Run Benchmarks", "Compare Benchmarks"],
+    "MCP": ["MCP"],
 }
 BENCHMARK_RUN_IN_PROGRESS_KEY = "benchmark_run_in_progress"
 SUPPORTED_LLM_PROVIDERS = ("openai", "ollama")
@@ -157,6 +154,7 @@ GROUP_SECTIONS: dict[str, list[str]] = {
     "RAG Creation": ["RAG Creation"],
     "Knowledge-Base": ["Knowledge-Base"],
     "Benchmarks": ["Probe Creation", "Benchmarking"],
+    "MCP": ["MCP"],
 }
 
 
@@ -172,14 +170,6 @@ def _set_navigation(section: str, subpage: str) -> None:
 def _page_label(page_name: str) -> str:
     """Return the user-facing label for a navigation page."""
     return PAGE_LABELS.get(page_name, page_name)
-
-
-def _render_active_navigation_card(page_name: str) -> None:
-    """Render an active navigation card without changing layout slot size."""
-    st.markdown(
-        f"<div class='nav-card-slot'><div class='nav-active-card'><span>{_page_label(page_name)}</span></div></div>",
-        unsafe_allow_html=True,
-    )
 
 
 def _render_section_heading(*, section_name: str, is_active: bool) -> None:
@@ -203,13 +193,14 @@ def _normalize_navigation_state() -> None:
     """Keep navigation state aligned with current internal route ids."""
     raw_section = str(st.session_state.get("nav_section", "RAG Creation"))
     section = SECTION_ALIASES.get(raw_section, raw_section)
+    raw_subpage = str(st.session_state.get("nav_subpage", _default_subpage(section if section in SECTIONS else "RAG Creation")))
+    normalized_subpage = _normalize_subpage_name(raw_subpage)
+    if section == "Knowledge-Base" and normalized_subpage == "MCP":
+        section = "MCP"
     if section not in SECTIONS:
         section = "RAG Creation"
     st.session_state["nav_section"] = section
 
-    normalized_subpage = _normalize_subpage_name(
-        str(st.session_state.get("nav_subpage", _default_subpage(section)))
-    )
     valid_subpages = SECTIONS.get(section, [])
     if normalized_subpage not in valid_subpages:
         normalized_subpage = _default_subpage(section)
@@ -488,16 +479,14 @@ with st.sidebar:
                     st.session_state.get("nav_section") == section_name
                     and st.session_state.get("nav_subpage") == page_name
                 )
-                if is_active_page:
-                    _render_active_navigation_card(page_name)
-                else:
-                    if st.button(
-                        _page_label(page_name),
-                        key=f"nav_{section_name}_{page_name}",
-                        disabled=navigation_locked,
-                    ):
-                        _set_navigation(section_name, page_name)
-                        st.rerun()
+                if st.button(
+                    _page_label(page_name),
+                    key=f"nav_{section_name}_{page_name}",
+                    disabled=navigation_locked or is_active_page,
+                    type="secondary",
+                ) and not is_active_page:
+                    _set_navigation(section_name, page_name)
+                    st.rerun()
         st.write("")
 
     section = str(st.session_state.get("nav_section", "RAG Creation"))
@@ -668,10 +657,8 @@ elif section == "Knowledge-Base" and subpage == "Load / Append Knowledge Base":
     render_load_append_model(show_title=True)
 elif section == "Knowledge-Base" and subpage == "Query Knowledge Base":
     render_query_model(show_title=True)
-elif section == "Knowledge-Base" and subpage == "MCP":
-    st.title("Knowledge-Base")
-    st.subheader("MCP")
-    st.info("Placeholder page for MCP integration.")
+elif section == "MCP" and subpage == "MCP":
+    render_mcp(show_title=True)
 elif section == "Knowledge-Base" and subpage == "View Knowledge Graph":
     render_knowledge_graph(show_title=True)
 elif section == "Probe Creation" and subpage in {"Question Generation", "Probe Generation"}:

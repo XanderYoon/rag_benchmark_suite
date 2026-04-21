@@ -25,26 +25,40 @@ def _display_path(path: Path) -> str:
         return str(path.resolve())
 
 
-def _render_pdf_viewer(pdf_path: Path) -> None:
-    """Render an inline PDF preview for the selected paper."""
+def _load_pdf_bytes(*, pdf_path: Path) -> bytes | None:
+    """Load one PDF file for preview and download rendering."""
     if not pdf_path.exists():
         st.error(f"Failed to load PDF preview from {pdf_path}.")
+        return None
+    try:
+        return pdf_path.read_bytes()
+    except OSError as exc:
+        st.error(f"Failed to read PDF preview from {pdf_path}: {exc}.")
+        return None
+
+
+def _render_pdf_viewer(pdf_path: Path) -> None:
+    """Render an inline PDF preview for the selected paper."""
+    pdf_bytes = _load_pdf_bytes(pdf_path=pdf_path)
+    if pdf_bytes is None:
         return
 
     pdf_renderer = getattr(st, "pdf", None)
     if callable(pdf_renderer):
         try:
-            pdf_renderer(str(pdf_path), height=720)
+            pdf_renderer(pdf_bytes, height=720)
         except TypeError:
-            pdf_renderer(str(pdf_path))
+            pdf_renderer(pdf_bytes)
+        except Exception as exc:
+            st.warning(
+                "Inline PDF preview is unavailable in the current Streamlit runtime. "
+                f"Native renderer failed: {exc}"
+            )
     else:
-        st.info("Inline PDF preview is unavailable in this Streamlit build. Use the download button below.")
-
-    try:
-        pdf_bytes = pdf_path.read_bytes()
-    except OSError:
-        st.error(f"Failed to load PDF download from {pdf_path}.")
-        return
+        st.warning(
+            "Inline PDF preview requires Streamlit PDF support (`streamlit[pdf]`). "
+            "Install the PDF extra or upgrade Streamlit to restore inline preview."
+        )
     st.download_button(
         "Download PDF",
         data=pdf_bytes,
